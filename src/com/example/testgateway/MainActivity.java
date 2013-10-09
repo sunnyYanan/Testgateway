@@ -28,8 +28,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android_serialport_api.SerialPort;
 
 public class MainActivity extends FragmentActivity {
@@ -39,13 +43,13 @@ public class MainActivity extends FragmentActivity {
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
 	public TelosbDao telosbDao;
-	public SerialPort mSerialPort ;
+	public SerialPort mSerialPort;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
 	PackagePattern packagePattern = null;
 	XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
 	public HaveData havadata = null;
-   //HaveData havadata = new HaveData();
+	// HaveData havadata = new HaveData();
 	List<String> list = new ArrayList<String>();
 	int listSingnal = 0;
 
@@ -58,7 +62,8 @@ public class MainActivity extends FragmentActivity {
 
 	FragmentManager manager;
 	LinearLayout layout;
-	Fragment f_serialPort, f_server, f_listnode,f_nodeSetting,f_alertSetting,f_dataCenter,f_aboutUs;
+	Fragment f_serialPort, f_server, f_listnode, f_nodeSetting, f_alertSetting,
+			f_dataCenter, f_aboutUs;
 	Button serialPortSetting;
 	Button serverSetting;
 	Button sinkSetting;
@@ -85,7 +90,8 @@ public class MainActivity extends FragmentActivity {
 		f_alertSetting = new Fragment_alertSetting();
 		f_dataCenter = new Fragment_dataCenter();
 		f_aboutUs = new Fragment_aboutUs();
-		
+
+
 		// 得到按钮以及设置按钮监听器
 		serialPortSetting = (Button) findViewById(R.id.serialPortSetting);
 		serverSetting = (Button) findViewById(R.id.serverSetting);
@@ -109,7 +115,8 @@ public class MainActivity extends FragmentActivity {
 		aboutUs.setOnClickListener(new ButtonClickListener());
 		quit.setOnClickListener(new ButtonClickListener());
 
-		//默认启动事务：节点
+		
+		// 默认启动事务：节点
 		transaction.add(R.id.fragment_container, f_serialPort);
 		transaction.commit();
 
@@ -135,7 +142,8 @@ public class MainActivity extends FragmentActivity {
 				transaction.replace(R.id.fragment_container, f_server);
 				transaction.commit();
 				break;
-			}case R.id.sinkSetting:
+			}
+			case R.id.sinkSetting:
 				transaction = manager.beginTransaction();
 				transaction.replace(R.id.fragment_container, f_nodeSetting);
 				transaction.commit();
@@ -167,7 +175,8 @@ public class MainActivity extends FragmentActivity {
 				transaction.replace(R.id.fragment_container, f_dataCenter);
 				transaction.commit();
 				break;
-			}case R.id.aboutUs:
+			}
+			case R.id.aboutUs:
 				transaction = manager.beginTransaction();
 				transaction.replace(R.id.fragment_container, f_aboutUs);
 				transaction.commit();
@@ -220,7 +229,7 @@ public class MainActivity extends FragmentActivity {
 
 		xmlTelosbPackagePatternUtil = new XmlTelosbPackagePatternUtil(
 				getFilesDir().toString());
-		
+
 		System.out
 				.println(xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
 						.size() + "__________%%%_______");
@@ -228,7 +237,7 @@ public class MainActivity extends FragmentActivity {
 				xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
 						.size() + "__________%%%_______");
 		httpClientUtil = new HttpClientUtil(getBaseContext());
-		
+
 		httpserverState = new MySource();
 		serialState = new MySource();
 		ms = new MySource();
@@ -256,34 +265,22 @@ public class MainActivity extends FragmentActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-/*		httpserverState = new MySource();
-		serialState = new MySource();
-		ms = new MySource();
-		havePackage = new MySource();
-		// MyListener ml=new MyListener();
-		HttpserverState hl = new HttpserverState();
-		SerialListener ml = new SerialListener();
-		PackageListener pl = new PackageListener();
-		httpserverState.addListener(hl);
-		ms.addListener(ml);
-		havePackage.addListener(pl);
-		
-		havePackage.setValue(false);
-		telosbDao = new TelosbDao(getBaseContext());
-		
-		httpserverState.setValue(true);
-		ms.setValue(true);
-		httpserverState.setValue(false);
-		System.out.println("end:");
-		try {
-			// createTable();
-			// insert() ;
-			test();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/	}
+		/*
+		 * httpserverState = new MySource(); serialState = new MySource(); ms =
+		 * new MySource(); havePackage = new MySource(); // MyListener ml=new
+		 * MyListener(); HttpserverState hl = new HttpserverState();
+		 * SerialListener ml = new SerialListener(); PackageListener pl = new
+		 * PackageListener(); httpserverState.addListener(hl);
+		 * ms.addListener(ml); havePackage.addListener(pl);
+		 * 
+		 * havePackage.setValue(false); telosbDao = new
+		 * TelosbDao(getBaseContext());
+		 * 
+		 * httpserverState.setValue(true); ms.setValue(true);
+		 * httpserverState.setValue(false); System.out.println("end:"); try { //
+		 * createTable(); // insert() ; test(); } catch (Exception e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 */}
 
 	public void ProcessData() {
 		if (listSingnal == 0) {
@@ -356,9 +353,9 @@ public class MainActivity extends FragmentActivity {
 			String headTest = "00FFFF";
 			TelosbPackage telosbPackage = new TelosbPackage();
 			int i;
-			
+
 			while (isWork) {
-				
+
 				i = serialUtil.findhead(headTest);
 				if (i < 0 && serialUtil.stringBuffer.length() > 6) {
 					serialUtil.delete(serialUtil.stringBuffer.length() - 6);
@@ -441,9 +438,10 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public HaveData getHaveData(){
+	public HaveData getHaveData() {
 		return new HaveData();
 	}
+
 	public void Packagesingnal() {
 		havePackage.setValue(true);
 	}
