@@ -210,15 +210,15 @@ public class Fragment_serialconfig extends Fragment {
 	 *
 	 */
 	private class ReadThread extends Thread {
-
+        byte[] buffer = new byte[64];
 		@Override
 		public void run() {
 			super.run();
 			System.out.println("^^^^^^^^^"+ma.serialUtil.stringBuffer.toString());
-			while(!isInterrupted()) {
+			while(ma.isWork) {
 				int size;
 				try {
-					byte[] buffer = new byte[64];
+					
 					if (mInputStream == null) return;
 					size = mInputStream.read(buffer);
 					/*if (size > 0) {
