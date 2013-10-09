@@ -39,7 +39,7 @@ import android_serialport_api.SerialPort;
 public class MainActivity extends FragmentActivity {
 
 	private static final int capibity = 50;
-	public static boolean isWork = true;
+	public static boolean isWork = false;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
 	public TelosbDao telosbDao;
@@ -388,8 +388,9 @@ public class MainActivity extends FragmentActivity {
 									.parseTelosbPackage(telosbData).getCtype()
 									+ ":%%%%%%%%%%%%%%");
 						} catch (Exception e) {
-
+                            System.out.println("异常");
 							e.printStackTrace();
+							continue;
 						}
 						;
 
@@ -399,8 +400,9 @@ public class MainActivity extends FragmentActivity {
 							telosbPackagePattern = xmlTelosbPackagePatternUtil
 									.parseTelosbPackage(telosbData);
 						} catch (Exception e) {
-
+							 System.out.println("异常");
 							e.printStackTrace();
+							continue;
 
 						}
 						if (httpClientUtil.PostTelosbData("", telosbData)) {
@@ -412,7 +414,7 @@ public class MainActivity extends FragmentActivity {
 							telosbPackage.setStatus("未上传");
 
 						}
-
+                      
 						telosbPackage.setCtype(telosbPackagePattern.ctype);
 						telosbPackage.setMessage(telosbData);
 						telosbPackage.setNodeID(telosbPackagePattern.nodeID);

@@ -496,9 +496,9 @@ public class XmlTelosbPackagePatternUtil {
 		String ctype = packageParserService
 				.parseDatafield(telsobData, "019019");
 		if (!type.contains(ctype)) {
-			System.out.println(telsobData);
+			System.out.println(telsobData+"^^^^^^^^^^^^^^^^^^^error:");
 			throw new RuntimeException("demo");
-
+           
 		}
 		// telosbPackage.setDataField(this.Parse(packagePattern,
 		// packageParserService.parseDatafield(telsobData, "019019"),
