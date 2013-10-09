@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.Thread.State;
+
+import com.example.testgateway.MainActivity.HaveData;
 
 
 import senseHuge.model.Serial;
@@ -121,25 +124,34 @@ public class Fragment_serialconfig extends Fragment {
 						try {
 							Log.i(tag, serial.getFilePath()+serial.getBuandrate());
 							
-							mSerialPort = new SerialPort(new File(serial.getFilePath()), serial.getBuandrate(), 0);
+							ma.mSerialPort = mSerialPort = new SerialPort(new File(serial.getFilePath()), serial.getBuandrate(), 0);
 							mOutputStream = mSerialPort.getOutputStream();
 							mInputStream = mSerialPort.getInputStream();
+							
+							/*byte [] buffer = {'A','B','C','e'};
+							mOutputStream.write(buffer);*/
 						} catch (SecurityException e1) {
 							// TODO Auto-generated catch block
 							Log.i(tag, "打开串口失败：");
 							e1.printStackTrace();
+							break;
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 							Log.i(tag, "打开串口失败：");
+							break;
 						}
 						Log.i(tag, "打开串口sucess：");
 						
 						serial.setState(true);
 						readThread=new ReadThread();
 						readThread.start();
-						
-						ma.havadata.start();
+			
+						ma.isWork = true;
+						ma.havadata = ma.getHaveData(); 
+					
+							ma.havadata.start();
+				        ma.serialState.setValue(true);
 					}
 				
 					break;
@@ -151,7 +163,23 @@ public class Fragment_serialconfig extends Fragment {
 							mSerialPort.close();
 							mOutputStream .close();
 							mInputStream .close();
+							
 							readThread.interrupt();
+							
+							serial.setState(false);
+							Log.i(tag, "关闭haveData sucess：");
+							
+							Log.i(tag,ma.havadata.getState().toString() );
+							ma.isWork = false;
+							ma.havadata.interrupt();
+							ma.serialState.setValue(false);
+							
+						if (ma.havadata.isInterrupted()) {
+							Log.i(tag,"被中断：");
+						}
+							
+							Log.i(tag,ma.havadata.getState().toString() );
+							
 //							readThread.stop();
 							Log.i(tag, "关闭串口sucess：");
 						    serial.setState(false);

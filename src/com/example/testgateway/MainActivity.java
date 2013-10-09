@@ -30,18 +30,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android_serialport_api.SerialPort;
 
 public class MainActivity extends FragmentActivity {
 
 	private static final int capibity = 50;
-	private static final String tag = "sensehugeXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:";
+	public static boolean isWork = true;
+	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
 	public TelosbDao telosbDao;
+	public SerialPort mSerialPort ;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
 	PackagePattern packagePattern = null;
 	XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
-	HaveData havadata = new HaveData();
+	public HaveData havadata = null;
+   //HaveData havadata = new HaveData();
 	List<String> list = new ArrayList<String>();
 	int listSingnal = 0;
 
@@ -106,7 +110,7 @@ public class MainActivity extends FragmentActivity {
 		quit.setOnClickListener(new ButtonClickListener());
 
 		//默认启动事务：节点
-		transaction.add(R.id.fragment_container, f_listnode);
+		transaction.add(R.id.fragment_container, f_serialPort);
 		transaction.commit();
 
 		init();
@@ -234,12 +238,39 @@ public class MainActivity extends FragmentActivity {
 		SerialListener ml = new SerialListener();
 		PackageListener pl = new PackageListener();
 		httpserverState.addListener(hl);
-		ms.addListener(ml);
+		serialState.addListener(ml);
 		havePackage.addListener(pl);
 
 		havePackage.setValue(false);
 		telosbDao = new TelosbDao(getBaseContext());
 
+		httpserverState.setValue(true);
+		serialState.setValue(true);
+		httpserverState.setValue(false);
+		System.out.println("end:");
+		try {
+			// createTable();
+			// insert() ;
+			test();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+/*		httpserverState = new MySource();
+		serialState = new MySource();
+		ms = new MySource();
+		havePackage = new MySource();
+		// MyListener ml=new MyListener();
+		HttpserverState hl = new HttpserverState();
+		SerialListener ml = new SerialListener();
+		PackageListener pl = new PackageListener();
+		httpserverState.addListener(hl);
+		ms.addListener(ml);
+		havePackage.addListener(pl);
+		
+		havePackage.setValue(false);
+		telosbDao = new TelosbDao(getBaseContext());
+		
 		httpserverState.setValue(true);
 		ms.setValue(true);
 		httpserverState.setValue(false);
@@ -252,7 +283,7 @@ public class MainActivity extends FragmentActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+*/	}
 
 	public void ProcessData() {
 		if (listSingnal == 0) {
@@ -277,11 +308,11 @@ public class MainActivity extends FragmentActivity {
 		public void eventChanged(MyEvent e) {
 			// TODO Auto-generated method stub
 			System.out.println("e:" + e.getValue());
-			if (ms.value) {
-				System.out.println("串口打开：");
+			if (serialState.value) {
+				System.out.println("串口打开：XXXXXXXXXXXXXXXXXXXXXXXXXXX");
 			} else {
 
-				System.out.println("串口关闭中。。。。。");
+				System.out.println("串口关闭中。。。。。XXXXXXXXXXXXXXXXXXXXS");
 			}
 		}
 	}
@@ -325,7 +356,9 @@ public class MainActivity extends FragmentActivity {
 			String headTest = "00FFFF";
 			TelosbPackage telosbPackage = new TelosbPackage();
 			int i;
-			while (true) {
+			
+			while (isWork) {
+				
 				i = serialUtil.findhead(headTest);
 				if (i < 0 && serialUtil.stringBuffer.length() > 6) {
 					serialUtil.delete(serialUtil.stringBuffer.length() - 6);
@@ -408,6 +441,9 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	public HaveData getHaveData(){
+		return new HaveData();
+	}
 	public void Packagesingnal() {
 		havePackage.setValue(true);
 	}
