@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android_serialport_api.SerialPort;
 
 public class MainActivity extends FragmentActivity {
 
@@ -44,7 +45,7 @@ public class MainActivity extends FragmentActivity {
 	HaveData havadata = new HaveData();
 	List<String> list = new ArrayList<String>();
 	int listSingnal = 0;
-
+    public SerialPort mSerialPort=null;
 	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
 	MySource ms;
