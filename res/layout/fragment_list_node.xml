@@ -3,34 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/nodeId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nodeId" 
-        android:textSize="20sp"/>
+    <RelativeLayout
+        android:id="@+id/listNodeLeft"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/nodePower"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@id/nodeId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/nodePower"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/nodeId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nodeId"
+            android:textSize="20sp" />
 
-    <ListView
-        android:id="@android:id/list"
+        <TextView
+            android:id="@+id/nodePower"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/nodeId"
+            android:text="@string/nodePower"
+            android:textSize="20sp" 
+            android:gravity="right"/>
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/nodeId" 
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/nodePower"
+            android:background="#FF0000"
+            android:text="@string/noData"
+            android:textSize="30sp" />
+    </RelativeLayout>
+    <RelativeLayout 
+        android:id="@+id/listNodeRight"
+        android:layout_toRightOf="@id/listNodeLeft"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent" />
-     <TextView
-        android:id="@android:id/empty"
-        android:layout_marginLeft="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/nodePower"
-        android:background="#FF0000"
-        android:text="No data" 
-        android:textSize="30sp"/>
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="5dp">
+        <TextView
+            android:text="@string/hello_world"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+    </RelativeLayout>
 
 </RelativeLayout>
