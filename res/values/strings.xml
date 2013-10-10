@@ -10,7 +10,12 @@
     <string name="serverSetting">服务器设置</string>
     <string name="sinkSetting">节点设置</string>
     <string name="alertSetting">预警设置</string>
+    <string name="powerSetting">电量设置:</string>
+    <string name="musicSetting">音乐设置:</string>
+    <string name="musicSelect">音乐选择</string>
     <string name="sinkCheck">节点信息</string>
+    <string name="nodeId">节点ID</string>
+    <string name="nodePower">节点电量</string>
     <string name="internetSetting">以太网设置</string>
     <string name="wifiSetting">wifi设置</string>
     <string name="dataCenter">数据中心</string>
@@ -35,6 +40,16 @@
         <item>2分钟</item>
         <item>5分钟</item>
         <item>10分钟</item>
+    </string-array>
+    <string-array name="powerSetting">
+        <item>5%</item>
+        <item>10%</item>
+        <item>15%</item>
+        <item>20%</item>
+        <item>25%</item>
+        <item>30%</item>
+        <item>35%</item>
+        <item>40%</item>
     </string-array>
 
     <string name="title_activity_fragment_node_setting">Fragment_nodeSetting</string>
