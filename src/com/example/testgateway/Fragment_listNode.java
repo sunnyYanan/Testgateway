@@ -21,15 +21,10 @@ public class Fragment_listNode extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view1=LayoutInflater.from(getActivity()).inflate(R.layout.list_node,null);
-		GridView gridview = (GridView) view1.findViewById(R.id.gridview);
-		//添加元素给gridview
-		gridview.setAdapter(new ImageAdapter(this.getActivity()));
-		// 设置Gallery的背景
-		//gridview.setBackgroundResource(R.drawable.ic_launcher);
+		View view1=LayoutInflater.from(getActivity()).inflate(R.layout.fragment_list_node,null);
 
 		//事件监听
-		gridview.setOnItemClickListener(new OnItemClickListener() {
+		/*gridview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id)
 			{
 				View viewdialog=LayoutInflater.from(getActivity()).inflate(R.layout.node_info,null);
@@ -65,7 +60,7 @@ public class Fragment_listNode extends Fragment {
 				
 			}
 		});
-
+*/
 		return view1;
 	}
 }

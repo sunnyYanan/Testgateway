@@ -17,7 +17,7 @@ import android.widget.Spinner;
 public class Fragment_nodeSetting extends Fragment {
 	// 节点设置
 	public MainActivity ma;
-	private boolean isAvalable;
+	private boolean isAvalable;//标识串口是否已连接
 	private int cycle;//标识设置的周期时间
 
 	@Override
