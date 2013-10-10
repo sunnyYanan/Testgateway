@@ -18,7 +18,11 @@ public class Fragment_alertSetting extends Fragment {
 		     ma = (MainActivity) getActivity();
 		     byte [] buffer = {'A','B','C','e'};
 		     try {
-				ma.mSerialPort.getOutputStream().write(buffer);
+		    	 if(ma.mSerialPort!=null) {
+		    		 ma.mSerialPort.getOutputStream().write(buffer);
+		    	 }else {
+		    		 System.out.println("has no serialPorts now!");
+		    	 }
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
