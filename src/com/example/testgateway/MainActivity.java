@@ -15,6 +15,7 @@ import senseHuge.service.LocalConfigService;
 import senseHuge.util.HttpClientUtil;
 import senseHuge.util.SerialUtil;
 import senseHuge.util.XmlTelosbPackagePatternUtil;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,12 +29,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android_serialport_api.SerialPort;
 
 public class MainActivity extends FragmentActivity {
@@ -52,6 +49,9 @@ public class MainActivity extends FragmentActivity {
 	// HaveData havadata = new HaveData();
 	List<String> list = new ArrayList<String>();
 	int listSingnal = 0;
+
+	boolean serverConnect = false;// 服务器是否连接
+	boolean serialPortConnect = false;// 串口是否连接
 
 	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
@@ -91,7 +91,6 @@ public class MainActivity extends FragmentActivity {
 		f_dataCenter = new Fragment_dataCenter();
 		f_aboutUs = new Fragment_aboutUs();
 
-
 		// 得到按钮以及设置按钮监听器
 		serialPortSetting = (Button) findViewById(R.id.serialPortSetting);
 		serverSetting = (Button) findViewById(R.id.serverSetting);
@@ -115,7 +114,6 @@ public class MainActivity extends FragmentActivity {
 		aboutUs.setOnClickListener(new ButtonClickListener());
 		quit.setOnClickListener(new ButtonClickListener());
 
-		
 		// 默认启动事务：节点
 		transaction.add(R.id.fragment_container, f_serialPort);
 		transaction.commit();
@@ -206,10 +204,24 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.serialPort_check:
-
+			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+			dialog.setTitle("串口连接状态");
+			if (serialPortConnect) {
+				dialog.setMessage("已连接");
+			} else {
+				dialog.setMessage("未连接");
+			}
+			dialog.show();
 			break;
 		case R.id.server_check:
-
+			AlertDialog.Builder dialog2 = new AlertDialog.Builder(this);
+			dialog2.setTitle("服务器连接状态");
+			if (serverConnect) {
+				dialog2.setMessage("已连接");
+			} else {
+				dialog2.setMessage("未连接");
+			}
+			dialog2.show();
 			break;
 		case R.id.quit:
 			finish();
@@ -388,7 +400,7 @@ public class MainActivity extends FragmentActivity {
 									.parseTelosbPackage(telosbData).getCtype()
 									+ ":%%%%%%%%%%%%%%");
 						} catch (Exception e) {
-                            System.out.println("异常");
+							System.out.println("异常");
 							e.printStackTrace();
 							continue;
 						}
@@ -400,7 +412,7 @@ public class MainActivity extends FragmentActivity {
 							telosbPackagePattern = xmlTelosbPackagePatternUtil
 									.parseTelosbPackage(telosbData);
 						} catch (Exception e) {
-							 System.out.println("异常");
+							System.out.println("异常");
 							e.printStackTrace();
 							continue;
 
@@ -414,7 +426,7 @@ public class MainActivity extends FragmentActivity {
 							telosbPackage.setStatus("未上传");
 
 						}
-                      
+
 						telosbPackage.setCtype(telosbPackagePattern.ctype);
 						telosbPackage.setMessage(telosbData);
 						telosbPackage.setNodeID(telosbPackagePattern.nodeID);
