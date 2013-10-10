@@ -101,5 +101,4 @@ public class Fragment_nodeSetting extends Fragment {
 		});
 		return v;
 	}
-
 }
