@@ -9,8 +9,53 @@
     tools:context=".Fragment_nodeSetting" >
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/alertSettingShow"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="alertSetting" />
+        android:gravity="center"
+        android:text="@string/alertSetting"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:id="@+id/powerSetting"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alertSettingShow"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="80dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/powerSetting"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:layout_width="200dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/musicSetting"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/powerSetting"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/musicSetting"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/musicSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/musicSelect" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -10,6 +10,9 @@
     <string name="serverSetting">服务器设置</string>
     <string name="sinkSetting">节点设置</string>
     <string name="alertSetting">预警设置</string>
+    <string name="powerSetting">电量设置:</string>
+    <string name="musicSetting">音乐设置:</string>
+    <string name="musicSelect">音乐选择</string>
     <string name="sinkCheck">节点信息</string>
     <string name="internetSetting">以太网设置</string>
     <string name="wifiSetting">wifi设置</string>
