@@ -28,12 +28,23 @@ public class Fragment_listNode extends ListFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
+<<<<<<< HEAD
+=======
+		
+>>>>>>> be8988229fe951efdeaeadb676d31e0d7f649900
 		return view;
 	}
 
 	@Override
+<<<<<<< HEAD
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+=======
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// details = getActivity().findViewById(R.id.nodeDetails);
+>>>>>>> be8988229fe951efdeaeadb676d31e0d7f649900
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		Map<String, String> data1 = new HashMap<String, String>();
 		data1.put("nodeId", "1");
@@ -62,11 +73,16 @@ public class Fragment_listNode extends ListFragment {
 		fTransaction.add(R.id.nodeDetails, nodeDetialFragment);
 		fTransaction.commit();
 
+<<<<<<< HEAD
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+=======
+		// currentPos = 0;
+		// showDetail(currentPos);
+>>>>>>> be8988229fe951efdeaeadb676d31e0d7f649900
 	}
 
 	private void showDetail(int position) {
