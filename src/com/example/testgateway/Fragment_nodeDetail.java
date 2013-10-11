@@ -51,11 +51,7 @@ public class Fragment_nodeDetail extends Fragment {
 		scroller.addView(text);
 		// text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
 		if (getShownIndex() != 0)
-<<<<<<< HEAD
 			text.setText(getShownIndex()+"ci");
-=======
-			text.setText("hh");
->>>>>>> be8988229fe951efdeaeadb676d31e0d7f649900
 		else
 			text.setText("µÚÒ»´Î");
 		return scroller;
