@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -56,6 +58,7 @@
     <string name="title_activity_fragment_node_setting">Fragment_nodeSetting</string>
 
 =======
+>>>>>>> origin/master
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -113,5 +116,8 @@
 
     <string name="title_activity_fragment_node_setting">Fragment_nodeSetting</string>
 
+<<<<<<< HEAD
+=======
 >>>>>>> a2dcd7bba0358fb75655a07f8b2dd16df508f4bd
+>>>>>>> origin/master
 </resources>
