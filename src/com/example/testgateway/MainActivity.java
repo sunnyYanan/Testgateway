@@ -55,7 +55,8 @@ public class MainActivity extends FragmentActivity {
 
 	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
-	MySource ms;
+	//调用以下资源的getvalue方法也可以判断当前的连接状态
+	MySource ms;//这个变量应该是多余的，待删除
 	MySource httpserverState;
 	MySource serialState;
 	MySource havePackage;
@@ -237,24 +238,24 @@ public class MainActivity extends FragmentActivity {
 		LocalConfigService localConfigService = new LocalConfigService(
 				getBaseContext());
 		localConfigService.setConfig("webserver", "192.168.10.145");
-		System.out.println(localConfigService.getConfig("webserver"));
-
+		// 初始化xml数据包格式并放入packagepattern中
 		xmlTelosbPackagePatternUtil = new XmlTelosbPackagePatternUtil(
 				getFilesDir().toString());
-
-		System.out
-				.println(xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
-						.size() + "__________%%%_______");
-		Log.i("XmlTelosbPackagePatternUtil",
-				xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
-						.size() + "__________%%%_______");
+		/*
+		 * System.out
+		 * .println(xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
+		 * .size() + "__________%%%_______");
+		 * Log.i("XmlTelosbPackagePatternUtil",
+		 * xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
+		 * .size() + "__________%%%_______");
+		 */
+		// 客户端，服务器，串口，等资源的初始化
 		httpClientUtil = new HttpClientUtil(getBaseContext());
-
 		httpserverState = new MySource();
 		serialState = new MySource();
 		ms = new MySource();
 		havePackage = new MySource();
-		// MyListener ml=new MyListener();
+		
 		HttpserverState hl = new HttpserverState();
 		SerialListener ml = new SerialListener();
 		PackageListener pl = new PackageListener();
@@ -262,37 +263,15 @@ public class MainActivity extends FragmentActivity {
 		serialState.addListener(ml);
 		havePackage.addListener(pl);
 
-		havePackage.setValue(false);
+//		havePackage.setValue(false);
+
+		// 创建数据库表
 		telosbDao = new TelosbDao(getBaseContext());
 
-		httpserverState.setValue(true);
+		/*httpserverState.setValue(true);
 		serialState.setValue(true);
-		httpserverState.setValue(false);
-		System.out.println("end:");
-		try {
-			// createTable();
-			// insert() ;
-			test();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		/*
-		 * httpserverState = new MySource(); serialState = new MySource(); ms =
-		 * new MySource(); havePackage = new MySource(); // MyListener ml=new
-		 * MyListener(); HttpserverState hl = new HttpserverState();
-		 * SerialListener ml = new SerialListener(); PackageListener pl = new
-		 * PackageListener(); httpserverState.addListener(hl);
-		 * ms.addListener(ml); havePackage.addListener(pl);
-		 * 
-		 * havePackage.setValue(false); telosbDao = new
-		 * TelosbDao(getBaseContext());
-		 * 
-		 * httpserverState.setValue(true); ms.setValue(true);
-		 * httpserverState.setValue(false); System.out.println("end:"); try { //
-		 * createTable(); // insert() ; test(); } catch (Exception e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 */}
+		httpserverState.setValue(false);*/
+	}
 
 	public void ProcessData() {
 		if (listSingnal == 0) {
@@ -300,27 +279,21 @@ public class MainActivity extends FragmentActivity {
 		} else {
 			return;
 		}
-
 		while (list.size() > 0) {
 			System.out.println("成功接收数据" + list.get(0));
 			list.remove(0);
-
 		}
-
 		listSingnal = 0;
-		// Packagewaite();
 	}
 
 	public class SerialListener implements Listenable {
-
 		@Override
 		public void eventChanged(MyEvent e) {
 			// TODO Auto-generated method stub
-			System.out.println("e:" + e.getValue());
+			System.out.println("串口‘s e:" + e.getValue());
 			if (serialState.value) {
 				System.out.println("串口打开：XXXXXXXXXXXXXXXXXXXXXXXXXXX");
 			} else {
-
 				System.out.println("串口关闭中。。。。。XXXXXXXXXXXXXXXXXXXXS");
 			}
 		}
@@ -331,7 +304,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public void eventChanged(MyEvent e) {
 			// TODO Auto-generated method stub
-			System.out.println("e:" + e.getValue());
+			System.out.println("包's e:" + e.getValue());
 			if (ms.value) {
 				System.out.println("接收到数据，数据正在出处理。。。。");
 				ProcessData();
@@ -345,7 +318,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public void eventChanged(MyEvent e) {
 			// TODO Auto-generated method stub
-			System.out.println("e:" + e.getValue());
+			System.out.println("server's e:" + e.getValue());
 			if (e.getValue()) {
 				System.out.println("服务器已连接：");
 			} else {
@@ -355,19 +328,15 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public class HaveData extends Thread {
-
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			super.run();
-
 			// 获取到的数据包
 			String headTest = "00FFFF";
 			TelosbPackage telosbPackage = new TelosbPackage();
 			int i;
-
 			while (isWork) {
-
 				i = serialUtil.findhead(headTest);
 				if (i < 0 && serialUtil.stringBuffer.length() > 6) {
 					serialUtil.delete(serialUtil.stringBuffer.length() - 6);
@@ -380,12 +349,6 @@ public class MainActivity extends FragmentActivity {
 					System.out.println(serialUtil.stringBuffer.toString());
 					System.out
 							.println("+++++++++++++++++++++++++++++++++++++++++++++");
-					/*
-					 * //int i = serialUtil.findhead("00FFFF"); if (i < 0) {
-					 * serialUtil.delete(serialUtil.stringBuffer.length()-6); }
-					 * else { System.out.println("start:"+i);
-					 * serialUtil.delete(i);
-					 */
 					String telosbData = serialUtil.getFirstData();
 					System.out.println("receive package:" + telosbData);
 
@@ -404,8 +367,7 @@ public class MainActivity extends FragmentActivity {
 							e.printStackTrace();
 							continue;
 						}
-						;
-
+//						;
 						PackagePattern telosbPackagePattern = null;
 						try {
 
@@ -418,13 +380,9 @@ public class MainActivity extends FragmentActivity {
 
 						}
 						if (httpClientUtil.PostTelosbData("", telosbData)) {
-
 							telosbPackage.setStatus("已上传");
-
 						} else {
-
 							telosbPackage.setStatus("未上传");
-
 						}
 
 						telosbPackage.setCtype(telosbPackagePattern.ctype);
@@ -448,7 +406,6 @@ public class MainActivity extends FragmentActivity {
 					}
 				}
 			}
-
 		}
 	}
 
@@ -487,83 +444,13 @@ public class MainActivity extends FragmentActivity {
 		dbHelper.execSQL(sql);
 		dbHelper.closeConnection();
 	}
-
 	public void insert() throws Exception {
 		DBHelper dbHelper = new DBHelper(this.getBaseContext());
 		dbHelper.open();
-
 		ContentValues values = new ContentValues(); // 相当于map
-
 		values.put("username", "test");
 		values.put("password", "123456");
-
 		dbHelper.insert("user", values);
-
 		dbHelper.closeConnection();
 	}
-
-	public void test() {
-
-		/*
-		 * telosbDao.insertTelosbPackage(); TelosbPackage telosbPackage = new
-		 * TelosbPackage(); telosbPackage.setId(4);
-		 * telosbDao.updateTelosbPackageStatus(telosbPackage);
-		 * telosbPackage.setId(9); telosbDao.deleteTelosbPackage(telosbPackage);
-		 * //telosbDao.findUploadList();
-		 * System.out.println(telosbDao.findUploadList().size());
-		 * System.out.println(telosbDao.findUnUploadList().size());
-		 */
-	}
-
-	/*
-	 * @SuppressLint("NewApi") public void initHttp(){
-	 * StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-	 * .detectDiskReads() .detectDiskWrites() .detectNetwork() .penaltyLog()
-	 * .build());
-	 * 
-	 * StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-	 * .detectDiskReads() .detectDiskWrites() .detectNetwork() // or
-	 * .detectAll() for all detectable problems .penaltyLog() .build());
-	 * StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-	 * .detectLeakedSqlLiteObjects() .detectLeakedClosableObjects()
-	 * .penaltyLog() .penaltyDeath() .build()); HttpClient httpClient;
-	 * httpClient = new DefaultHttpClient();
-	 * httpClient.getParams().setParameter(
-	 * CoreConnectionPNames.CONNECTION_TIMEOUT, 1000); HttpPost post = new
-	 * HttpPost( "http://192.168.10.107:8080/foo/login.jsp");
-	 * List<NameValuePair> params = new ArrayList<NameValuePair>(); String name
-	 * ="1"; params .add(new BasicNameValuePair("name", name)); String pass
-	 * ="1"; params .add(new BasicNameValuePair("pass", pass ));
-	 * 
-	 * 
-	 * 
-	 * 
-	 * try { // 设置请求参数 post.setEntity(new UrlEncodedFormEntity( params,
-	 * HTTP.UTF_8)); // 发送POST请求 HttpResponse response = httpClient
-	 * .execute(post); // 如果服务器成功地返回响应 if (response.getStatusLine()
-	 * .getStatusCode() == 200) { String msg = EntityUtils
-	 * .toString(response.getEntity()); // 提示登录成功 Toast.makeText(this, msg,
-	 * 5000).show(); System.out.println("hello:"+msg); Log.i(tag, msg); } }
-	 * catch (Exception e) { e.printStackTrace(); } }
-	 */
-
-	public void testXMLParse() {
-		/*
-		 * String C2=
-		 * "00FFFF00005A00EE000000000000F9C20000C200000000045FC53C045FC53D1BFE53F9020000DC0A000A0001EA0A00090000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		 * ; xmlTelosbPackagePatternUtil.Parse(packagePattern, "C2", C2); String
-		 * C1=
-		 * "00FFFF00005C00EE00000000000003C10000C100000000046051B3046051B41C005403000000001F00CCCB5200000000000000000B780FB1076019D7000500000000009A00000000FFFF0100000000000000000000000000000000000000000000000000"
-		 * ; // xmlTelosbPackagePatternUtil.Parse(packagePattern, "C1", C1); //
-		 * PackagePattern packagePattern1
-		 * =xmlTelosbPackagePatternUtil.parseTelosbPackage(C1, packagePattern);
-		 * PackagePattern packagePattern1 = null; try { packagePattern1 =
-		 * xmlTelosbPackagePatternUtil.parseTelosbPackage(C1); } catch
-		 * (Exception e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 * System.out.println("size:"+packagePattern1.getDataField
-		 * ().size()+";length ="+packagePattern1.getMessageLength());
-		 */
-	}
-
 }

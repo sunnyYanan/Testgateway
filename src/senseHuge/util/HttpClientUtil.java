@@ -38,67 +38,6 @@ public class HttpClientUtil extends Thread {
 		httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000);
 	}
 	
-/*	@SuppressLint("NewApi")
-	public void Post(){
-		  StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-          .detectDiskReads()
-          .detectDiskWrites()
-          .detectNetwork()   // or .detectAll() for all detectable problems
-          .penaltyLog()
-          .build());
-          StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-          .detectLeakedSqlLiteObjects()
-          .detectLeakedClosableObjects()
-          .penaltyLog()
-          .penaltyDeath()
-          .build());
-		HttpClient httpClient;
-		httpClient = new DefaultHttpClient();
-		httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000);
-		HttpPost post = new HttpPost(
-				"http://192.168.10.107:8080/foo/login.jsp");
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		String name ="1";
-		params
-			.add(new BasicNameValuePair("name", name));
-		String pass ="1";
-		params
-			.add(new BasicNameValuePair("pass", pass ));
-		
-		
-
-		
-		try
-		{
-			// 设置请求参数
-			post.setEntity(new UrlEncodedFormEntity(
-				params, HTTP.UTF_8));
-			// 发送POST请求
-			HttpResponse response = httpClient
-				.execute(post);
-			// 如果服务器成功地返回响应
-			if (response.getStatusLine()
-				.getStatusCode() == 200)
-			{
-				String msg = EntityUtils
-					.toString(response.getEntity());
-				// 提示登录成功
-				Toast.makeText(this.context,
-					msg, 5000).show();
-				System.out.println("hello:"+msg);
-				Log.i(tag, "httpclient send sucess"+msg);
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			
-		}
-	
-	}
-	
-	*/
-	
 	@SuppressLint("NewApi")
 	public Boolean PostTelosbData(String url,String data){
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
