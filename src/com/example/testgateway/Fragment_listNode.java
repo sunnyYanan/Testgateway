@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import senseHuge.model.PackagePattern;
+import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,7 +36,7 @@ public class Fragment_listNode extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
 
-		Thread listNodeThread =new Thread(new MyThread());
+		Thread listNodeThread = new Thread(new MyThread());
 		listNodeThread.start();
 
 		// 实例化一个适配器
@@ -47,14 +48,21 @@ public class Fragment_listNode extends Fragment {
 		GridView gridview = (GridView) view.findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
 
-		gridview.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-				Toast.makeText(Fragment_listNode.this.getActivity(),
-						"" + position, Toast.LENGTH_SHORT).show();
-			}
-		});
+		gridview.setOnItemClickListener(new MyItemClickListener());
 		return view;
+	}
+
+	class MyItemClickListener implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			// TODO Auto-generated method stub
+			AlertDialog.Builder d= new AlertDialog.Builder(arg1.getContext());
+			d.setTitle("haha");
+			d.show();
+		}
+
 	}
 
 	class MyThread implements Runnable {
@@ -141,6 +149,7 @@ public class Fragment_listNode extends Fragment {
 	 * R.drawable.ic_launcher, R.drawable.ic_launcher, R.drawable.ic_launcher,
 	 * R.drawable.ic_launcher, R.drawable.ic_launcher, }; }
 	 */
+
 	/*
 	 * @Override public void onActivityCreated(Bundle savedInstanceState) {
 	 * super.onActivityCreated(savedInstanceState); List<Map<String, String>>
