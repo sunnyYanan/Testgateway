@@ -1,9 +1,10 @@
 package com.example.testgateway;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import senseHuge.Dao.TelosbDao;
+import senseHuge.Dao.MySQLiteDbHelper;
 import senseHuge.listener.Listenable;
 import senseHuge.listener.MyEvent;
 import senseHuge.listener.MySource;
@@ -15,7 +16,9 @@ import senseHuge.util.HttpClientUtil;
 import senseHuge.util.SerialUtil;
 import senseHuge.util.XmlTelosbPackagePatternUtil;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -37,7 +40,9 @@ public class MainActivity extends FragmentActivity {
 	public static boolean isWork = false;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
-	public TelosbDao telosbDao;
+	// public TelosbDao telosbDao;
+	public MySQLiteDbHelper mDbhelper;
+	public SQLiteDatabase mDb;
 	public SerialPort mSerialPort;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
@@ -53,8 +58,8 @@ public class MainActivity extends FragmentActivity {
 
 	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
-	//调用以下资源的getvalue方法也可以判断当前的连接状态
-	MySource ms;//这个变量应该是多余的，待删除
+	// 调用以下资源的getvalue方法也可以判断当前的连接状态
+	MySource ms;// 这个变量应该是多余的，待删除
 	MySource httpserverState;
 	MySource serialState;
 	MySource havePackage;
@@ -253,7 +258,7 @@ public class MainActivity extends FragmentActivity {
 		serialState = new MySource();
 		ms = new MySource();
 		havePackage = new MySource();
-		
+
 		HttpserverState hl = new HttpserverState();
 		SerialListener ml = new SerialListener();
 		PackageListener pl = new PackageListener();
@@ -261,14 +266,17 @@ public class MainActivity extends FragmentActivity {
 		serialState.addListener(ml);
 		havePackage.addListener(pl);
 
-//		havePackage.setValue(false);
+		// havePackage.setValue(false);
 
 		// 创建数据库表
-		telosbDao = new TelosbDao(getBaseContext());
+		mDbhelper = new MySQLiteDbHelper(MainActivity.this, "telosb",
+				null, 1);
+		mDb = mDbhelper.getWritableDatabase();
 
-		/*httpserverState.setValue(true);
-		serialState.setValue(true);
-		httpserverState.setValue(false);*/
+		/*
+		 * httpserverState.setValue(true); serialState.setValue(true);
+		 * httpserverState.setValue(false);
+		 */
 	}
 
 	public void ProcessData() {
@@ -365,7 +373,7 @@ public class MainActivity extends FragmentActivity {
 							e.printStackTrace();
 							continue;
 						}
-//						;
+						// ;
 						PackagePattern telosbPackagePattern = null;
 						try {
 
@@ -386,15 +394,26 @@ public class MainActivity extends FragmentActivity {
 						telosbPackage.setCtype(telosbPackagePattern.ctype);
 						telosbPackage.setMessage(telosbData);
 						telosbPackage.setNodeID(telosbPackagePattern.nodeID);
-						boolean result = telosbDao
-								.insertTelosbPackage(telosbPackage);
-						if (result) {
-							System.out
-									.println("insert telosbPackage to database success%%");
-						} else {
-							System.out
-									.println("insert telosbPackage to database fail！！！    ");
-						}
+						/*
+						 * boolean result = telosbDao
+						 * .insertTelosbPackage(telosbPackage); if (result) {
+						 * System.out
+						 * .println("insert telosbPackage to database success%%"
+						 * ); } else { System.out
+						 * .println("insert telosbPackage to database fail！！！    "
+						 * ); }
+						 */
+						ContentValues values = new ContentValues(); // 相当于map
+						values.put("message", telosbPackage.getMessage());
+						values.put("Ctype", telosbPackage.getCtype());
+						values.put("NodeID", telosbPackage.nodeID);
+
+						values.put("status", telosbPackage.getStatus());
+						Date date = new Date();
+						SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+								"yyyy-MM-dd hh:mm:ss");
+						values.put("receivetime", simpleDateFormat.format(date));
+						mDb.insert("Telosb", null, values);
 						if (telosbData != null) {
 							list.add(telosbData);
 							Packagesingnal();
@@ -429,26 +448,21 @@ public class MainActivity extends FragmentActivity {
 
 	/**
 	 * TEst
-	 *//*
-	public void createTable() throws Exception {
-		DBHelper dbHelper = new DBHelper(this.getBaseContext());
-		dbHelper.open();
-
-		String deleteSql = "drop table if exists user ";
-		dbHelper.execSQL(deleteSql);
-
-		// id是自动增长的主键，username和 password为字段名， text为字段的类型
-		String sql = "CREATE TABLE user (id integer primary key autoincrement, username text, password text)";
-		dbHelper.execSQL(sql);
-		dbHelper.closeConnection();
-	}
-	public void insert() throws Exception {
-		DBHelper dbHelper = new DBHelper(this.getBaseContext());
-		dbHelper.open();
-		ContentValues values = new ContentValues(); // 相当于map
-		values.put("username", "test");
-		values.put("password", "123456");
-		dbHelper.insert("user", values);
-		dbHelper.closeConnection();
-	}*/
+	 */
+	/*
+	 * public void createTable() throws Exception { DBHelper dbHelper = new
+	 * DBHelper(this.getBaseContext()); dbHelper.open();
+	 * 
+	 * String deleteSql = "drop table if exists user ";
+	 * dbHelper.execSQL(deleteSql);
+	 * 
+	 * // id是自动增长的主键，username和 password为字段名， text为字段的类型 String sql =
+	 * "CREATE TABLE user (id integer primary key autoincrement, username text, password text)"
+	 * ; dbHelper.execSQL(sql); dbHelper.closeConnection(); } public void
+	 * insert() throws Exception { DBHelper dbHelper = new
+	 * DBHelper(this.getBaseContext()); dbHelper.open(); ContentValues values =
+	 * new ContentValues(); // 相当于map values.put("username", "test");
+	 * values.put("password", "123456"); dbHelper.insert("user", values);
+	 * dbHelper.closeConnection(); }
+	 */
 }

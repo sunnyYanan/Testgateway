@@ -219,13 +219,6 @@ public class XmlTelosbPackagePatternUtil {
 			System.out
 					.println("packagePattern.TelosbDataField.get(Ctype) == null!!!");
 		}
-		System.out.println("Ctype =" + Ctype);
-		System.out.println(telsobData);
-		System.out.println(packagePattern.TelosbDataField.get(Ctype).size()
-				+ "size:");
-		for (String string : packagePattern.TelosbDataField.get(Ctype).keySet()) {
-			System.out.println(string + "TTTTTTTTTTTTTTTTT");
-		}
 
 		Iterator<?> it = packagePattern.TelosbDataField.get(Ctype).entrySet()
 				.iterator();
@@ -410,7 +403,6 @@ public class XmlTelosbPackagePatternUtil {
 			Map.Entry pairs = (Map.Entry) it.next();
 			System.out.println(pairs.getKey() + " =============== "
 					+ pairs.getValue());
-
 		}
 	}
 }
