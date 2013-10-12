@@ -24,9 +24,10 @@ public class Fragment_listNode extends Fragment {
 	 * FragmentManager fManager; FragmentTransaction fTransaction; Fragment
 	 * nodeDetialFragment;
 	 */
-//	MainActivity ma;
-	List<Map<String, Object>> idList = new ArrayList<Map<String, Object>>();
-//	List<String> powerList = new ArrayList<String>();
+	// MainActivity ma;
+	List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
+
+	// List<String> powerList = new ArrayList<String>();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,21 +35,13 @@ public class Fragment_listNode extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
 
-		/*List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < 19; i++) {
-			Map<String, Object> item = new HashMap<String, Object>();
-			item.put("imageItem", R.drawable.ic_launcher);// 添加图像资源的ID
-			item.put("textItem", "icon" + i);// 按序号添加ItemText
-			item.put("power", "10");
-			items.add(item);
-		}
-*/
-		prepareData();
+		Thread listNodeThread =new Thread(new MyThread());
+		listNodeThread.start();
 
 		// 实例化一个适配器
-		SimpleAdapter adapter = new SimpleAdapter(this.getActivity(), idList,
-				R.layout.list_node_pagestyle, new String[] { "图片",
-						"源节点编号", "节点电压" }, new int[] { R.id.listNodeImage,
+		SimpleAdapter adapter = new SimpleAdapter(this.getActivity(), nodeList,
+				R.layout.list_node_pagestyle, new String[] { "图片", "源节点编号",
+						"节点电压" }, new int[] { R.id.listNodeImage,
 						R.id.listNodeId, R.id.listNodePower });
 
 		GridView gridview = (GridView) view.findViewById(R.id.gridview);
@@ -64,18 +57,31 @@ public class Fragment_listNode extends Fragment {
 		return view;
 	}
 
+	class MyThread implements Runnable {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			prepareData();
+		}
+
+	}
+
 	private void prepareData() {
+
 		// TODO Auto-generated method stub
 		// 得到数据并解析
 		// 这样的查找是从最早的记录开始查找的,只查找C1包，因为只有C1包有电压信息
-		Cursor cursor = MainActivity.mDb.query("Telosb", new String[] { "message" },
-				"CType=?", new String[] { "C1" }, null, null, null);
+		Cursor cursor = MainActivity.mDb.query("Telosb",
+				new String[] { "message" }, "CType=?", new String[] { "C1" },
+				null, null, null);
 		while (cursor.moveToNext()) {
 			String message = cursor.getString(cursor.getColumnIndex("message"));
 			System.out.println("query--->" + message);
 			try {
-				//解析后的数据
-				PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil.parseTelosbPackage(message);
+				// 解析后的数据
+				PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil
+						.parseTelosbPackage(message);
 				getTheNodeInfo(mpp);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -83,23 +89,23 @@ public class Fragment_listNode extends Fragment {
 			}
 		}
 	}
-//在解析后的数据中提取出节点编号和电压，并存入要显示的数据中
+
+	// 在解析后的数据中提取出节点编号和电压，并存入要显示的数据中
 	private void getTheNodeInfo(PackagePattern mpp) {
 		// TODO Auto-generated method stub
 		Iterator<?> it = mpp.DataField.entrySet().iterator();
-		Map<String,Object> item = new HashMap<String,Object>();
+		Map<String, Object> item = new HashMap<String, Object>();
 		while (it.hasNext()) {
 			item.put("图片", R.drawable.ic_launcher);
 			Map.Entry pairs = (Map.Entry) it.next();
-			if(pairs.getKey().equals("源节点编号")) {
-				item.put("源节点编号",pairs.getValue().toString());
-			}
-			else if(pairs.getKey().equals("节点电压"))
-				item.put("节点电压",pairs.getValue().toString());
+			if (pairs.getKey().equals("源节点编号")) {
+				item.put("源节点编号", pairs.getValue().toString());
+			} else if (pairs.getKey().equals("节点电压"))
+				item.put("节点电压", pairs.getValue().toString());
 			System.out.println(pairs.getKey() + " =============== "
 					+ pairs.getValue());
 		}
-		idList.add(item);
+		nodeList.add(item);
 	}
 
 	@Override
