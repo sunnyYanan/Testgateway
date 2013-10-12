@@ -37,51 +37,49 @@ public final class R {
         public static final int img5=0x7f020006;
     }
     public static final class id {
-        public static final int ItemImage=0x7f09001c;
-        public static final int ItemText=0x7f09001e;
-        public static final int ItemTitle=0x7f09001d;
-        public static final int ListView01=0x7f090022;
-        public static final int RelativeLayout01=0x7f09001b;
+        public static final int ItemImage=0x7f090018;
+        public static final int ItemText=0x7f09001a;
+        public static final int ItemTitle=0x7f090019;
+        public static final int ListView01=0x7f090020;
+        public static final int RelativeLayout01=0x7f090017;
         public static final int aboutUs=0x7f090009;
-        public static final int action_settings=0x7f09002b;
+        public static final int action_settings=0x7f090029;
         public static final int alertSetting=0x7f090004;
         public static final int alertSettingShow=0x7f09000c;
-        public static final int close=0x7f090025;
-        public static final int config=0x7f09002a;
-        public static final int connect=0x7f090026;
-        public static final int connect_test=0x7f090029;
+        public static final int close=0x7f090023;
+        public static final int config=0x7f090028;
+        public static final int connect=0x7f090024;
+        public static final int connect_test=0x7f090027;
         public static final int dataCenter=0x7f090008;
-        public static final int dialog=0x7f09001f;
-        public static final int etname=0x7f090021;
+        public static final int dialog=0x7f09001d;
+        public static final int etname=0x7f09001f;
         public static final int fragment_container=0x7f09000b;
         public static final int functionView=0x7f090000;
+        public static final int gridview=0x7f090011;
         public static final int internetSetting=0x7f090006;
-        public static final int listNodeLeft=0x7f090011;
-        public static final int listNodeRight=0x7f090014;
+        public static final int listNodeImage=0x7f09001b;
+        public static final int listNodeTest=0x7f09001c;
         public static final int musicSelect=0x7f090010;
         public static final int musicSetting=0x7f09000f;
-        public static final int nodeDetails=0x7f090015;
-        public static final int nodeId=0x7f090012;
-        public static final int nodeIdShow=0x7f090016;
-        public static final int nodePower=0x7f090013;
-        public static final int nodePowerShow=0x7f090017;
+        public static final int nodeIdShow=0x7f090012;
+        public static final int nodePowerShow=0x7f090013;
         public static final int powerSetting=0x7f09000d;
         public static final int powerSettingSpinner=0x7f09000e;
         public static final int quit=0x7f09000a;
-        public static final int sendCycle=0x7f090019;
-        public static final int sendCycleSelect=0x7f09001a;
+        public static final int sendCycle=0x7f090015;
+        public static final int sendCycleSelect=0x7f090016;
         public static final int serialPortSetting=0x7f090001;
-        public static final int serialPort_check=0x7f09002c;
-        public static final int serverAddr=0x7f090028;
+        public static final int serialPort_check=0x7f09002a;
+        public static final int serverAddr=0x7f090026;
         public static final int serverSetting=0x7f090002;
-        public static final int server_check=0x7f09002d;
+        public static final int server_check=0x7f09002b;
         public static final int sinkCheck=0x7f090005;
         public static final int sinkSetting=0x7f090003;
-        public static final int sinkSettingShow=0x7f090018;
-        public static final int spinner_baud=0x7f090023;
-        public static final int spinner_device=0x7f090024;
-        public static final int t_server=0x7f090027;
-        public static final int tvname=0x7f090020;
+        public static final int sinkSettingShow=0x7f090014;
+        public static final int spinner_baud=0x7f090021;
+        public static final int spinner_device=0x7f090022;
+        public static final int t_server=0x7f090025;
+        public static final int tvname=0x7f09001e;
         public static final int wifiSetting=0x7f090007;
     }
     public static final class layout {
@@ -93,38 +91,40 @@ public final class R {
         public static final int fragment_node_item=0x7f030005;
         public static final int fragment_node_setting=0x7f030006;
         public static final int list_items=0x7f030007;
-        public static final int node_info=0x7f030008;
-        public static final int serialconfig=0x7f030009;
-        public static final int serverconfig=0x7f03000a;
+        public static final int list_node_pagestyle=0x7f030008;
+        public static final int node_info=0x7f030009;
+        public static final int serialconfig=0x7f03000a;
+        public static final int serverconfig=0x7f03000b;
     }
     public static final class menu {
         public static final int fragment_node_setting=0x7f080000;
         public static final int main=0x7f080001;
     }
     public static final class string {
-        public static final int aboutUs=0x7f060013;
+        public static final int aboutUs=0x7f060014;
         public static final int action_settings=0x7f060001;
         public static final int alertSetting=0x7f060008;
         public static final int app_name=0x7f060000;
-        public static final int dataCenter=0x7f060012;
+        public static final int dataCenter=0x7f060013;
         public static final int hello_world=0x7f060004;
-        public static final int internetSetting=0x7f060010;
+        public static final int internetSetting=0x7f060011;
+        public static final int listNodeImage=0x7f06000d;
         public static final int musicSelect=0x7f06000b;
         public static final int musicSetting=0x7f06000a;
-        public static final int noData=0x7f06000f;
-        public static final int nodeId=0x7f06000d;
-        public static final int nodePower=0x7f06000e;
+        public static final int noData=0x7f060010;
+        public static final int nodeId=0x7f06000e;
+        public static final int nodePower=0x7f06000f;
         public static final int powerSetting=0x7f060009;
-        public static final int quit=0x7f060014;
-        public static final int sendCycle=0x7f060015;
+        public static final int quit=0x7f060015;
+        public static final int sendCycle=0x7f060016;
         public static final int serialPortSetting=0x7f060005;
         public static final int serialPort_check=0x7f060002;
         public static final int serverSetting=0x7f060006;
         public static final int server_check=0x7f060003;
         public static final int sinkCheck=0x7f06000c;
         public static final int sinkSetting=0x7f060007;
-        public static final int title_activity_fragment_node_setting=0x7f060016;
-        public static final int wifiSetting=0x7f060011;
+        public static final int title_activity_fragment_node_setting=0x7f060017;
+        public static final int wifiSetting=0x7f060012;
     }
     public static final class style {
         /** 
