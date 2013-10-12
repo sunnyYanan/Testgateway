@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -32,17 +29,18 @@ public class Fragment_listNode extends Fragment {
 				false);
 		
 		List<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 19; i++) {
 			Map<String, Object> item = new HashMap<String, Object>();
 			item.put("imageItem", R.drawable.ic_launcher);// 添加图像资源的ID
 			item.put("textItem", "icon" + i);// 按序号添加ItemText
+			item.put("power", "10");
 			items.add(item);
 		}
 
 		// 实例化一个适配器
 		SimpleAdapter adapter = new SimpleAdapter(this.getActivity(), items,
-				R.layout.list_node_pagestyle, new String[] { "imageItem", "textItem" },
-				new int[] { R.id.listNodeImage, R.id.listNodeTest });
+				R.layout.list_node_pagestyle, new String[] { "imageItem", "textItem","power" },
+				new int[] { R.id.listNodeImage, R.id.listNodeId,R.id.listNodePower });
 
 		GridView gridview = (GridView) view.findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
