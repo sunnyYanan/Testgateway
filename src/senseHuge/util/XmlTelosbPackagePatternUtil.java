@@ -307,7 +307,7 @@ public class XmlTelosbPackagePatternUtil {
 
 		return map;
 	}
-
+/*
 	public PackagePattern parseTelosbPackage(String telsobData,
 			PackagePattern packagePattern) {
 		PackagePattern telosbPackage = new PackagePattern();
@@ -333,11 +333,10 @@ public class XmlTelosbPackagePatternUtil {
 
 		return telosbPackage;
 	}
-
+*/
 	public PackagePattern parseTelosbPackage(String telsobData)
 			throws Exception {
 		PackagePattern telosbPackage = new PackagePattern();
-
 		telosbPackage.setAMtype(packageParserService.parseDatafield(telsobData,
 				"008008"));
 		telosbPackage.setCtype(packageParserService.parseDatafield(telsobData,
@@ -352,23 +351,12 @@ public class XmlTelosbPackagePatternUtil {
 				"001003"));
 		telosbPackage.setNodeID(packageParserService.parseDatafield(telsobData,
 				"020021"));
-		// Map<String, String> map = this.Parse(this.getPackagePattern(),
-		// packageParserService.parseDatafield(telsobData, "019019"),
-		// telsobData);
-
-		// telosbPackage.setDataField(map);
-		// packagePattern = this.getPackagePattern();
 		if (packagePattern == null) {
 
 			System.out.println("packagePattern == null");
 		}
 		System.out.println(packagePattern.getTelosbDataField().size()
 				+ "==packagePattern.getTelosbDataField().size()");
-		/*
-		 * if (packagePattern.getTelosbDataField().size() == 0) {
-		 * this.packagePattern = this.getPackagePattern(); }
-		 */
-
 		String type = "C1C2C3C4";
 		String ctype = packageParserService
 				.parseDatafield(telsobData, "019019");
@@ -377,10 +365,6 @@ public class XmlTelosbPackagePatternUtil {
 			throw new RuntimeException("demo");
 
 		}
-		// telosbPackage.setDataField(this.Parse(packagePattern,
-		// packageParserService.parseDatafield(telsobData, "019019"),
-		// telsobData));
-
 		telosbPackage.setDataField(this.Parse(
 				packageParserService.parseDatafield(telsobData, "019019"),
 				telsobData));
@@ -391,13 +375,7 @@ public class XmlTelosbPackagePatternUtil {
 	}
 
 	public void testTelosbDatafield(PackagePattern telosbPackage) {
-		for (String string : telosbPackage.DataField.keySet()) {
-			System.out.println(string + ";;;;");
-
-		}
-
 		Iterator<?> it = telosbPackage.DataField.entrySet().iterator();
-
 		System.out.println("#########111111111111111111111111##############");
 		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry) it.next();

@@ -41,13 +41,13 @@ public class MainActivity extends FragmentActivity {
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
 	// public TelosbDao telosbDao;
-	public MySQLiteDbHelper mDbhelper;
-	public SQLiteDatabase mDb;
+	public static MySQLiteDbHelper mDbhelper;
+	public static SQLiteDatabase mDb;
 	public SerialPort mSerialPort;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
 	PackagePattern packagePattern = null;
-	XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
+	public static XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
 	public HaveData havadata = null;
 	// HaveData havadata = new HaveData();
 	List<String> list = new ArrayList<String>();
@@ -269,8 +269,7 @@ public class MainActivity extends FragmentActivity {
 		// havePackage.setValue(false);
 
 		// 创建数据库表
-		mDbhelper = new MySQLiteDbHelper(MainActivity.this, "telosb",
-				null, 1);
+		mDbhelper = new MySQLiteDbHelper(MainActivity.this, "telosb", null, 1);
 		mDb = mDbhelper.getWritableDatabase();
 
 		/*
@@ -365,6 +364,7 @@ public class MainActivity extends FragmentActivity {
 						System.out
 								.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 						try {
+							// 数据解析
 							System.out.println(xmlTelosbPackagePatternUtil
 									.parseTelosbPackage(telosbData).getCtype()
 									+ ":%%%%%%%%%%%%%%");
@@ -376,7 +376,7 @@ public class MainActivity extends FragmentActivity {
 						// ;
 						PackagePattern telosbPackagePattern = null;
 						try {
-
+							// 数据解析
 							telosbPackagePattern = xmlTelosbPackagePatternUtil
 									.parseTelosbPackage(telosbData);
 						} catch (Exception e) {

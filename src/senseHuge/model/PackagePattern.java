@@ -12,9 +12,7 @@ public class PackagePattern {
 	public String AMtype = "00";
 	public String ctype = "C1";
 	public String nodeID ;
-	
 	public Map<String, String> DataField = new LinkedHashMap<String, String>();
-
 	public Map<String, Map<String, String>> TelosbDataField = new LinkedHashMap<String, Map<String,String>>();
 	
 	public PackagePattern() {

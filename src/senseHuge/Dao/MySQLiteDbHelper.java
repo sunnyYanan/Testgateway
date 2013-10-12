@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MySQLiteDbHelper extends SQLiteOpenHelper {
-
 	public MySQLiteDbHelper(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
