@@ -3,7 +3,6 @@ package com.example.testgateway;
 import java.util.ArrayList;
 import java.util.List;
 
-import senseHuge.Dao.DBHelper;
 import senseHuge.Dao.TelosbDao;
 import senseHuge.listener.Listenable;
 import senseHuge.listener.MyEvent;
@@ -16,7 +15,6 @@ import senseHuge.util.HttpClientUtil;
 import senseHuge.util.SerialUtil;
 import senseHuge.util.XmlTelosbPackagePatternUtil;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -431,7 +429,7 @@ public class MainActivity extends FragmentActivity {
 
 	/**
 	 * TEst
-	 */
+	 *//*
 	public void createTable() throws Exception {
 		DBHelper dbHelper = new DBHelper(this.getBaseContext());
 		dbHelper.open();
@@ -452,5 +450,5 @@ public class MainActivity extends FragmentActivity {
 		values.put("password", "123456");
 		dbHelper.insert("user", values);
 		dbHelper.closeConnection();
-	}
+	}*/
 }
