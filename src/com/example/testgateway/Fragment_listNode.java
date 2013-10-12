@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class Fragment_listNode extends Fragment {
 	/*
@@ -27,6 +27,7 @@ public class Fragment_listNode extends Fragment {
 	 */
 	// MainActivity ma;
 	List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
+	List<String> nodeId = new ArrayList<String>();
 
 	// List<String> powerList = new ArrayList<String>();
 
@@ -41,7 +42,7 @@ public class Fragment_listNode extends Fragment {
 
 		// 实例化一个适配器
 		SimpleAdapter adapter = new SimpleAdapter(this.getActivity(), nodeList,
-				R.layout.list_node_pagestyle, new String[] { "图片", "源节点编号",
+				R.layout.list_node_page_style, new String[] { "图片", "源节点编号",
 						"节点电压" }, new int[] { R.id.listNodeImage,
 						R.id.listNodeId, R.id.listNodePower });
 
@@ -58,21 +59,22 @@ public class Fragment_listNode extends Fragment {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			// TODO Auto-generated method stub
-			AlertDialog.Builder d= new AlertDialog.Builder(arg1.getContext());
-			d.setTitle("haha");
+			View dialog = LayoutInflater.from(arg1.getContext()).inflate(
+					R.layout.list_node_package_style, null);
+			AlertDialog.Builder d = new AlertDialog.Builder(arg1.getContext());
+			d.setTitle("第" + (arg2 + 1) + "个节点中的包").setView(dialog)
+					.setPositiveButton("确定", null);
 			d.show();
 		}
 
 	}
 
 	class MyThread implements Runnable {
-
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			prepareData();
 		}
-
 	}
 
 	private void prepareData() {
@@ -102,17 +104,31 @@ public class Fragment_listNode extends Fragment {
 	private void getTheNodeInfo(PackagePattern mpp) {
 		// TODO Auto-generated method stub
 		Iterator<?> it = mpp.DataField.entrySet().iterator();
-		Map<String, Object> item = new HashMap<String, Object>();
 		while (it.hasNext()) {
-			item.put("图片", R.drawable.ic_launcher);
 			Map.Entry pairs = (Map.Entry) it.next();
 			if (pairs.getKey().equals("源节点编号")) {
-				item.put("源节点编号", pairs.getValue().toString());
-			} else if (pairs.getKey().equals("节点电压"))
-				item.put("节点电压", pairs.getValue().toString());
+				String id = pairs.getValue().toString();
+				if (!nodeId.contains(id)) {
+					nodeId.add(id);
+					addNodeIntoList();
+				}
+			} /*
+			 * else if (pairs.getKey().equals("节点电压")) // 
+			 */
 			System.out.println(pairs.getKey() + " =============== "
 					+ pairs.getValue());
 		}
+		// nodeList.add(item);
+	}
+
+	private void addNodeIntoList() {
+		// TODO Auto-generated method stub
+		Map<String, Object> item = new HashMap<String, Object>();
+		item.put("图片", R.drawable.ic_launcher);
+		for (int i = 0; i < nodeId.size(); i++) {
+			item.put("源节点编号", nodeId.get(i));
+		}
+		item.put("节点电压", "11");
 		nodeList.add(item);
 	}
 
