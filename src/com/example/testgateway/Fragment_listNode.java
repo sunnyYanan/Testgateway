@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,10 +82,10 @@ public class Fragment_listNode extends Fragment {
 
 		// TODO Auto-generated method stub
 		// 得到数据并解析
-		// 这样的查找是从最早的记录开始查找的,只查找C1包，因为只有C1包有电压信息
+		// 按接受时间的降序排列,只查找C1包，因为只有C1包有电压信息
 		Cursor cursor = MainActivity.mDb.query("Telosb",
 				new String[] { "message" }, "CType=?", new String[] { "C1" },
-				null, null, null);
+				null, null, "receivetime DESC");
 		while (cursor.moveToNext()) {
 			String message = cursor.getString(cursor.getColumnIndex("message"));
 			System.out.println("query--->" + message);
@@ -100,7 +101,7 @@ public class Fragment_listNode extends Fragment {
 		}
 	}
 
-	// 在解析后的数据中提取出节点编号和电压，并存入要显示的数据中
+	// 在解析后的数据中提取出节点编号，若无重复就存入要显示的节点列表中
 	private void getTheNodeInfo(PackagePattern mpp) {
 		// TODO Auto-generated method stub
 		Iterator<?> it = mpp.DataField.entrySet().iterator();
@@ -112,24 +113,73 @@ public class Fragment_listNode extends Fragment {
 					nodeId.add(id);
 					addNodeIntoList();
 				}
-			} /*
-			 * else if (pairs.getKey().equals("节点电压")) // 
-			 */
-			System.out.println(pairs.getKey() + " =============== "
-					+ pairs.getValue());
+			}
 		}
-		// nodeList.add(item);
 	}
 
+	// 将节点加入到显示列表中
 	private void addNodeIntoList() {
 		// TODO Auto-generated method stub
 		Map<String, Object> item = new HashMap<String, Object>();
 		item.put("图片", R.drawable.ic_launcher);
 		for (int i = 0; i < nodeId.size(); i++) {
 			item.put("源节点编号", nodeId.get(i));
+			computeTheNodePower(nodeId.get(i), item);
 		}
-		item.put("节点电压", "11");
+		// item.put("节点电压", "11");
 		nodeList.add(item);
+	}
+
+	/**
+	 * @param string
+	 *            节点编号的字符串标识
+	 * @param item
+	 *            待存入的map 得到节点的电量，并存入数据中
+	 */
+	private void computeTheNodePower(String string, Map<String, Object> item) {
+		// TODO Auto-generated method stub
+		// 得到该节点的最近2条记录,并计算其电量平均值
+		Cursor cursor = MainActivity.mDb.query("Telosb",
+				new String[] { "message" }, "NodeID=? AND CType=?",
+				new String[] { string,"C1"}, null, null, "receivetime DESC");
+		int i=1;
+		int cur = 0;
+		String[] powers= new String[i];
+		
+		while (cursor.moveToNext()&&i>0) {
+			String message = cursor.getString(cursor.getColumnIndex("message"));
+			try {
+				// 解析后的数据
+				PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil
+						.parseTelosbPackage(message);
+				String power = getTheNodePower(mpp);
+				powers[cur++] = power;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			i--;
+		}
+		item.put("节点电压", getTheAverage(powers));
+	}
+//计算电压平均值，目前未实现，数据不知道该如何处理
+	private Object getTheAverage(String[] powers) {
+		// TODO Auto-generated method stub
+		return powers[0];
+	}
+
+	private String getTheNodePower(PackagePattern mpp) {
+		// TODO Auto-generated method stub
+		Iterator<?> it = mpp.DataField.entrySet().iterator();
+		String power=null;
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry) it.next();
+			if (pairs.getKey().equals("节点电压")) {
+				power = pairs.getValue().toString();
+				Log.i("power", power);
+			}
+		}
+		return power;
 	}
 
 	@Override
