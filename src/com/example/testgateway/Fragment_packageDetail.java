@@ -10,20 +10,19 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Fragment_nodeDetail extends Fragment {
+public class Fragment_packageDetail extends Fragment {
 
 	/**
 	 * Create a new instance of DetailsFragment, initialized to show the text at
 	 * 'index'.
 	 */
-	public static Fragment_nodeDetail newInstance(int index) {
-		Fragment_nodeDetail f = new Fragment_nodeDetail();
+	public static Fragment_packageDetail newInstance(int index) {
+		Fragment_packageDetail f = new Fragment_packageDetail();
 
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
 		args.putInt("index", index);
 		f.setArguments(args);
-
 		return f;
 	}
 
@@ -35,9 +34,6 @@ public class Fragment_nodeDetail extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-
-		Toast.makeText(this.getActivity(), "dd", Toast.LENGTH_SHORT).show();
-
 		/*
 		 * return inflater .inflate(R.layout.fragment_data_center, container,
 		 * false);

@@ -38,42 +38,45 @@ public final class R {
     }
     public static final class id {
         public static final int aboutUs=0x7f090009;
-        public static final int action_settings=0x7f090023;
+        public static final int action_settings=0x7f090026;
         public static final int alertSetting=0x7f090004;
         public static final int alertSettingShow=0x7f09000c;
-        public static final int close=0x7f09001d;
-        public static final int config=0x7f090022;
-        public static final int connect=0x7f09001e;
-        public static final int connect_test=0x7f090021;
+        public static final int close=0x7f090020;
+        public static final int config=0x7f090025;
+        public static final int connect=0x7f090021;
+        public static final int connect_test=0x7f090024;
         public static final int dataCenter=0x7f090008;
         public static final int fragment_container=0x7f09000b;
         public static final int functionView=0x7f090000;
         public static final int gridview=0x7f090011;
         public static final int internetSetting=0x7f090006;
-        public static final int listNodeId=0x7f090019;
-        public static final int listNodeImage=0x7f090018;
-        public static final int listNodePower=0x7f09001a;
+        public static final int listNodeId=0x7f09001c;
+        public static final int listNodeImage=0x7f09001b;
+        public static final int listNodePower=0x7f09001d;
         public static final int musicSelect=0x7f090010;
         public static final int musicSetting=0x7f09000f;
-        public static final int packageLeft=0x7f090015;
-        public static final int packageRight=0x7f090017;
-        public static final int packageTitle=0x7f090016;
+        public static final int packageLeft=0x7f090018;
+        public static final int packageMessage=0x7f090017;
+        public static final int packageRight=0x7f09001a;
+        public static final int packageStatus=0x7f090016;
+        public static final int packageTitle=0x7f090019;
+        public static final int packageType=0x7f090015;
         public static final int powerSetting=0x7f09000d;
         public static final int powerSettingSpinner=0x7f09000e;
         public static final int quit=0x7f09000a;
         public static final int sendCycle=0x7f090013;
         public static final int sendCycleSelect=0x7f090014;
         public static final int serialPortSetting=0x7f090001;
-        public static final int serialPort_check=0x7f090024;
-        public static final int serverAddr=0x7f090020;
+        public static final int serialPort_check=0x7f090027;
+        public static final int serverAddr=0x7f090023;
         public static final int serverSetting=0x7f090002;
-        public static final int server_check=0x7f090025;
+        public static final int server_check=0x7f090028;
         public static final int sinkCheck=0x7f090005;
         public static final int sinkSetting=0x7f090003;
         public static final int sinkSettingShow=0x7f090012;
-        public static final int spinner_baud=0x7f09001b;
-        public static final int spinner_device=0x7f09001c;
-        public static final int t_server=0x7f09001f;
+        public static final int spinner_baud=0x7f09001e;
+        public static final int spinner_device=0x7f09001f;
+        public static final int t_server=0x7f090022;
         public static final int wifiSetting=0x7f090007;
     }
     public static final class layout {
@@ -83,10 +86,11 @@ public final class R {
         public static final int fragment_data_center=0x7f030003;
         public static final int fragment_list_node=0x7f030004;
         public static final int fragment_node_setting=0x7f030005;
-        public static final int list_node_package_style=0x7f030006;
-        public static final int list_node_page_style=0x7f030007;
-        public static final int serialconfig=0x7f030008;
-        public static final int serverconfig=0x7f030009;
+        public static final int list_node_package=0x7f030006;
+        public static final int list_node_package_style=0x7f030007;
+        public static final int list_node_page_style=0x7f030008;
+        public static final int serialconfig=0x7f030009;
+        public static final int serverconfig=0x7f03000a;
     }
     public static final class menu {
         public static final int fragment_node_setting=0x7f080000;

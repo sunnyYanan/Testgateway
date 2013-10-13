@@ -17,14 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 public class Fragment_listNode extends Fragment {
-	
+
 	List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
 	List<String> nodeId = new ArrayList<String>();
+	ListView packageList;
+	View dialog;
 
 	// List<String> powerList = new ArrayList<String>();
 	@Override
@@ -32,6 +34,7 @@ public class Fragment_listNode extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
+
 		Thread listNodeThread = new Thread(new MyThread());
 		listNodeThread.start();
 		// 实例化一个适配器
@@ -53,14 +56,49 @@ public class Fragment_listNode extends Fragment {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			// TODO Auto-generated method stub
-			View dialog = LayoutInflater.from(arg1.getContext()).inflate(
+			dialog = LayoutInflater.from(arg1.getContext()).inflate(
 					R.layout.list_node_package_style, null);
+			getThePackage(nodeId.get(arg2));
 			AlertDialog.Builder d = new AlertDialog.Builder(arg1.getContext());
-			d.setTitle("第" + (arg2 + 1) + "个节点中的包，节点ID是："+nodeId.get(arg2)).setView(dialog)
-					.setPositiveButton("确定", null);
+			d.setTitle("第" + (arg2 + 1) + "个节点中的包，节点ID是：" + nodeId.get(arg2))
+					.setView(dialog).setPositiveButton("确定", null);
 			d.show();
 		}
 
+		// 得到相应节点的全部包，参数为节点ID
+		private void getThePackage(String string) {
+			// TODO Auto-generated method stub
+			Cursor cursor = MainActivity.mDb.query("Telosb", new String[] {
+					"Ctype", "status", "message" }, "NodeID=?",
+					new String[] { string }, null, null, "receivetime DESC");
+			List<Map<String, String>> content = new ArrayList<Map<String, String>>();
+			Map<String, String> data;
+			while (cursor.moveToNext()) {
+				data = new HashMap<String, String>();
+				String message = cursor.getString(cursor
+						.getColumnIndex("message"));
+				String status = cursor.getString(cursor
+						.getColumnIndex("status"));
+				String type = cursor.getString(cursor.getColumnIndex("Ctype"));
+
+				data.put("type", type);
+				data.put("status", status);
+				data.put("message", message);
+				content.add(data);
+			}
+
+			putDataIntoPackage(content);
+		}
+		private void putDataIntoPackage(List<Map<String, String>> content) {
+			// TODO Auto-generated method stub
+			packageList = (ListView) dialog.findViewById(android.R.id.list);
+			SimpleAdapter adapter = new SimpleAdapter(dialog.getContext(),
+					content, R.layout.list_node_package, new String[] { "type",
+							"status", "message" }, new int[] {
+							R.id.packageType, R.id.packageStatus,
+							R.id.packageMessage });
+			packageList.setAdapter(adapter);
+		}
 	}
 
 	class MyThread implements Runnable {
@@ -134,12 +172,12 @@ public class Fragment_listNode extends Fragment {
 		// 得到该节点的最近2条记录,并计算其电量平均值
 		Cursor cursor = MainActivity.mDb.query("Telosb",
 				new String[] { "message" }, "NodeID=? AND CType=?",
-				new String[] { string,"C1"}, null, null, "receivetime DESC");
-		int i=1;
+				new String[] { string, "C1" }, null, null, "receivetime DESC");
+		int i = 1;
 		int cur = 0;
-		String[] powers= new String[i];
-		
-		while (cursor.moveToNext()&&i>0) {
+		String[] powers = new String[i];
+
+		while (cursor.moveToNext() && i > 0) {
 			String message = cursor.getString(cursor.getColumnIndex("message"));
 			try {
 				// 解析后的数据
@@ -155,7 +193,8 @@ public class Fragment_listNode extends Fragment {
 		}
 		item.put("节点电压", getTheAverage(powers));
 	}
-//计算电压平均值，目前未实现，数据不知道该如何处理
+
+	// 计算电压平均值，目前未实现，数据不知道该如何处理
 	private Object getTheAverage(String[] powers) {
 		// TODO Auto-generated method stub
 		return powers[0];
@@ -164,7 +203,7 @@ public class Fragment_listNode extends Fragment {
 	private String getTheNodePower(PackagePattern mpp) {
 		// TODO Auto-generated method stub
 		Iterator<?> it = mpp.DataField.entrySet().iterator();
-		String power=null;
+		String power = null;
 		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry) it.next();
 			if (pairs.getKey().equals("节点电压")) {

@@ -22,18 +22,6 @@ public class Fragment_alertSetting extends Fragment {
 		// Inflate the layout for this fragment
 
 		ma = (MainActivity) getActivity();
-		/*byte[] buffer = { 'A', 'B', 'C', 'e' };
-		try {
-			if (ma.mSerialPort != null) {
-				ma.mSerialPort.getOutputStream().write(buffer);
-			} else {
-				System.out.println("has no serialPorts now!");
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
 		View v = inflater.inflate(R.layout.fragment_alert_setting, container,
 				false);
 		Spinner spinner = (Spinner) v.findViewById(R.id.powerSettingSpinner);
