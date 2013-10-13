@@ -4,10 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.Thread.State;
-
-import com.example.testgateway.MainActivity.HaveData;
-
 import senseHuge.model.Serial;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -121,16 +117,13 @@ public class Fragment_serialconfig extends Fragment {
 
 	class ButtonClickListener implements OnClickListener {
 		FragmentTransaction transaction;
-
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.connect: {
 				if (mSerialPort == null || !serial.getState()) {
-
 					try {
 						Log.i(tag, serial.getFilePath() + serial.getBuandrate());
-
 						ma.mSerialPort = mSerialPort = new SerialPort(new File(
 								serial.getFilePath()), serial.getBuandrate(), 0);
 						mOutputStream = mSerialPort.getOutputStream();

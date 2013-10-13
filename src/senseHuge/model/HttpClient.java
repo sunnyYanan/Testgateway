@@ -4,8 +4,6 @@ public class HttpClient {
 	public String server;
 	public String info;
 	
-	
-	
 	public HttpClient(String server) {
 		super();
 		this.server = server;
