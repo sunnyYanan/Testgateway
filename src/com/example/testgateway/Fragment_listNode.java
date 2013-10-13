@@ -22,25 +22,18 @@ import android.widget.GridView;
 import android.widget.SimpleAdapter;
 
 public class Fragment_listNode extends Fragment {
-	/*
-	 * FragmentManager fManager; FragmentTransaction fTransaction; Fragment
-	 * nodeDetialFragment;
-	 */
-	// MainActivity ma;
+	
 	List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
 	List<String> nodeId = new ArrayList<String>();
 
 	// List<String> powerList = new ArrayList<String>();
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
-
 		Thread listNodeThread = new Thread(new MyThread());
 		listNodeThread.start();
-
 		// 实例化一个适配器
 		SimpleAdapter adapter = new SimpleAdapter(this.getActivity(), nodeList,
 				R.layout.list_node_page_style, new String[] { "图片", "源节点编号",
@@ -63,7 +56,7 @@ public class Fragment_listNode extends Fragment {
 			View dialog = LayoutInflater.from(arg1.getContext()).inflate(
 					R.layout.list_node_package_style, null);
 			AlertDialog.Builder d = new AlertDialog.Builder(arg1.getContext());
-			d.setTitle("第" + (arg2 + 1) + "个节点中的包").setView(dialog)
+			d.setTitle("第" + (arg2 + 1) + "个节点中的包，节点ID是："+nodeId.get(arg2)).setView(dialog)
 					.setPositiveButton("确定", null);
 			d.show();
 		}
@@ -180,11 +173,6 @@ public class Fragment_listNode extends Fragment {
 			}
 		}
 		return power;
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 	}
 	/*
 	 * public class ImageAdapter extends BaseAdapter { private Context mContext;
