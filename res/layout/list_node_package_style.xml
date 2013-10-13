@@ -58,11 +58,12 @@
         -->
     </RelativeLayout>
 
-    <FrameLayout
+    <TextView
         android:id="@+id/packageRight"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_toRightOf="@id/packageLeft">
-    </FrameLayout>
+        android:layout_toRightOf="@id/packageLeft"
+        android:text="@string/hello_world">
+    </TextView>
 
 </RelativeLayout>

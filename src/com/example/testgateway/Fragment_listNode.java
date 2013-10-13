@@ -11,8 +11,6 @@ import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class Fragment_listNode extends Fragment {
 
@@ -29,10 +28,15 @@ public class Fragment_listNode extends Fragment {
 	List<String> nodeId = new ArrayList<String>();
 	ListView packageList;
 	View dialog;
+	TextView packageAfterParse;
+	//dialog显示出来的当前节点的所有包的内容
+	List<Map<String, String>> content;
+
 	// 右侧包内容显示
-	FragmentManager fManager;
-	Fragment packageDetialFragment;
-	FragmentTransaction fTransaction;
+	/*
+	 * FragmentManager fManager; Fragment packageDetialFragment;
+	 * FragmentTransaction fTransaction;
+	 */
 
 	// List<String> powerList = new ArrayList<String>();
 	@Override
@@ -70,18 +74,23 @@ public class Fragment_listNode extends Fragment {
 			// TODO Auto-generated method stub
 			dialog = LayoutInflater.from(arg1.getContext()).inflate(
 					R.layout.list_node_package_style, null);
+
+			packageAfterParse = (TextView) dialog
+					.findViewById(R.id.packageRight);
+
 			getThePackage(nodeId.get(arg2));
 			AlertDialog.Builder d = new AlertDialog.Builder(arg1.getContext());
 			d.setTitle("第" + (arg2 + 1) + "个节点中的包，节点ID是：" + nodeId.get(arg2))
 					.setView(dialog).setPositiveButton("确定", null);
 
 			// 初始化右侧包显示
-			
-			/*  packageDetialFragment = Fragment_packageDetail.newInstance(0);
-			  fTransaction = getFragmentManager().beginTransaction();
-			  fTransaction.add(R.id.packageRight, packageDetialFragment);
-			  fTransaction.commit();
-*/
+
+			/*
+			 * packageDetialFragment = Fragment_packageDetail.newInstance(0);
+			 * fTransaction = getFragmentManager().beginTransaction();
+			 * fTransaction.add(R.id.packageRight, packageDetialFragment);
+			 * fTransaction.commit();
+			 */
 			d.show();
 
 		}
@@ -92,7 +101,7 @@ public class Fragment_listNode extends Fragment {
 			Cursor cursor = MainActivity.mDb.query("Telosb", new String[] {
 					"Ctype", "status", "message" }, "NodeID=?",
 					new String[] { string }, null, null, "receivetime DESC");
-			List<Map<String, String>> content = new ArrayList<Map<String, String>>();
+			content = new ArrayList<Map<String, String>>();
 			Map<String, String> data;
 			while (cursor.moveToNext()) {
 				data = new HashMap<String, String>();
@@ -130,27 +139,39 @@ public class Fragment_listNode extends Fragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
-				showDetail(arg2);
+				// showDetail(arg2);
+				switch (arg2) {
+				case 0:
+					packageAfterParse.setText("0");
+					break;
+				case 1:
+					packageAfterParse.setText("1");
+					break;
+				case 2:
+					packageAfterParse.setText("2");
+					break;
+				default:
+					packageAfterParse.setText("qq");
+					break;
+				}
+
 			}
 
-			private void showDetail(int position) {
-				// Check what fragment is currently shown, replace if needed.
-				Fragment_packageDetail details = (Fragment_packageDetail) getFragmentManager()
-						.findFragmentById(R.id.packageRight);
-				fTransaction = getFragmentManager().beginTransaction();
-				if(details == null) {
-					details = Fragment_packageDetail.newInstance(-1);
-					fTransaction.add(R.id.packageRight, details);
-					
-				}
-				else if (details.getShownIndex() != position) {
-					details = Fragment_packageDetail.newInstance(position);
-					fTransaction.replace(R.id.packageRight, details);
-				}
-				fTransaction
-						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				fTransaction.commit();
-			}
+			/*
+			 * private void showDetail(int position) { // Check what fragment is
+			 * currently shown, replace if needed. Fragment_packageDetail
+			 * details = (Fragment_packageDetail) getFragmentManager()
+			 * .findFragmentById(R.id.packageRight); fTransaction =
+			 * getFragmentManager().beginTransaction(); if(details == null) {
+			 * details = Fragment_packageDetail.newInstance(-1);
+			 * fTransaction.add(R.id.packageRight, details);
+			 * 
+			 * } else if (details.getShownIndex() != position) { details =
+			 * Fragment_packageDetail.newInstance(position);
+			 * fTransaction.replace(R.id.packageRight, details); } fTransaction
+			 * .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			 * fTransaction.commit(); }
+			 */
 		}
 
 	}
