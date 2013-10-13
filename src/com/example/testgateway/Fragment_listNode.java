@@ -11,6 +11,8 @@ import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +29,18 @@ public class Fragment_listNode extends Fragment {
 	List<String> nodeId = new ArrayList<String>();
 	ListView packageList;
 	View dialog;
+	// 右侧包内容显示
+	FragmentManager fManager;
+	Fragment packageDetialFragment;
+	FragmentTransaction fTransaction;
 
 	// List<String> powerList = new ArrayList<String>();
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// fManager = this.getChildFragmentManager();
+		super.onCreate(savedInstanceState);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -62,7 +74,16 @@ public class Fragment_listNode extends Fragment {
 			AlertDialog.Builder d = new AlertDialog.Builder(arg1.getContext());
 			d.setTitle("第" + (arg2 + 1) + "个节点中的包，节点ID是：" + nodeId.get(arg2))
 					.setView(dialog).setPositiveButton("确定", null);
+
+			// 初始化右侧包显示
+			
+			/*  packageDetialFragment = Fragment_packageDetail.newInstance(0);
+			  fTransaction = getFragmentManager().beginTransaction();
+			  fTransaction.add(R.id.packageRight, packageDetialFragment);
+			  fTransaction.commit();
+*/
 			d.show();
+
 		}
 
 		// 得到相应节点的全部包，参数为节点ID
@@ -86,9 +107,9 @@ public class Fragment_listNode extends Fragment {
 				data.put("message", message);
 				content.add(data);
 			}
-
 			putDataIntoPackage(content);
 		}
+
 		private void putDataIntoPackage(List<Map<String, String>> content) {
 			// TODO Auto-generated method stub
 			packageList = (ListView) dialog.findViewById(android.R.id.list);
@@ -98,7 +119,40 @@ public class Fragment_listNode extends Fragment {
 							R.id.packageType, R.id.packageStatus,
 							R.id.packageMessage });
 			packageList.setAdapter(adapter);
+
+			// 设置列表点击事件
+			packageList.setOnItemClickListener(new MyListItemClickListener());
 		}
+
+		class MyListItemClickListener implements OnItemClickListener {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				showDetail(arg2);
+			}
+
+			private void showDetail(int position) {
+				// Check what fragment is currently shown, replace if needed.
+				Fragment_packageDetail details = (Fragment_packageDetail) getFragmentManager()
+						.findFragmentById(R.id.packageRight);
+				fTransaction = getFragmentManager().beginTransaction();
+				if(details == null) {
+					details = Fragment_packageDetail.newInstance(-1);
+					fTransaction.add(R.id.packageRight, details);
+					
+				}
+				else if (details.getShownIndex() != position) {
+					details = Fragment_packageDetail.newInstance(position);
+					fTransaction.replace(R.id.packageRight, details);
+				}
+				fTransaction
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				fTransaction.commit();
+			}
+		}
+
 	}
 
 	class MyThread implements Runnable {

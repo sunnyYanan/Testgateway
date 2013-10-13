@@ -46,7 +46,7 @@ public class Fragment_packageDetail extends Fragment {
 		text.setPadding(padding, padding, padding, padding);
 		scroller.addView(text);
 		// text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
-		if (getShownIndex() != 0)
+		if (getShownIndex() != -1)
 			text.setText(getShownIndex()+"ci");
 		else
 			text.setText("µÚÒ»´Î");
