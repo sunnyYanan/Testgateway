@@ -23,13 +23,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class Fragment_listNode extends Fragment {
-
+	// 界面显示的节点数据
 	List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
+	// 查找出来的显示的不重复的节点id
 	List<String> nodeId = new ArrayList<String>();
 	ListView packageList;
 	View dialog;
 	TextView packageAfterParse;
-	//dialog显示出来的当前节点的所有包的内容
+	// dialog显示出来的当前节点的所有包的内容
 	List<Map<String, String>> content;
 
 	// 右侧包内容显示
@@ -140,23 +141,46 @@ public class Fragment_listNode extends Fragment {
 					long arg3) {
 				// TODO Auto-generated method stub
 				// showDetail(arg2);
-				switch (arg2) {
-				case 0:
-					packageAfterParse.setText("0");
-					break;
-				case 1:
-					packageAfterParse.setText("1");
-					break;
-				case 2:
-					packageAfterParse.setText("2");
-					break;
-				default:
-					packageAfterParse.setText("qq");
-					break;
+				/*
+				 * switch (arg2) { case 0: packageAfterParse.setText("0");
+				 * break; case 1: packageAfterParse.setText("1"); break; case 2:
+				 * packageAfterParse.setText("2"); break; default:
+				 * packageAfterParse.setText("qq"); break; }
+				 */
+				Map<String, String> packageMessage = content.get(arg2);
+				Iterator<?> it = packageMessage.entrySet().iterator();
+				String message;
+				PackagePattern pp;
+				// 取出当前需要解析的数据
+				while (it.hasNext()) {
+					Map.Entry pairs = (Map.Entry) it.next();
+					if (pairs.getKey().equals("message")) {
+						message = pairs.getValue().toString();
+						try {
+							pp = MainActivity.xmlTelosbPackagePatternUtil
+									.parseTelosbPackage(message);
+							showTheParsedPackage(pp);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 
 			}
 
+			private void showTheParsedPackage(PackagePattern pp) {
+				// TODO Auto-generated method stub
+				Iterator<?> it = pp.DataField.entrySet().iterator();
+				StringBuffer sb = new StringBuffer();
+				while (it.hasNext()) {
+					Map.Entry pairs = (Map.Entry) it.next();
+					sb.append(pairs.getKey().toString() + ": "
+							+ pairs.getValue().toString());
+					sb.append("\n");
+				}
+				packageAfterParse.setText(sb.toString());
+			}
 			/*
 			 * private void showDetail(int position) { // Check what fragment is
 			 * currently shown, replace if needed. Fragment_packageDetail
