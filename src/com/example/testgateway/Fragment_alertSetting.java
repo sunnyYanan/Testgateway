@@ -3,10 +3,11 @@ package com.example.testgateway;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,12 +17,17 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class Fragment_alertSetting extends Fragment {
 	public MainActivity ma;
 	private int alertPower;// 预警值的设置
 	Button musicSelect;
-	static private int openfileDialogId = 0;  
+	static private int openfileDialogId = 0;
+	private static String TAG = "MainActivity";
+	private static final int REQUEST_CODE = 1;   //请求码
+	public static final String EXTRA_FILE_CHOOSER = "file_chooser";
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -93,27 +99,36 @@ public class Fragment_alertSetting extends Fragment {
 
 	public class MyButtonListener implements OnClickListener {
 		String filepath;
+
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-			 
-			Map<String, Integer> images = new HashMap<String, Integer>();  
-            // 下面几句设置各文件类型的图标， 需要你先把图标添加到资源文件夹  
-          //  images.put(OpenFileDialog.sRoot, R.drawable.ic_launcher);   // 根目录图标  
-          //  images.put(OpenFileDialog.sParent, R.drawable.ic_launcher);    //返回上一层的图标  
-          //  images.put(OpenFileDialog.sFolder, R.drawable.ic_launcher);   //文件夹图标  
-            images.put("mp3", R.drawable.ic_launcher);   //wav文件图标  
-         //   images.put(OpenFileDialog.sEmpty, R.drawable.ic_launcher);  
-			Dialog dialog = OpenFileDialog.createDialog(openfileDialogId, arg0.getContext(), "打开文件", new FileDialogCallBack() {  
-                @Override  
-                public void callback(Bundle bundle) {  
-                    filepath = bundle.getString("path");  
-                }  
-            },   
-            ".mp3;",  
-            images);
-			dialog.show();
-			System.out.println("path:"+filepath);
+			Intent fileChooserIntent = new Intent(arg0.getContext(),
+					FileChooserActivity.class);
+			startActivityForResult(fileChooserIntent, REQUEST_CODE);
 		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		Log.v(TAG, "onActivityResult#requestCode:" + requestCode
+				+ "#resultCode:" + resultCode);
+		if (resultCode == this.getActivity().RESULT_CANCELED) {
+			toast("没有打开文件");
+			return;
+		}
+		if (resultCode == this.getActivity().RESULT_OK && requestCode == REQUEST_CODE) {
+			// 获取路径名
+			String musicPath = data.getStringExtra(EXTRA_FILE_CHOOSER);
+			Log.v(TAG, "onActivityResult # musicPath : " + musicPath);
+			if (musicPath != null) {
+				toast("Choose File : " + musicPath);
+			} else
+				toast("打开文件失败");
+		}
+	}
+	private void toast(CharSequence hint){
+	    Toast.makeText(this.getActivity().getBaseContext(), hint , Toast.LENGTH_SHORT).show();
 	}
 }

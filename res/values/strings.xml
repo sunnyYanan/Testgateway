@@ -58,4 +58,6 @@
     </string-array>
 
     <string name="title_activity_fragment_node_setting">Fragment_nodeSetting</string>
+    <string name="title_activity_file_chooser">FileChooserActivity</string>
+
 </resources>
