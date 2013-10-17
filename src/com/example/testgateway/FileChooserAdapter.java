@@ -1,9 +1,7 @@
 package com.example.testgateway;
 
-import java.io.File;
 import java.util.ArrayList;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import senseHuge.model.PackagePattern;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class Fragment_listNode extends Fragment {
 	TextView packageAfterParse;
 	// dialog显示出来的当前节点的所有包的内容
 	List<Map<String, String>> content;
+	GridView gridview;
 
 	// 右侧包内容显示
 	/*
@@ -41,9 +43,20 @@ public class Fragment_listNode extends Fragment {
 
 	// List<String> powerList = new ArrayList<String>();
 	@Override
+	public void onAttach(Activity a) {
+		super.onAttach(a);
+		init();
+	}
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// fManager = this.getChildFragmentManager();
 		super.onCreate(savedInstanceState);
+	}
+
+	// 准备节点数据
+	public void init() {
+		Thread listNodeThread = new Thread(new MyThread());
+		listNodeThread.start();
 	}
 
 	@Override
@@ -51,18 +64,14 @@ public class Fragment_listNode extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
+		gridview = (GridView) view.findViewById(R.id.gridview);
 
-		Thread listNodeThread = new Thread(new MyThread());
-		listNodeThread.start();
 		// 实例化一个适配器
 		SimpleAdapter adapter = new SimpleAdapter(this.getActivity(), nodeList,
 				R.layout.list_node_page_style, new String[] { "图片", "源节点编号",
 						"节点电压" }, new int[] { R.id.listNodeImage,
 						R.id.listNodeId, R.id.listNodePower });
-
-		GridView gridview = (GridView) view.findViewById(R.id.gridview);
 		gridview.setAdapter(adapter);
-
 		gridview.setOnItemClickListener(new MyItemClickListener());
 		return view;
 	}

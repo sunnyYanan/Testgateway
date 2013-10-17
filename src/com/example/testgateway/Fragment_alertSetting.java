@@ -1,12 +1,10 @@
 package com.example.testgateway;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,6 @@ public class Fragment_alertSetting extends Fragment {
 	public MainActivity ma;
 	private int alertPower;// 预警值的设置
 	Button musicSelect;
-	static private int openfileDialogId = 0;
 	private static String TAG = "MainActivity";
 	private static final int REQUEST_CODE = 1;   //请求码
 	public static final String EXTRA_FILE_CHOOSER = "file_chooser";
@@ -114,16 +111,19 @@ public class Fragment_alertSetting extends Fragment {
 
 		Log.v(TAG, "onActivityResult#requestCode:" + requestCode
 				+ "#resultCode:" + resultCode);
-		if (resultCode == this.getActivity().RESULT_CANCELED) {
+		this.getActivity();
+		if (resultCode == FragmentActivity.RESULT_CANCELED) {
 			toast("没有打开文件");
 			return;
 		}
-		if (resultCode == this.getActivity().RESULT_OK && requestCode == REQUEST_CODE) {
+		this.getActivity();
+		if (resultCode == FragmentActivity.RESULT_OK && requestCode == REQUEST_CODE) {
 			// 获取路径名
 			String musicPath = data.getStringExtra(EXTRA_FILE_CHOOSER);
 			Log.v(TAG, "onActivityResult # musicPath : " + musicPath);
 			if (musicPath != null) {
 				toast("Choose File : " + musicPath);
+				MainActivity.alertMusicPath = musicPath;//预警音乐路径设置
 			} else
 				toast("打开文件失败");
 		}

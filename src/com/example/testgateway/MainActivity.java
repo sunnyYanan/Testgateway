@@ -40,12 +40,14 @@ public class MainActivity extends FragmentActivity {
 	public static boolean isWork = false;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
+	public static String alertMusicPath;//预警音乐设置
 	// public TelosbDao telosbDao;
 	public static MySQLiteDbHelper mDbhelper;
 	public static SQLiteDatabase mDb;
 	public SerialPort mSerialPort;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
+	Fragment_listNode fListNode;
 	PackagePattern packagePattern = null;
 	public static XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
 	public HaveData havadata = null;
@@ -83,6 +85,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		fListNode = new Fragment_listNode();
 
 		// 串口，服务器，节点监听事务
 		manager = getSupportFragmentManager();
@@ -244,14 +247,6 @@ public class MainActivity extends FragmentActivity {
 		// 初始化xml数据包格式并放入packagepattern中
 		xmlTelosbPackagePatternUtil = new XmlTelosbPackagePatternUtil(
 				getFilesDir().toString());
-		/*
-		 * System.out
-		 * .println(xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
-		 * .size() + "__________%%%_______");
-		 * Log.i("XmlTelosbPackagePatternUtil",
-		 * xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
-		 * .size() + "__________%%%_______");
-		 */
 		// 客户端，服务器，串口，等资源的初始化
 		httpClientUtil = new HttpClientUtil(getBaseContext());
 		httpserverState = new MySource();
@@ -276,6 +271,8 @@ public class MainActivity extends FragmentActivity {
 		 * httpserverState.setValue(true); serialState.setValue(true);
 		 * httpserverState.setValue(false);
 		 */
+		//准备节点信息
+//		fListNode.init();
 	}
 
 	public void ProcessData() {

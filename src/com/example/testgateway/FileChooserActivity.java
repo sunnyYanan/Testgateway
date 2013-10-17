@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import com.example.testgateway.FileChooserAdapter.FileInfo;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -26,8 +25,8 @@ public class FileChooserActivity extends Activity {
 	private View mBtExit;
 	private TextView mTvPath ;
 	
-	private String mSdcardRootPath ;  //sdcard 根路�?
-	private String mLastFilePath ;    //当前显示的路�?	
+	private String mRootPath ;  
+	private String mLastFilePath ;   
 	private ArrayList<FileInfo> mFileLists  ;
 	private FileChooserAdapter mAdatper ;
 	
@@ -37,7 +36,7 @@ public class FileChooserActivity extends Activity {
 		setContentView(R.layout.filechooser_show);
 
 		//mSdcardRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();// �õ�sdcardĿ¼
-		mSdcardRootPath = "/";
+		mRootPath = "/";//��Ŀ¼
 		mBackView = findViewById(R.id.imgBackFolder);
 		mBackView.setOnClickListener(mClickListener);
 		mBtExit = findViewById(R.id.btExit);
@@ -48,15 +47,13 @@ public class FileChooserActivity extends Activity {
 		mGridView = (GridView)findViewById(R.id.gvFileChooser);
 		mGridView.setEmptyView(findViewById(R.id.tvEmptyHint));
 		mGridView.setOnItemClickListener(mItemClickListener);
-		setGridViewAdapter(mSdcardRootPath);
+		setGridViewAdapter(mRootPath);
 	}
-	//配置适配�?	
 	private void setGridViewAdapter(String filePath) {
 		updateFileItems(filePath);
 		mAdatper = new FileChooserAdapter(this , mFileLists);
 		mGridView.setAdapter(mAdatper);
 	}
-	//根据路径更新数据，并且�?知Adatper数据改变
 	private void updateFileItems(String filePath) {
 		mLastFilePath = filePath ;
 		mTvPath.setText(mLastFilePath);
@@ -71,7 +68,7 @@ public class FileChooserActivity extends Activity {
 			return ;
 		
 		for (int i = 0; i < files.length; i++) {
-			if(files[i].isHidden())  // 不显示隐藏文�?				
+			if(files[i].isHidden())  		
 				continue ;
 			String fileAbsolutePath = files[i].getAbsolutePath() ;
 			String fileName = files[i].getName();
@@ -84,9 +81,8 @@ public class FileChooserActivity extends Activity {
 		}
 		//When first enter , the object of mAdatper don't initialized
 		if(mAdatper != null)
-		    mAdatper.notifyDataSetChanged();  //重新刷新
+		    mAdatper.notifyDataSetChanged(); 
 	}
-	//获得当前路径的所有文�?	
 	private File[] folderScan(String path) {
 		File file = new File(path);
 		File[] files = file.listFiles();
@@ -113,16 +109,16 @@ public class FileChooserActivity extends Activity {
 		public void onItemClick(AdapterView<?> adapterView, View view, int position,
 				long id) {
 			FileInfo fileInfo = (FileInfo)(((FileChooserAdapter)adapterView.getAdapter()).getItem(position));
-			if(fileInfo.isDirectory())   //点击项为文件�? 显示该文件夹下所有文�?				
+			if(fileInfo.isDirectory())  	
 				updateFileItems(fileInfo.getFilePath()) ;
-			else if(fileInfo.isPPTFile()){  //是ppt文件 �?则将该路径�?知给调用�?			    
+			else if(fileInfo.isPPTFile()){ 
 				Intent intent = new Intent();
 			    intent.putExtra(Fragment_alertSetting.EXTRA_FILE_CHOOSER , fileInfo.getFilePath());
 			    setResult(RESULT_OK , intent);
 			    finish();
 			}
-			else {   //其他文件.....
-				toast("���ļ�����");
+			else {   
+				toast("�ļ����ʹ���");
 			}
 		}
 	};
@@ -135,15 +131,13 @@ public class FileChooserActivity extends Activity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	//返回上一层目录的操作
 	public void backProcess(){
-		//判断当前路径是不是sdcard路径 �?如果不是，则返回到上�?���?		
-		if (!mLastFilePath.equals(mSdcardRootPath)) {  
+		if (!mLastFilePath.equals(mRootPath)) {  
 			File thisFile = new File(mLastFilePath);
 			String parentFilePath = thisFile.getParent();
 			updateFileItems(parentFilePath);
 		} 
-		else {   //是sdcard路径 ，直接结�?			
+		else {   	
 			setResult(RESULT_CANCELED);
 			finish();
 		}
