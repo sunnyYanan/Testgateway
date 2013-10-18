@@ -13,6 +13,7 @@ import senseHuge.model.RingBuffer;
 import senseHuge.model.TelosbPackage;
 import senseHuge.service.LocalConfigService;
 import senseHuge.util.HttpClientUtil;
+import senseHuge.util.ListNodePrepare;
 import senseHuge.util.SerialUtil;
 import senseHuge.util.XmlTelosbPackagePatternUtil;
 import android.app.AlertDialog;
@@ -47,10 +48,11 @@ public class MainActivity extends FragmentActivity {
 	public SerialPort mSerialPort;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
-	Fragment_listNode fListNode;
+//	Fragment_listNode fListNode;
 	PackagePattern packagePattern = null;
 	public static XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
 	public HaveData havadata = null;
+	ListNodePrepare listNodePrepare;
 	// HaveData havadata = new HaveData();
 	List<String> list = new ArrayList<String>();
 	int listSingnal = 0;
@@ -85,10 +87,11 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		fListNode = new Fragment_listNode();
+//		fListNode = new Fragment_listNode();
 
 		// 串口，服务器，节点监听事务
 		manager = getSupportFragmentManager();
+		listNodePrepare = new ListNodePrepare();
 		FragmentTransaction transaction = manager.beginTransaction();
 		f_serialPort = new Fragment_serialconfig();
 		f_server = new Fragment_serverconfig();
@@ -272,7 +275,7 @@ public class MainActivity extends FragmentActivity {
 		 * httpserverState.setValue(false);
 		 */
 		//准备节点信息
-//		fListNode.init();
+		listNodePrepare.prepare();
 	}
 
 	public void ProcessData() {
