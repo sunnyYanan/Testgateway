@@ -54,12 +54,6 @@ public class Fragment_listNode extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	// 准备节点数据
-	/*public void init() {
-		Thread listNodeThread = new Thread(new MyThread());
-		listNodeThread.start();
-	}*/
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -152,14 +146,6 @@ public class Fragment_listNode extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// TODO Auto-generated method stub
-				// showDetail(arg2);
-				/*
-				 * switch (arg2) { case 0: packageAfterParse.setText("0");
-				 * break; case 1: packageAfterParse.setText("1"); break; case 2:
-				 * packageAfterParse.setText("2"); break; default:
-				 * packageAfterParse.setText("qq"); break; }
-				 */
 				Map<String, String> packageMessage = content.get(arg2);
 				Iterator<?> it = packageMessage.entrySet().iterator();
 				String message;
@@ -194,21 +180,6 @@ public class Fragment_listNode extends Fragment {
 				}
 				packageAfterParse.setText(sb.toString());
 			}
-			/*
-			 * private void showDetail(int position) { // Check what fragment is
-			 * currently shown, replace if needed. Fragment_packageDetail
-			 * details = (Fragment_packageDetail) getFragmentManager()
-			 * .findFragmentById(R.id.packageRight); fTransaction =
-			 * getFragmentManager().beginTransaction(); if(details == null) {
-			 * details = Fragment_packageDetail.newInstance(-1);
-			 * fTransaction.add(R.id.packageRight, details);
-			 * 
-			 * } else if (details.getShownIndex() != position) { details =
-			 * Fragment_packageDetail.newInstance(position);
-			 * fTransaction.replace(R.id.packageRight, details); } fTransaction
-			 * .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			 * fTransaction.commit(); }
-			 */
 		}
 
 	}

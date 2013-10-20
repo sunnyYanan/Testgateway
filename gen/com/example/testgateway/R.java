@@ -41,14 +41,13 @@ public final class R {
     }
     public static final class id {
         public static final int aboutUs=0x7f090009;
-        public static final int action_settings=0x7f09002d;
+        public static final int action_settings=0x7f09002c;
         public static final int alertSetting=0x7f090004;
         public static final int alertSettingShow=0x7f090013;
         public static final int btExit=0x7f090010;
         public static final int close=0x7f090027;
-        public static final int config=0x7f09002c;
+        public static final int config=0x7f09002b;
         public static final int connect=0x7f090028;
-        public static final int connect_test=0x7f09002b;
         public static final int dataCenter=0x7f090008;
         public static final int fragment_container=0x7f09000b;
         public static final int functionView=0x7f090000;
@@ -74,10 +73,10 @@ public final class R {
         public static final int sendCycle=0x7f09001a;
         public static final int sendCycleSelect=0x7f09001b;
         public static final int serialPortSetting=0x7f090001;
-        public static final int serialPort_check=0x7f09002e;
+        public static final int serialPort_check=0x7f09002d;
         public static final int serverAddr=0x7f09002a;
         public static final int serverSetting=0x7f090002;
-        public static final int server_check=0x7f09002f;
+        public static final int server_check=0x7f09002e;
         public static final int sinkCheck=0x7f090005;
         public static final int sinkSetting=0x7f090003;
         public static final int sinkSettingShow=0x7f090019;

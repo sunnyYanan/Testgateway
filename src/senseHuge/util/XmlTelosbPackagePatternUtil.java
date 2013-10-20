@@ -184,6 +184,7 @@ public class XmlTelosbPackagePatternUtil {
 		packagePattern.TelosbDataField.put("C4", C4);
 
 		try {
+			//存入xml文件中
 			packagePatternService.save2(packagePattern, outPut);
 			outPut.close();
 		} catch (Exception e) {

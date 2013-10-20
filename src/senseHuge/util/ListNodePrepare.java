@@ -110,6 +110,10 @@ public class ListNodePrepare {
 		// 计算电压平均值，目前未实现，数据不知道该如何处理
 		private Object getTheAverage(String[] powers) {
 			// TODO Auto-generated method stub
+			/*Object sumPower;
+			for(int i=0; i<powers.length; i++) {
+				sumPower+=powers[i];
+			}*/
 			return powers[0];
 		}
 		private String getTheNodePower(PackagePattern mpp) {

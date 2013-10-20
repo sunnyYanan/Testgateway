@@ -52,6 +52,9 @@ public class Fragment_serialconfig extends Fragment {
 
 		connectButton = (Button) view1.findViewById(R.id.connect);
 		closeButton = (Button) view1.findViewById(R.id.close);
+
+		changeButtonStatus();
+
 		connectButton.setOnClickListener(new ButtonClickListener());
 		closeButton.setOnClickListener(new ButtonClickListener());
 
@@ -115,8 +118,20 @@ public class Fragment_serialconfig extends Fragment {
 		return view1;
 	}
 
+	private void changeButtonStatus() {
+		// TODO Auto-generated method stub
+		if (MainActivity.serialPortConnect) {
+			connectButton.setEnabled(false);
+			closeButton.setEnabled(true);
+		} else {
+			connectButton.setEnabled(true);
+			closeButton.setEnabled(false);
+		}
+	}
+
 	class ButtonClickListener implements OnClickListener {
 		FragmentTransaction transaction;
+
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
@@ -128,11 +143,6 @@ public class Fragment_serialconfig extends Fragment {
 								serial.getFilePath()), serial.getBuandrate(), 0);
 						mOutputStream = mSerialPort.getOutputStream();
 						mInputStream = mSerialPort.getInputStream();
-
-						/*
-						 * byte [] buffer = {'A','B','C','e'};
-						 * mOutputStream.write(buffer);
-						 */
 					} catch (SecurityException e1) {
 						// TODO Auto-generated catch block
 						Log.i(tag, "打开串口失败：");
@@ -155,6 +165,7 @@ public class Fragment_serialconfig extends Fragment {
 
 					ma.havadata.start();
 					ma.serialState.setValue(true);
+					changeButtonStatus();
 				}
 
 				break;
@@ -182,6 +193,7 @@ public class Fragment_serialconfig extends Fragment {
 
 						Log.i(tag, ma.havadata.getState().toString());
 						ma.serialPortConnect = false;
+						changeButtonStatus();
 						// readThread.stop();
 						Log.i(tag, "关闭串口sucess：");
 						serial.setState(false);

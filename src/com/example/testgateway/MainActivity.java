@@ -41,7 +41,7 @@ public class MainActivity extends FragmentActivity {
 	public static boolean isWork = false;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
-	public static String alertMusicPath;//预警音乐设置
+	
 	// public TelosbDao telosbDao;
 	public static MySQLiteDbHelper mDbhelper;
 	public static SQLiteDatabase mDb;
@@ -57,8 +57,8 @@ public class MainActivity extends FragmentActivity {
 	List<String> list = new ArrayList<String>();
 	int listSingnal = 0;
 
-	boolean serverConnect = false;// 服务器是否连接
-	boolean serialPortConnect = false;// 串口是否连接
+	public static boolean serverConnect = false;// 服务器是否连接
+	public static boolean serialPortConnect = false;// 串口是否连接
 
 	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
@@ -394,15 +394,6 @@ public class MainActivity extends FragmentActivity {
 						telosbPackage.setCtype(telosbPackagePattern.ctype);
 						telosbPackage.setMessage(telosbData);
 						telosbPackage.setNodeID(telosbPackagePattern.nodeID);
-						/*
-						 * boolean result = telosbDao
-						 * .insertTelosbPackage(telosbPackage); if (result) {
-						 * System.out
-						 * .println("insert telosbPackage to database success%%"
-						 * ); } else { System.out
-						 * .println("insert telosbPackage to database fail！！！    "
-						 * ); }
-						 */
 						ContentValues values = new ContentValues(); // 相当于map
 						values.put("message", telosbPackage.getMessage());
 						values.put("Ctype", telosbPackage.getCtype());
@@ -446,23 +437,4 @@ public class MainActivity extends FragmentActivity {
 		this.ringBuffer = ringBuffer;
 	}
 
-	/**
-	 * TEst
-	 */
-	/*
-	 * public void createTable() throws Exception { DBHelper dbHelper = new
-	 * DBHelper(this.getBaseContext()); dbHelper.open();
-	 * 
-	 * String deleteSql = "drop table if exists user ";
-	 * dbHelper.execSQL(deleteSql);
-	 * 
-	 * // id是自动增长的主键，username和 password为字段名， text为字段的类型 String sql =
-	 * "CREATE TABLE user (id integer primary key autoincrement, username text, password text)"
-	 * ; dbHelper.execSQL(sql); dbHelper.closeConnection(); } public void
-	 * insert() throws Exception { DBHelper dbHelper = new
-	 * DBHelper(this.getBaseContext()); dbHelper.open(); ContentValues values =
-	 * new ContentValues(); // 相当于map values.put("username", "test");
-	 * values.put("password", "123456"); dbHelper.insert("user", values);
-	 * dbHelper.closeConnection(); }
-	 */
 }

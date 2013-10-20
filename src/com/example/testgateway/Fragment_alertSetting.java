@@ -23,6 +23,7 @@ public class Fragment_alertSetting extends Fragment {
 	Button musicSelect;
 	private static String TAG = "MainActivity";
 	private static final int REQUEST_CODE = 1;   //请求码
+	public static String alertMusicPath;//预警音乐设置
 	public static final String EXTRA_FILE_CHOOSER = "file_chooser";
 
 	@Override
@@ -123,7 +124,7 @@ public class Fragment_alertSetting extends Fragment {
 			Log.v(TAG, "onActivityResult # musicPath : " + musicPath);
 			if (musicPath != null) {
 				toast("Choose File : " + musicPath);
-				MainActivity.alertMusicPath = musicPath;//预警音乐路径设置
+				alertMusicPath = musicPath;//预警音乐路径设置
 			} else
 				toast("打开文件失败");
 		}
