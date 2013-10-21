@@ -82,13 +82,13 @@ public class ListNodePrepare {
 		 */
 		private void computeTheNodePower(String string, Map<String, Object> item) {
 			// TODO Auto-generated method stub
-			// 得到该节点的最近2条记录,并计算其电量平均值
+			// 得到该节点的最近4条记录,并计算其电量平均值
 			Cursor cursor = MainActivity.mDb.query("Telosb",
 					new String[] { "message" }, "NodeID=? AND CType=?",
 					new String[] { string, "C1" }, null, null, "receivetime DESC");
-			int i = 1;
+			int i = 4;
 			int cur = 0;
-			String[] powers = new String[i];
+			float[] powers = new float[i];
 
 			while (cursor.moveToNext() && i > 0) {
 				String message = cursor.getString(cursor.getColumnIndex("message"));
@@ -96,7 +96,7 @@ public class ListNodePrepare {
 					// 解析后的数据
 					PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil
 							.parseTelosbPackage(message);
-					String power = getTheNodePower(mpp);
+					float power = getTheNodePower(mpp);
 					powers[cur++] = power;
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -104,30 +104,53 @@ public class ListNodePrepare {
 				}
 				i--;
 			}
-			item.put("节点电压", getTheAverage(powers));
+			item.put("节点电压", getTheAverage(powers)+"v");
 		}
 
-		// 计算电压平均值，目前未实现，数据不知道该如何处理
-		private Object getTheAverage(String[] powers) {
+		// 计算电压平均值
+		private float getTheAverage(float[] powers) {
 			// TODO Auto-generated method stub
-			/*Object sumPower;
+			float powerSum = 0;
 			for(int i=0; i<powers.length; i++) {
-				sumPower+=powers[i];
-			}*/
-			return powers[0];
+				powerSum+=powers[i];
+			}
+			float power = (float) (powerSum/powers.length/4096*2.5);
+			float  b   =  (float)(Math.round(power*1000))/1000;
+			//(这里的100就是2位小数点,如果要其它位,如4位,这里两个100改成10000)
+			return b;
 		}
-		private String getTheNodePower(PackagePattern mpp) {
+		private float getTheNodePower(PackagePattern mpp) {
 			// TODO Auto-generated method stub
 			Iterator<?> it = mpp.DataField.entrySet().iterator();
-			String power = null;
+			String power = null;//十六进制表示
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().equals("节点电压")) {
 					power = pairs.getValue().toString();
-					Log.i("power", power);
 				}
 			}
-			return power;
+			int powerDeci= 0;
+			for(int i=power.length()-1; i>=0; i--) {
+				char n = power.charAt(i);
+				int num=0;
+				if(n=='A') {
+					num = 10;
+				}else if(n=='B') {
+					num = 11;
+				}else if(n=='C') {
+					num = 12;
+				}else if(n=='D') {
+					num = 13;
+				}else if(n=='E') {
+					num = 14;
+				}else if(n=='F') {
+					num = 15;
+				}else
+					num = Integer.parseInt(String.valueOf(n));
+				
+				powerDeci+=num*Math.pow(16, 3-i);
+			}
+			return powerDeci;
 		}
 
 }
