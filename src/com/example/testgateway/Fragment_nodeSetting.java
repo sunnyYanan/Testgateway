@@ -22,14 +22,6 @@ public class Fragment_nodeSetting extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-
-		/*
-		 * RelativeLayout.LayoutParams rootRelativeParams = new
-		 * RelativeLayout.LayoutParams( 100, 100); View view =
-		 * LayoutInflater.from(getActivity())
-		 * .inflate(R.layout.fragment_node_setting, null);
-		 * view.setLayoutParams(rootRelativeParams);
-		 */
 		ma = (MainActivity) getActivity();
 		//默认发包周期是5秒
 		cycle = 5;
@@ -94,7 +86,6 @@ public class Fragment_nodeSetting extends Fragment {
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-
 			}
 		});
 		return v;

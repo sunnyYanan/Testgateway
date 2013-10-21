@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 public class Fragment_alertSetting extends Fragment {
 	public MainActivity ma;
-	public static int alertPower;// 预警值的设置
+	public static int alertPower=15;// 预警值的设置
 	Button musicSelect;
 	private static String TAG = "MainActivity";
 	private static final int REQUEST_CODE = 1;   //请求码

@@ -34,7 +34,7 @@ public class ListNodePrepare {
 				null, null, "receivetime DESC");
 		while (cursor.moveToNext()) {
 			String message = cursor.getString(cursor.getColumnIndex("message"));
-			System.out.println("query--->" + message);
+//			System.out.println("query--->" + message);
 			try {
 				// 解析后的数据
 				PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil
