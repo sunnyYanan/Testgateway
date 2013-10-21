@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <Button
+    <!--     <Button
             android:id="@+id/connect_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,15 +46,16 @@
             android:layout_marginLeft="50dp"
             android:layout_marginRight="200dp"
             android:layout_marginTop="80dp"
-            android:text="测试" />
+            android:text="测试" /> -->
 
         <Button
             android:id="@+id/config"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
-            android:layout_toLeftOf="@id/connect_test"
-            android:text="配置" />
+            android:text="配置"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="200dp" />
     </RelativeLayout>
 
 </LinearLayout>

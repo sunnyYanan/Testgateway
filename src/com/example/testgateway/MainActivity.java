@@ -13,6 +13,7 @@ import senseHuge.model.RingBuffer;
 import senseHuge.model.TelosbPackage;
 import senseHuge.service.LocalConfigService;
 import senseHuge.util.HttpClientUtil;
+import senseHuge.util.ListNodePrepare;
 import senseHuge.util.SerialUtil;
 import senseHuge.util.XmlTelosbPackagePatternUtil;
 import android.app.AlertDialog;
@@ -40,21 +41,24 @@ public class MainActivity extends FragmentActivity {
 	public static boolean isWork = false;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
+	
 	// public TelosbDao telosbDao;
 	public static MySQLiteDbHelper mDbhelper;
 	public static SQLiteDatabase mDb;
 	public SerialPort mSerialPort;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
+//	Fragment_listNode fListNode;
 	PackagePattern packagePattern = null;
 	public static XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
 	public HaveData havadata = null;
+	ListNodePrepare listNodePrepare;
 	// HaveData havadata = new HaveData();
 	List<String> list = new ArrayList<String>();
 	int listSingnal = 0;
 
-	boolean serverConnect = false;// 服务器是否连接
-	boolean serialPortConnect = false;// 串口是否连接
+	public static boolean serverConnect = false;// 服务器是否连接
+	public static boolean serialPortConnect = false;// 串口是否连接
 
 	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
@@ -83,9 +87,11 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+//		fListNode = new Fragment_listNode();
 
 		// 串口，服务器，节点监听事务
 		manager = getSupportFragmentManager();
+		listNodePrepare = new ListNodePrepare();
 		FragmentTransaction transaction = manager.beginTransaction();
 		f_serialPort = new Fragment_serialconfig();
 		f_server = new Fragment_serverconfig();
@@ -244,14 +250,6 @@ public class MainActivity extends FragmentActivity {
 		// 初始化xml数据包格式并放入packagepattern中
 		xmlTelosbPackagePatternUtil = new XmlTelosbPackagePatternUtil(
 				getFilesDir().toString());
-		/*
-		 * System.out
-		 * .println(xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
-		 * .size() + "__________%%%_______");
-		 * Log.i("XmlTelosbPackagePatternUtil",
-		 * xmlTelosbPackagePatternUtil.getPackagePattern().TelosbDataField
-		 * .size() + "__________%%%_______");
-		 */
 		// 客户端，服务器，串口，等资源的初始化
 		httpClientUtil = new HttpClientUtil(getBaseContext());
 		httpserverState = new MySource();
@@ -276,6 +274,8 @@ public class MainActivity extends FragmentActivity {
 		 * httpserverState.setValue(true); serialState.setValue(true);
 		 * httpserverState.setValue(false);
 		 */
+		//准备节点信息
+		listNodePrepare.prepare();
 	}
 
 	public void ProcessData() {
@@ -394,15 +394,6 @@ public class MainActivity extends FragmentActivity {
 						telosbPackage.setCtype(telosbPackagePattern.ctype);
 						telosbPackage.setMessage(telosbData);
 						telosbPackage.setNodeID(telosbPackagePattern.nodeID);
-						/*
-						 * boolean result = telosbDao
-						 * .insertTelosbPackage(telosbPackage); if (result) {
-						 * System.out
-						 * .println("insert telosbPackage to database success%%"
-						 * ); } else { System.out
-						 * .println("insert telosbPackage to database fail！！！    "
-						 * ); }
-						 */
 						ContentValues values = new ContentValues(); // 相当于map
 						values.put("message", telosbPackage.getMessage());
 						values.put("Ctype", telosbPackage.getCtype());
@@ -446,23 +437,4 @@ public class MainActivity extends FragmentActivity {
 		this.ringBuffer = ringBuffer;
 	}
 
-	/**
-	 * TEst
-	 */
-	/*
-	 * public void createTable() throws Exception { DBHelper dbHelper = new
-	 * DBHelper(this.getBaseContext()); dbHelper.open();
-	 * 
-	 * String deleteSql = "drop table if exists user ";
-	 * dbHelper.execSQL(deleteSql);
-	 * 
-	 * // id是自动增长的主键，username和 password为字段名， text为字段的类型 String sql =
-	 * "CREATE TABLE user (id integer primary key autoincrement, username text, password text)"
-	 * ; dbHelper.execSQL(sql); dbHelper.closeConnection(); } public void
-	 * insert() throws Exception { DBHelper dbHelper = new
-	 * DBHelper(this.getBaseContext()); dbHelper.open(); ContentValues values =
-	 * new ContentValues(); // 相当于map values.put("username", "test");
-	 * values.put("password", "123456"); dbHelper.insert("user", values);
-	 * dbHelper.closeConnection(); }
-	 */
 }

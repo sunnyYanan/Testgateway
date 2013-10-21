@@ -184,6 +184,7 @@ public class XmlTelosbPackagePatternUtil {
 		packagePattern.TelosbDataField.put("C4", C4);
 
 		try {
+			//存入xml文件中
 			packagePatternService.save2(packagePattern, outPut);
 			outPut.close();
 		} catch (Exception e) {
@@ -254,7 +255,7 @@ public class XmlTelosbPackagePatternUtil {
 
 		packagePattern.TelosbDataField.get(Ctype);
 
-		if (packagePattern == null) {
+		/*if (packagePattern == null) {
 			System.out.println("packagePattern is null!!!");
 		} else if (packagePattern.getDataField() != null) {
 			// System.out.println("packagePattern .getDataField() is null!!!");
@@ -278,7 +279,7 @@ public class XmlTelosbPackagePatternUtil {
 		for (String string : packagePattern.TelosbDataField.get(Ctype).keySet()) {
 			System.out.println(string + "TTTTTTTTTTTTTTTTT");
 		}
-
+*/
 		Iterator it = packagePattern.TelosbDataField.get(Ctype).entrySet()
 				.iterator();
 
@@ -369,18 +370,18 @@ public class XmlTelosbPackagePatternUtil {
 				packageParserService.parseDatafield(telsobData, "019019"),
 				telsobData));
 
-		testTelosbDatafield(telosbPackage);
+//		testTelosbDatafield(telosbPackage);
 
 		return telosbPackage;
 	}
 
-	public void testTelosbDatafield(PackagePattern telosbPackage) {
+/*	public void testTelosbDatafield(PackagePattern telosbPackage) {
 		Iterator<?> it = telosbPackage.DataField.entrySet().iterator();
-		System.out.println("#########111111111111111111111111##############");
+//		System.out.println("#########111111111111111111111111##############");
 		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry) it.next();
 			System.out.println(pairs.getKey() + " =============== "
 					+ pairs.getValue());
 		}
-	}
+	}*/
 }

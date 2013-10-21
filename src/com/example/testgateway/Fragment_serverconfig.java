@@ -17,61 +17,59 @@ import android.widget.TextView;
 public class Fragment_serverconfig extends Fragment {
 	Button button;
 	TextView text;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-		View view=LayoutInflater.from(getActivity()).inflate(R.layout.serverconfig,null);
+
+		View view = LayoutInflater.from(getActivity()).inflate(
+				R.layout.serverconfig, null);
 		button = (Button) view.findViewById(R.id.config);
 		button.setOnClickListener(new ButtonClickListener());
-		 text=(TextView)view.findViewById(R.id.serverAddr);
+		text = (TextView) view.findViewById(R.id.serverAddr);
 		return view;
 	}
-	
+
 	/**
-	 * XXXXXXXXXXXXXXXXXXXXXXXX
-	 * ≤‚ ‘
+	 * XXXXXXXXXXXXXXXXXXXXXXXX ≤‚ ‘
 	 */
-	public void tt(){
-		Bundle bundle = new Bundle();  
-        System.out.println(bundle.getSerializable("key"));
-        String string = getArguments().getString("key");
-        System.out.println(string);
-       // this.setArguments(bundle); 
+	public void tt() {
+		Bundle bundle = new Bundle();
+		System.out.println(bundle.getSerializable("key"));
+		String string = getArguments().getString("key");
+		System.out.println(string);
+		// this.setArguments(bundle);
 	}
-	
-	
-	
-	class ButtonClickListener implements OnClickListener{
-		FragmentTransaction transaction ;
-			@Override
-			public void onClick(View v) {
-				switch(v.getId()){
-				case R.id.config:{
-					String serverAddr = text.getText().toString().trim();
-					
-					tt();//≤‚ ‘
-					Context ctx = getActivity();       
-					SharedPreferences sp = ctx.getSharedPreferences("SP", 0);
-					//¥Ê»Î ˝æ›
-					Editor editor = sp.edit();
-					if(sp.getString("serverAddr", "none")!=null){
-						editor.remove("serverAddr");
-					}
-					editor.putString("serverAddr", serverAddr);
-				
-					editor.commit();
-					Log.i("SP", sp.getString("serverAddr", "none"));
-				
-					break;
+
+	class ButtonClickListener implements OnClickListener {
+		FragmentTransaction transaction;
+
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.config: {
+				String serverAddr = text.getText().toString().trim();
+
+			//	tt();// ≤‚ ‘
+				Context ctx = getActivity();
+				SharedPreferences sp = ctx.getSharedPreferences("SP", 0);
+				// ¥Ê»Î ˝æ›
+				Editor editor = sp.edit();
+				if (sp.getString("serverAddr", "none") != null) {
+					editor.remove("serverAddr");
 				}
-	
-				default:{
-				
-					break;
-				
-				}
-				}
+				editor.putString("serverAddr", serverAddr);
+
+				editor.commit();
+				Log.i("SP", sp.getString("serverAddr", "none"));
+
+				break;
+			}
+
+			default: {
+				break;
+			}
 			}
 		}
+	}
 }
