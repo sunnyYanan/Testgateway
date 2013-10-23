@@ -12,8 +12,10 @@ import senseHuge.model.PackagePattern;
 import senseHuge.model.RingBuffer;
 import senseHuge.model.TelosbPackage;
 import senseHuge.service.LocalConfigService;
+import senseHuge.service.OfflineBackupService;
 import senseHuge.util.HttpClientUtil;
 import senseHuge.util.ListNodePrepare;
+import senseHuge.util.OfflineBackupUtil;
 import senseHuge.util.SerialUtil;
 import senseHuge.util.XmlTelosbPackagePatternUtil;
 import android.app.AlertDialog;
@@ -244,6 +246,7 @@ public class MainActivity extends FragmentActivity {
 	 * mainactivity 初始化
 	 */
 	public void init() {
+		testBackup();
 		LocalConfigService localConfigService = new LocalConfigService(
 				getBaseContext());
 		localConfigService.setConfig("webserver", "192.168.10.145");
@@ -276,6 +279,24 @@ public class MainActivity extends FragmentActivity {
 		 */
 		//准备节点信息
 		listNodePrepare.prepare();
+		
+		
+	}
+	
+	
+	public void testBackup(){
+		List<TelosbPackage> list = new ArrayList<TelosbPackage>();
+		for (int i = 0; i < 10; i++) {
+			TelosbPackage telosbPackage = new TelosbPackage();
+			telosbPackage.setCtype("C1");
+			telosbPackage.setId(i);
+			telosbPackage.setMessage("XXXXXXXXXXXXXXXX"+i);
+			telosbPackage.setReceivetime(new Date());
+			telosbPackage.setNodeID("1");
+			list.add(telosbPackage);
+		}
+		OfflineBackupUtil offlineBackupUtil = new OfflineBackupUtil();
+		offlineBackupUtil.CreatBackUpFile(list, getFilesDir().toString());
 	}
 
 	public void ProcessData() {
