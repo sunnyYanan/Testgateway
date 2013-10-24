@@ -35,7 +35,7 @@ public class Fragment_serialconfig extends Fragment {
 	OutputStream mOutputStream;
 	SerialPort serialPort = null;
 	byte[] mBuffer;
-	SerialPort mSerialPort = null;
+	public static SerialPort mSerialPort = null;
 	Button connectButton = null;
 	Button closeButton = null;
 	ReadThread readThread = null;
@@ -139,7 +139,7 @@ public class Fragment_serialconfig extends Fragment {
 				if (mSerialPort == null || !serial.getState()) {
 					try {
 						Log.i(tag, serial.getFilePath() + serial.getBuandrate());
-						ma.mSerialPort = mSerialPort = new SerialPort(new File(
+						mSerialPort = new SerialPort(new File(
 								serial.getFilePath()), serial.getBuandrate(), 0);
 						mOutputStream = mSerialPort.getOutputStream();
 						mInputStream = mSerialPort.getInputStream();
@@ -155,12 +155,12 @@ public class Fragment_serialconfig extends Fragment {
 						break;
 					}
 					Log.i(tag, "打开串口sucess：");
-					ma.serialPortConnect = true;
+					MainActivity.serialPortConnect = true;
 					serial.setState(true);
 					readThread = new ReadThread();
 					readThread.start();
 
-					ma.isWork = true;
+//					ma.isWork = true;
 					ma.havadata = ma.getHaveData();
 
 					ma.havadata.start();
@@ -183,7 +183,7 @@ public class Fragment_serialconfig extends Fragment {
 						Log.i(tag, "关闭haveData sucess：");
 
 						Log.i(tag, ma.havadata.getState().toString());
-						ma.isWork = false;
+						MainActivity.serialPortConnect=false;
 						ma.havadata.interrupt();
 						ma.serialState.setValue(false);
 
@@ -192,7 +192,7 @@ public class Fragment_serialconfig extends Fragment {
 						}
 
 						Log.i(tag, ma.havadata.getState().toString());
-						ma.serialPortConnect = false;
+						
 						changeButtonStatus();
 						// readThread.stop();
 						Log.i(tag, "关闭串口sucess：");
@@ -231,9 +231,9 @@ public class Fragment_serialconfig extends Fragment {
 		@Override
 		public void run() {
 			super.run();
-			System.out.println("^^^^^^^^^"
-					+ ma.serialUtil.stringBuffer.toString());
-			while (ma.isWork) {
+			/*System.out.println("^^^^^^^^^"
+					+ ma.serialUtil.stringBuffer.toString());*/
+			while (MainActivity.serialPortConnect) {
 				int size;
 				try {
 

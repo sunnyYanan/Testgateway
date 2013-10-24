@@ -25,7 +25,7 @@ public class Fragment_nodeSetting extends Fragment {
 		ma = (MainActivity) getActivity();
 		//默认发包周期是5秒
 		cycle = 5;
-		if (ma.mSerialPort == null) {
+		if (Fragment_serialconfig.mSerialPort == null) {
 			isAvalable = false;
 		} else {
 			isAvalable = true;
@@ -52,7 +52,7 @@ public class Fragment_nodeSetting extends Fragment {
 				
 				if(isAvalable) {
 					try {
-						ma.mSerialPort.getOutputStream().write(cycle);
+						Fragment_serialconfig.mSerialPort.getOutputStream().write(cycle);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

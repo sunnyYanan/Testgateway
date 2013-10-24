@@ -40,14 +40,14 @@ import android_serialport_api.SerialPort;
 public class MainActivity extends FragmentActivity {
 
 	private static final int capibity = 50;
-	public static boolean isWork = false;
+//	public static boolean isWork = false;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
 	
 	// public TelosbDao telosbDao;
 	public static MySQLiteDbHelper mDbhelper;
 	public static SQLiteDatabase mDb;
-	public SerialPort mSerialPort;
+//	public SerialPort mSerialPort;
 	SerialUtil serialUtil = new SerialUtil();
 	HttpClientUtil httpClientUtil;
 //	Fragment_listNode fListNode;
@@ -279,8 +279,6 @@ public class MainActivity extends FragmentActivity {
 		 */
 		//准备节点信息
 		listNodePrepare.prepare();
-		
-		
 	}
 	
 	
@@ -362,7 +360,7 @@ public class MainActivity extends FragmentActivity {
 			String headTest = "00FFFF";
 			TelosbPackage telosbPackage = new TelosbPackage();
 			int i;
-			while (isWork) {
+			while (serialPortConnect) {
 				i = serialUtil.findhead(headTest);
 				if (i < 0 && serialUtil.stringBuffer.length() > 6) {
 					serialUtil.delete(serialUtil.stringBuffer.length() - 6);

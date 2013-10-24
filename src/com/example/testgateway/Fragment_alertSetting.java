@@ -51,9 +51,9 @@ public class Fragment_alertSetting extends Fragment {
 				System.out.println("pos---->" + arg2);
 				setAlertPower(arg2);
 
-				if (ma.mSerialPort != null) {
+				if (Fragment_serialconfig.mSerialPort != null) {
 					try {
-						ma.mSerialPort.getOutputStream().write(alertPower);
+						Fragment_serialconfig.mSerialPort.getOutputStream().write(alertPower);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
