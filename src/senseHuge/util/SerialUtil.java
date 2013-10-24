@@ -3,8 +3,6 @@ package senseHuge.util;
 
 public class SerialUtil {
 	
-	//static String string = "EEE00FFFF00002A0093000030E8002A0050FD6B008CFFBAFD6B008CFFBAFDC8FFE1FE6200004B8100000000000000000000000000FFFF00002A0093000030E8002A0050FD6B008CFFBAFD6B008CFFBAFDC8FFE1FE6200004B81000000000000000000000000";
-	
 	public String headString = "00FFFF";
 	public int headLength;
 	public int Length;
@@ -25,7 +23,6 @@ public class SerialUtil {
 	}
 
 	public String getFirstData(){
-		System.out.println(stringBuffer);
 		int start = findhead(headString);
 		int packageLength = Integer.parseInt(stringBuffer.substring(start+10, start+12),16);
 		int length =2*packageLength+16;
@@ -62,7 +59,7 @@ public class SerialUtil {
 		if (end>stringBuffer.length()) {
 			return false;
 		} else {
-         System.out.println("end:"+ end + "length:"+stringBuffer.length() );
+         System.out.println("delete end:"+ end + "buffer length:"+stringBuffer.length() );
 			stringBuffer.delete(0,end);
 			return true;
 		}

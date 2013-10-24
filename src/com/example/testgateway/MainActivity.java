@@ -1,6 +1,5 @@
 package com.example.testgateway;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,15 +10,12 @@ import senseHuge.listener.MySource;
 import senseHuge.model.PackagePattern;
 import senseHuge.model.RingBuffer;
 import senseHuge.model.TelosbPackage;
+import senseHuge.service.ListNodePrepare;
 import senseHuge.service.LocalConfigService;
-import senseHuge.service.OfflineBackupService;
 import senseHuge.util.HttpClientUtil;
-import senseHuge.util.ListNodePrepare;
 import senseHuge.util.OfflineBackupUtil;
-import senseHuge.util.SerialUtil;
 import senseHuge.util.XmlTelosbPackagePatternUtil;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -35,40 +31,31 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android_serialport_api.SerialPort;
 
 public class MainActivity extends FragmentActivity {
 
 	private static final int capibity = 50;
-//	public static boolean isWork = false;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
 	
-	// public TelosbDao telosbDao;
 	public static MySQLiteDbHelper mDbhelper;
 	public static SQLiteDatabase mDb;
-//	public SerialPort mSerialPort;
-	SerialUtil serialUtil = new SerialUtil();
-	HttpClientUtil httpClientUtil;
-//	Fragment_listNode fListNode;
+//	SerialUtil serialUtil = new SerialUtil();
+	public static HttpClientUtil httpClientUtil;
 	PackagePattern packagePattern = null;
 	public static XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
-	public HaveData havadata = null;
 	ListNodePrepare listNodePrepare;
-	// HaveData havadata = new HaveData();
-	List<String> list = new ArrayList<String>();
-	int listSingnal = 0;
 
 	public static boolean serverConnect = false;// 服务器是否连接
 	public static boolean serialPortConnect = false;// 串口是否连接
 
 	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
-	// 调用以下资源的getvalue方法也可以判断当前的连接状态
-	MySource ms;// 这个变量应该是多余的，待删除
+	// 调用以下资源的getvalue方法也可以判断当前的连接状态，当监听多个时方便使用的，目前没用
+//	MySource ms;// 这个变量应该是多余的，待删除
 	MySource httpserverState;
 	MySource serialState;
-	MySource havePackage;
+//	MySource havePackage;
 
 	FragmentManager manager;
 	LinearLayout layout;
@@ -257,15 +244,15 @@ public class MainActivity extends FragmentActivity {
 		httpClientUtil = new HttpClientUtil(getBaseContext());
 		httpserverState = new MySource();
 		serialState = new MySource();
-		ms = new MySource();
-		havePackage = new MySource();
+//		ms = new MySource();
+//		havePackage = new MySource();
 
 		HttpserverState hl = new HttpserverState();
 		SerialListener ml = new SerialListener();
-		PackageListener pl = new PackageListener();
+//		PackageListener pl = new PackageListener();
 		httpserverState.addListener(hl);
 		serialState.addListener(ml);
-		havePackage.addListener(pl);
+//		havePackage.addListener(pl);
 
 		// havePackage.setValue(false);
 
@@ -297,19 +284,6 @@ public class MainActivity extends FragmentActivity {
 		offlineBackupUtil.CreatBackUpFile(list, getFilesDir().toString());
 	}
 
-	public void ProcessData() {
-		if (listSingnal == 0) {
-			listSingnal = 1;
-		} else {
-			return;
-		}
-		while (list.size() > 0) {
-			System.out.println("成功接收数据" + list.get(0));
-			list.remove(0);
-		}
-		listSingnal = 0;
-	}
-
 	public class SerialListener implements Listenable {
 		@Override
 		public void eventChanged(MyEvent e) {
@@ -322,7 +296,7 @@ public class MainActivity extends FragmentActivity {
 			}
 		}
 	}
-
+/*
 	public class PackageListener implements Listenable {
 
 		@Override
@@ -331,12 +305,12 @@ public class MainActivity extends FragmentActivity {
 			System.out.println("包's e:" + e.getValue());
 			if (ms.value) {
 				System.out.println("接收到数据，数据正在出处理。。。。");
-				ProcessData();
+				//ProcessData();
 			} else {
 				System.out.println("数据接收完毕，等待中。。。。");
 			}
 		}
-	}
+	}*/
 
 	public class HttpserverState implements Listenable {
 		@Override
@@ -351,102 +325,13 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public class HaveData extends Thread {
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			super.run();
-			// 获取到的数据包
-			String headTest = "00FFFF";
-			TelosbPackage telosbPackage = new TelosbPackage();
-			int i;
-			while (serialPortConnect) {
-				i = serialUtil.findhead(headTest);
-				if (i < 0 && serialUtil.stringBuffer.length() > 6) {
-					serialUtil.delete(serialUtil.stringBuffer.length() - 6);
-				} else if (i > 0) {
-					serialUtil.delete(i);
-				}
-				if (serialUtil.stringBuffer.length() > 300) {
-					System.out
-							.println("++++++++++++++++++++++++++++++++++++++++++++++++++");
-					System.out.println(serialUtil.stringBuffer.toString());
-					System.out
-							.println("+++++++++++++++++++++++++++++++++++++++++++++");
-					String telosbData = serialUtil.getFirstData();
-					System.out.println("receive package:" + telosbData);
-
-					if (telosbData == "") {
-						System.out.println("empty");
-
-					} else {
-						System.out
-								.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-						try {
-							// 数据解析
-							System.out.println(xmlTelosbPackagePatternUtil
-									.parseTelosbPackage(telosbData).getCtype()
-									+ ":%%%%%%%%%%%%%%");
-						} catch (Exception e) {
-							System.out.println("异常");
-							e.printStackTrace();
-							continue;
-						}
-						// ;
-						PackagePattern telosbPackagePattern = null;
-						try {
-							// 数据解析
-							telosbPackagePattern = xmlTelosbPackagePatternUtil
-									.parseTelosbPackage(telosbData);
-						} catch (Exception e) {
-							System.out.println("异常");
-							e.printStackTrace();
-							continue;
-
-						}
-						if (httpClientUtil.PostTelosbData("", telosbData)) {
-							telosbPackage.setStatus("已上传");
-						} else {
-							telosbPackage.setStatus("未上传");
-						}
-
-						telosbPackage.setCtype(telosbPackagePattern.ctype);
-						telosbPackage.setMessage(telosbData);
-						telosbPackage.setNodeID(telosbPackagePattern.nodeID);
-						ContentValues values = new ContentValues(); // 相当于map
-						values.put("message", telosbPackage.getMessage());
-						values.put("Ctype", telosbPackage.getCtype());
-						values.put("NodeID", telosbPackage.nodeID);
-
-						values.put("status", telosbPackage.getStatus());
-						Date date = new Date();
-						SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-								"yyyy-MM-dd hh:mm:ss");
-						values.put("receivetime", simpleDateFormat.format(date));
-						mDb.insert("Telosb", null, values);
-						if (telosbData != null) {
-							list.add(telosbData);
-							Packagesingnal();
-						}
-						System.out.println(list.size() + "_____________");
-						System.gc();
-					}
-				}
-			}
-		}
-	}
-
-	public HaveData getHaveData() {
-		return new HaveData();
-	}
-
-	public void Packagesingnal() {
+/*	public void Packagesingnal() {
 		havePackage.setValue(true);
 	}
 
 	public void Packagewaite() {
 		havePackage.setValue(false);
-	}
+	}*/
 
 	public RingBuffer<String> getRingBuffer() {
 		return ringBuffer;

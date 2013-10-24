@@ -286,7 +286,7 @@ public class XmlTelosbPackagePatternUtil {
 		int num = 0;
 		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry) it.next();
-			System.out.println(pairs.getKey() + " = " + pairs.getValue());
+			System.out.println("½âÎö°ü£º"+pairs.getKey() + " = " + pairs.getValue());
 			// String data = packageParserService.parser(telsobData,
 			// pairs.getValue().toString());
 			String value = packageParserService.parseDatafield(telsobData,

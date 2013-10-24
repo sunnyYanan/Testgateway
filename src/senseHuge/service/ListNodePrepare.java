@@ -1,4 +1,4 @@
-package senseHuge.util;
+package senseHuge.service;
 
 import java.util.HashMap;
 import java.util.Iterator;

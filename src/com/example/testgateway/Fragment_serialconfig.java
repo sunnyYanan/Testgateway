@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import senseHuge.model.Serial;
+import senseHuge.service.SerialportDataProcess;
+import senseHuge.util.SerialUtil;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,18 +32,21 @@ import android_serialport_api.SerialPort;
  */
 public class Fragment_serialconfig extends Fragment {
 	protected static final String tag = "Fragment_serialconfig";
+	SerialportDataProcess dataProcess;
 	Serial serial = new Serial();
 	Spinner spinner = null;
 	Spinner devSpinner = null;
 	InputStream mInputStream;
 	OutputStream mOutputStream;
 	SerialPort serialPort = null;
+	public static SerialUtil serialUtil = new SerialUtil();
 	byte[] mBuffer;
 	public static SerialPort mSerialPort = null;
 	Button connectButton = null;
 	Button closeButton = null;
 	ReadThread readThread = null;
 	MainActivity ma;
+	View view1;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +54,7 @@ public class Fragment_serialconfig extends Fragment {
 
 		ma = (MainActivity) getActivity();
 
-		View view1 = LayoutInflater.from(getActivity()).inflate(
+		view1 = LayoutInflater.from(getActivity()).inflate(
 				R.layout.serialconfig, null);
 
 		connectButton = (Button) view1.findViewById(R.id.connect);
@@ -146,25 +153,34 @@ public class Fragment_serialconfig extends Fragment {
 					} catch (SecurityException e1) {
 						// TODO Auto-generated catch block
 						Log.i(tag, "打开串口失败：");
+						
+						linkStatus("打开串口失败");
+						
 						e1.printStackTrace();
 						break;
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						Log.i(tag, "打开串口失败：");
+						linkStatus("打开串口失败");
 						break;
 					}
 					Log.i(tag, "打开串口sucess：");
+					linkStatus("打开串口成功");
+					
 					MainActivity.serialPortConnect = true;
 					serial.setState(true);
+					
+					// 串口读取数据
 					readThread = new ReadThread();
 					readThread.start();
-
-//					ma.isWork = true;
-					ma.havadata = ma.getHaveData();
-
-					ma.havadata.start();
-					ma.serialState.setValue(true);
+					
+					//数据处理
+					dataProcess = new SerialportDataProcess();
+					dataProcess.start();
+					
+					ma.serialState.setValue(true);//应该改进为用这个！！
+					
 					changeButtonStatus();
 				}
 
@@ -180,42 +196,49 @@ public class Fragment_serialconfig extends Fragment {
 						readThread.interrupt();
 
 						serial.setState(false);
-						Log.i(tag, "关闭haveData sucess：");
 
-						Log.i(tag, ma.havadata.getState().toString());
-						MainActivity.serialPortConnect=false;
-						ma.havadata.interrupt();
-						ma.serialState.setValue(false);
+//						Log.i(tag, ma.havadata.getState().toString());
+						MainActivity.serialPortConnect = false;
+						
+						dataProcess.interrupt();
+						ma.serialState.setValue(false);//应该改进为用这个！！
 
-						if (ma.havadata.isInterrupted()) {
+						if (dataProcess.isInterrupted()) {
 							Log.i(tag, "被中断：");
 						}
-
-						Log.i(tag, ma.havadata.getState().toString());
-						
+						Log.i(tag, dataProcess.getState().toString());
 						changeButtonStatus();
 						// readThread.stop();
-						Log.i(tag, "关闭串口sucess：");
-						serial.setState(false);
+						linkStatus("关闭串口成功");
+						
 					} catch (SecurityException e1) {
 						// TODO Auto-generated catch block
-						Log.i(tag, "关闭串口失败：");
+						linkStatus("关闭串口失败");
 						e1.printStackTrace();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						Log.i(tag, "关闭串口失败：");
+						linkStatus("关闭串口失败");
 					}
 				}
-
 				break;
 			}
-
 			default: {
 
 				break;
 			}
 			}
+		}
+
+		private void linkStatus(String string) {
+			// TODO Auto-generated method stub
+			AlertDialog.Builder builder = new AlertDialog.Builder(view1.getContext());
+			// 2. Chain together various setter methods to set the dialog characteristics
+			builder.setMessage(string)
+			       .setTitle("串口消息");
+			// 3. Get the AlertDialog from create()
+			builder.show();
+			
 		}
 	}
 
@@ -231,8 +254,10 @@ public class Fragment_serialconfig extends Fragment {
 		@Override
 		public void run() {
 			super.run();
-			/*System.out.println("^^^^^^^^^"
-					+ ma.serialUtil.stringBuffer.toString());*/
+			/*
+			 * System.out.println("^^^^^^^^^" +
+			 * ma.serialUtil.stringBuffer.toString());
+			 */
 			while (MainActivity.serialPortConnect) {
 				int size;
 				try {
@@ -245,8 +270,7 @@ public class Fragment_serialconfig extends Fragment {
 					 * Log.i(tag, "start+"+size); }
 					 */
 					for (int j = 0; j < size; j++) {
-
-						ma.serialUtil.stringBuffer.append(byteToHex(buffer[j]));
+						serialUtil.stringBuffer.append(byteToHex(buffer[j]));
 					}
 
 				} catch (IOException e) {
@@ -255,14 +279,13 @@ public class Fragment_serialconfig extends Fragment {
 				}
 			}
 		}
-	}
-
-	public String byteToHex(byte byteData) {
-		// TODO Auto-generated method stub
-		String hex = "";
-		hex = Integer.toHexString(byteData & 0xFF);
-		if (hex.length() == 1)
-			hex = "0" + hex;
-		return hex.toUpperCase();
+		private String byteToHex(byte byteData) {
+			// TODO Auto-generated method stub
+			String hex = "";
+			hex = Integer.toHexString(byteData & 0xFF);
+			if (hex.length() == 1)
+				hex = "0" + hex;
+			return hex.toUpperCase();
+		}
 	}
 }
