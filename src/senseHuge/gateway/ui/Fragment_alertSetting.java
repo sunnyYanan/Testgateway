@@ -2,6 +2,8 @@ package senseHuge.gateway.ui;
 
 import java.io.IOException;
 
+import senseHuge.gateway.service.FileChooserActivity;
+
 import com.example.testgateway.R;
 
 import android.content.Intent;

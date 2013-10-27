@@ -1,4 +1,4 @@
-package senseHuge.gateway.ui;
+package senseHuge.gateway.util;
 
 import android.os.Bundle;
 

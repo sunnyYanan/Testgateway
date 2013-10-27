@@ -1,9 +1,8 @@
-package senseHuge.gateway.ui;
+package senseHuge.gateway.util;
 
 import java.util.ArrayList;
 
-import com.example.testgateway.R;
-
+import senseHuge.gateway.model.FileInfo;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -13,13 +12,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.testgateway.R;
+
 
 public class FileChooserAdapter extends BaseAdapter {
 
 	private ArrayList<FileInfo> mFileLists;
 	private LayoutInflater mLayoutInflater = null;
 
-	private static ArrayList<String> PPT_SUFFIX = new ArrayList<String>();
+	public static ArrayList<String> PPT_SUFFIX = new ArrayList<String>();
 
 	static {
 		PPT_SUFFIX.add(".mp3");
@@ -93,65 +94,6 @@ public class FileChooserAdapter extends BaseAdapter {
 		public ViewHolder(View view) {
 			imgFileIcon = (ImageView) view.findViewById(R.id.imgFileIcon);
 			tvFileName = (TextView) view.findViewById(R.id.tvFileName);
-		}
-	}
-
-	
-	enum FileType {
-		FILE , DIRECTORY;
-	}
-
-	// =========================
-	// Model
-	// =========================
-	static class FileInfo {
-		private FileType fileType;
-		private String fileName;
-		private String filePath;
-
-		public FileInfo(String filePath, String fileName, boolean isDirectory) {
-			this.filePath = filePath;
-			this.fileName = fileName;
-			fileType = isDirectory ? FileType.DIRECTORY : FileType.FILE;
-		}
-
-		public boolean isPPTFile(){
-			if(fileName.lastIndexOf(".") < 0)  //Don't have the suffix 
-				return false ;
-			String fileSuffix = fileName.substring(fileName.lastIndexOf("."));
-			if(!isDirectory() && PPT_SUFFIX.contains(fileSuffix))
-				return true ;
-			else
-				return false ;
-		}
-  
-		public boolean isDirectory(){
-			if(fileType == FileType.DIRECTORY)
-				return true ;
-			else
-				return false ;
-		}
-		
-		public String getFileName() {
-			return fileName;
-		}
-
-		public void setFileName(String fileName) {
-			this.fileName = fileName;
-		}
-
-		public String getFilePath() {
-			return filePath;
-		}
-
-		public void setFilePath(String filePath) {
-			this.filePath = filePath;
-		}
-
-		@Override
-		public String toString() {
-			return "FileInfo [fileType=" + fileType + ", fileName=" + fileName
-					+ ", filePath=" + filePath + "]";
 		}
 	}
 
