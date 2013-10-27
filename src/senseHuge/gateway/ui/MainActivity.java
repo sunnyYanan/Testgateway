@@ -62,12 +62,11 @@ public class MainActivity extends FragmentActivity {
 
 	FragmentManager manager;
 	LinearLayout layout;
-	Fragment f_serialPort, f_server, f_listnode, f_nodeSetting, f_alertSetting,
+	Fragment f_serialPort, f_server, f_listnode, f_nodeSetting,
 			f_dataCenter, f_aboutUs;
 	Button serialPortSetting;
 	Button serverSetting;
 	Button sinkSetting;
-	Button alertSetting;
 	Button sinkCheck;
 	Button internetSetting;
 	Button wifiSetting;
@@ -89,7 +88,6 @@ public class MainActivity extends FragmentActivity {
 		f_server = new Fragment_serverconfig();
 		f_listnode = new Fragment_listNode();
 		f_nodeSetting = new Fragment_nodeSetting();
-		f_alertSetting = new Fragment_alertSetting();
 		f_dataCenter = new Fragment_dataCenter();
 		f_aboutUs = new Fragment_aboutUs();
 
@@ -97,7 +95,6 @@ public class MainActivity extends FragmentActivity {
 		serialPortSetting = (Button) findViewById(R.id.serialPortSetting);
 		serverSetting = (Button) findViewById(R.id.serverSetting);
 		sinkSetting = (Button) findViewById(R.id.sinkSetting);
-		alertSetting = (Button) findViewById(R.id.alertSetting);
 		sinkCheck = (Button) findViewById(R.id.sinkCheck);
 		internetSetting = (Button) findViewById(R.id.internetSetting);
 		wifiSetting = (Button) findViewById(R.id.wifiSetting);
@@ -108,7 +105,6 @@ public class MainActivity extends FragmentActivity {
 		serialPortSetting.setOnClickListener(new ButtonClickListener());
 		serverSetting.setOnClickListener(new ButtonClickListener());
 		sinkSetting.setOnClickListener(new ButtonClickListener());
-		alertSetting.setOnClickListener(new ButtonClickListener());
 		sinkCheck.setOnClickListener(new ButtonClickListener());
 		internetSetting.setOnClickListener(new ButtonClickListener());
 		wifiSetting.setOnClickListener(new ButtonClickListener());
@@ -146,11 +142,6 @@ public class MainActivity extends FragmentActivity {
 			case R.id.sinkSetting:
 				transaction = manager.beginTransaction();
 				transaction.replace(R.id.fragment_container, f_nodeSetting);
-				transaction.commit();
-				break;
-			case R.id.alertSetting:
-				transaction = manager.beginTransaction();
-				transaction.replace(R.id.fragment_container, f_alertSetting);
 				transaction.commit();
 				break;
 			case R.id.sinkCheck: {

@@ -44,15 +44,6 @@
             android:text="@string/sinkSetting" />
 
         <Button
-            android:id="@+id/alertSetting"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="@string/alertSetting" />
-
-        <Button
             android:id="@+id/sinkCheck"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
