@@ -227,7 +227,7 @@ public class MainActivity extends FragmentActivity {
 	 * mainactivity 初始化
 	 */
 	public void init() {
-		testBackup();
+	
 		LocalConfigService localConfigService = new LocalConfigService(
 				getBaseContext());
 		localConfigService.setConfig("webserver", "192.168.10.145");
@@ -260,6 +260,7 @@ public class MainActivity extends FragmentActivity {
 		 */
 		//准备节点信息
 		listNodePrepare.prepare();
+		//testBackup();
 	}
 	
 	
