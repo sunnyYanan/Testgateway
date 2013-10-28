@@ -9,10 +9,10 @@
     <string name="serialPortSetting">串口设置</string>
     <string name="serverSetting">服务器设置</string>
     <string name="sinkSetting">节点设置</string>
-    <string name="alertSetting">预警设置</string>
     <string name="powerSetting">预警电量设置:</string>
     <string name="musicSetting">预警音乐设置:</string>
     <string name="musicSelect">音乐选择</string>
+    <string name="settingOK">确定</string>
     <string name="sinkCheck">节点信息</string>
     <string name="listNodeImage">节点图片</string>
     <string name="nodeId">节点ID</string>

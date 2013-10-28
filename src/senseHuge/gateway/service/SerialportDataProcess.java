@@ -8,9 +8,11 @@ import senseHuge.gateway.model.TelosbPackage;
 import senseHuge.gateway.ui.Fragment_serialconfig;
 import senseHuge.gateway.ui.MainActivity;
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 
 public class SerialportDataProcess extends Thread {
 //	List<String> list = new ArrayList<String>();//全部包
+	SQLiteDatabase db;
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -21,14 +23,14 @@ public class SerialportDataProcess extends Thread {
 		int i;
 		while (MainActivity.serialPortConnect) {
 			i = Fragment_serialconfig.serialUtil.findhead(headTest);
-			System.out.println("包头位置："+i);
-			System.out.println("未处理前："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
+//			System.out.println("包头位置："+i);
+//			System.out.println("未处理前："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
 			if (i < 0 && Fragment_serialconfig.serialUtil.stringBuffer.length() > 6) {
 				Fragment_serialconfig.serialUtil.delete(Fragment_serialconfig.serialUtil.stringBuffer.length() - 6);
 			} else if (i > 0) {
 				Fragment_serialconfig.serialUtil.delete(i);
 			}
-			System.out.println("处理后："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
+//			System.out.println("处理后："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
 			if (Fragment_serialconfig.serialUtil.stringBuffer.length() > 300) {
 				System.out
 						.println("读入的数据+++++++++++++++++++++++++++++++++++");
@@ -85,7 +87,10 @@ public class SerialportDataProcess extends Thread {
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 							"yyyy-MM-dd hh:mm:ss");
 					values.put("receivetime", simpleDateFormat.format(date));
-					MainActivity.mDb.insert("Telosb", null, values);
+					
+					db = MainActivity.mDbhelper.getWritableDatabase();
+					db.insert("Telosb", null, values);
+					db.close();
 					
 					/*if (telosbData != null) {
 						list.add(telosbData);

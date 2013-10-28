@@ -17,7 +17,7 @@ public class FileInfo {
 		fileType = isDirectory ? FileType.DIRECTORY : FileType.FILE;
 	}
 
-	public boolean isPPTFile() {
+	public boolean isMp3File() {
 		if (fileName.lastIndexOf(".") < 0) // Don't have the suffix
 			return false;
 		String fileSuffix = fileName.substring(fileName.lastIndexOf("."));

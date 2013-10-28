@@ -42,7 +42,6 @@ public class MainActivity extends FragmentActivity {
 	protected static final String tags = "sensehuge:";
 	
 	public static MySQLiteDbHelper mDbhelper;
-	public static SQLiteDatabase mDb;
 //	SerialUtil serialUtil = new SerialUtil();
 	public static HttpClientUtil httpClientUtil;
 	PackagePattern packagePattern = null;
@@ -232,8 +231,10 @@ public class MainActivity extends FragmentActivity {
 				getBaseContext());
 		localConfigService.setConfig("webserver", "192.168.10.145");
 		// 初始化xml数据包格式并放入packagepattern中
+		System.out.println("1");
 		xmlTelosbPackagePatternUtil = new XmlTelosbPackagePatternUtil(
 				getFilesDir().toString());
+		System.out.println("2");
 		// 客户端，服务器，串口，等资源的初始化
 		httpClientUtil = new HttpClientUtil(getBaseContext());
 		httpserverState = new MySource();
@@ -252,7 +253,6 @@ public class MainActivity extends FragmentActivity {
 
 		// 创建数据库表
 		mDbhelper = new MySQLiteDbHelper(MainActivity.this, "MyData.db", null, 1);
-		mDb = mDbhelper.getWritableDatabase();
 
 		/*
 		 * httpserverState.setValue(true); serialState.setValue(true);
@@ -320,20 +320,4 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-/*	public void Packagesingnal() {
-		havePackage.setValue(true);
-	}
-
-	public void Packagewaite() {
-		havePackage.setValue(false);
-	}*/
-/*
-	public RingBuffer<String> getRingBuffer() {
-		return ringBuffer;
-	}
-
-	public void setRingBuffer(RingBuffer<String> ringBuffer) {
-		this.ringBuffer = ringBuffer;
-	}
-*/
 }

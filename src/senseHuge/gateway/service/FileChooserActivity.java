@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import senseHuge.gateway.model.FileInfo;
-import senseHuge.gateway.ui.Fragment_alertSetting;
+import senseHuge.gateway.ui.Fragment_nodeSetting;
 import senseHuge.gateway.util.FileChooserAdapter;
 import android.app.Activity;
 import android.content.Intent;
@@ -114,9 +114,9 @@ public class FileChooserActivity extends Activity {
 			FileInfo fileInfo = (FileInfo)(((FileChooserAdapter)adapterView.getAdapter()).getItem(position));
 			if(fileInfo.isDirectory())  	
 				updateFileItems(fileInfo.getFilePath()) ;
-			else if(fileInfo.isPPTFile()){ 
+			else if(fileInfo.isMp3File()){ 
 				Intent intent = new Intent();
-			    intent.putExtra(Fragment_alertSetting.EXTRA_FILE_CHOOSER , fileInfo.getFilePath());
+			    intent.putExtra(Fragment_nodeSetting.EXTRA_FILE_CHOOSER , fileInfo.getFilePath());
 			    setResult(RESULT_OK , intent);
 			    finish();
 			}

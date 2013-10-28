@@ -2,17 +2,19 @@ package senseHuge.gateway.ui;
 
 import java.io.IOException;
 
+import senseHuge.gateway.Dao.MySQLiteDbHelper;
 import senseHuge.gateway.service.FileChooserActivity;
-
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -30,18 +32,25 @@ public class Fragment_nodeSetting extends Fragment {
 	Spinner sendCycleSpinner;
 	Spinner powerSettingSpinner;
 	Button musicChooseButton;
+	Button settingOkButton;
 	int alertPower = 15;// 预警值的设置
-	String alertMusicPath;// 预警音乐设置
-	
+	String alertMusicPath= "\\mnt\\1.mp3";// 预警音乐设置
+	MySQLiteDbHelper mdbHelper;
+	SQLiteDatabase db;
+
 	private static String TAG = "MainActivity";
-	private static final int REQUEST_CODE = 1;   //请求码
+	private static final int REQUEST_CODE = 1; // 请求码
 	public static final String EXTRA_FILE_CHOOSER = "file_chooser";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
+		View v = inflater.inflate(R.layout.fragment_node_setting, container,
+				false);
+		
 		ma = (MainActivity) getActivity();
+		mdbHelper =  new MySQLiteDbHelper(v.getContext(), "MyData.db", null, 1);
 		// 默认发包周期是5秒
 		cycle = 5;
 		if (Fragment_serialconfig.mSerialPort == null) {
@@ -50,13 +59,11 @@ public class Fragment_nodeSetting extends Fragment {
 			isAvalable = true;
 		}
 
-		View v = inflater.inflate(R.layout.fragment_node_setting, container,
-				false);
-
 		sendCycleSpinner = (Spinner) v.findViewById(R.id.sendCycleSelect);
 		powerSettingSpinner = (Spinner) v
 				.findViewById(R.id.powerSettingSpinner);
 		musicChooseButton = (Button) v.findViewById(R.id.musicSelect);
+		settingOkButton = (Button) v.findViewById(R.id.settingOKButton);
 
 		ArrayAdapter<CharSequence> sendCycleAdapter = ArrayAdapter
 				.createFromResource(getActivity(), R.array.nodeSettingCycle,
@@ -78,36 +85,97 @@ public class Fragment_nodeSetting extends Fragment {
 		powerSettingSpinner
 				.setOnItemSelectedListener(new PowerSettingListener());
 		musicChooseButton.setOnClickListener(new MyButtonListener());
+		settingOkButton.setOnClickListener(new MyButtonListener());
 		return v;
 	}
 
 	public class MyButtonListener implements OnClickListener {
-		String filepath;
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-			Intent fileChooserIntent = new Intent(arg0.getContext(),
-					FileChooserActivity.class);
-			startActivityForResult(fileChooserIntent, REQUEST_CODE);
+			switch (arg0.getId()) {
+			case R.id.musicSelect:
+				Intent fileChooserIntent = new Intent(arg0.getContext(),
+						FileChooserActivity.class);
+				startActivityForResult(fileChooserIntent, REQUEST_CODE);
+				break;
+			case R.id.settingOKButton:
+				System.out.println("settingOk");
+				writeIntoNode();
+				saveIntoDB();
+				break;
+			}
+
+		}
+
+	}
+
+	// 将预警设置写入数据库
+	private void saveIntoDB() {
+		// TODO Auto-generated method stub
+		db=mdbHelper.getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		values.put("type", "预警电量");
+		values.put("value", alertPower+"%");
+		values.put("path", alertMusicPath);
+		
+		if(checkIfHas()){
+			db.update("AlertSetting", values, "type=?", new String[]{"预警电量"});
+		}else {
+			db.insert("AlertSetting", null, values);
+		}
+		db.close();
+	}
+	//检查数据库中是否已经有该类型
+	private boolean checkIfHas() {
+		// TODO Auto-generated method stub
+		Cursor cursor = db.query("AlertSetting",
+				new String[] { "type" },null,
+				null, null, null, null);
+		while(cursor.moveToNext()) {
+			String type = (cursor.getString(cursor.getColumnIndex("type")));
+			if(type.equalsIgnoreCase("预警电量")) {
+				cursor.close();
+				return true;
+			}
+		}
+		cursor.close();
+		return false;
+	}
+
+	// 将发包周期与电量设置写入sink节点
+	private void writeIntoNode() {
+		// TODO Auto-generated method stub
+		if (isAvalable) {
+			try {
+				String message = ("预警电量：" + alertPower + " 发包周期：" + cycle);
+				Fragment_serialconfig.mSerialPort.getOutputStream().write(
+						message.getBytes("gb2312"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		/*Log.v(TAG, "onActivityResult#requestCode:" + requestCode
-				+ "#resultCode:" + resultCode);
-		this.getActivity();*/
+		/*
+		 * Log.v(TAG, "onActivityResult#requestCode:" + requestCode +
+		 * "#resultCode:" + resultCode); this.getActivity();
+		 */
 		if (resultCode == FragmentActivity.RESULT_CANCELED) {
 			toast("没有打开文件");
 			return;
 		}
-//		this.getActivity();
+		// this.getActivity();
 		if (resultCode == FragmentActivity.RESULT_OK
 				&& requestCode == REQUEST_CODE) {
 			// 获取路径名
 			String musicPath = data.getStringExtra(EXTRA_FILE_CHOOSER);
-//			Log.v(TAG, "onActivityResult # musicPath : " + musicPath);
+			// Log.v(TAG, "onActivityResult # musicPath : " + musicPath);
 			if (musicPath != null) {
 				toast("Choose File : " + musicPath);
 				alertMusicPath = musicPath;// 预警音乐路径设置
@@ -130,15 +198,6 @@ public class Fragment_nodeSetting extends Fragment {
 			setAlertPower(arg2);
 			System.out.println("powerSettingValue---->" + alertPower);
 
-			if (isAvalable) {
-				try {
-					Fragment_serialconfig.mSerialPort.getOutputStream().write(
-							alertPower);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 		}
 
 		@Override
@@ -182,15 +241,7 @@ public class Fragment_nodeSetting extends Fragment {
 			System.out.println("SendCyclepos---->" + arg2);
 			setCycle(arg2);
 			System.out.println("SendCycleValue---->" + cycle);
-			if (isAvalable) {
-				try {
-					Fragment_serialconfig.mSerialPort.getOutputStream().write(
-							cycle);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+
 		}
 
 		@Override
