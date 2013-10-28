@@ -319,20 +319,4 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-/*	public void Packagesingnal() {
-		havePackage.setValue(true);
-	}
-
-	public void Packagewaite() {
-		havePackage.setValue(false);
-	}*/
-/*
-	public RingBuffer<String> getRingBuffer() {
-		return ringBuffer;
-	}
-
-	public void setRingBuffer(RingBuffer<String> ringBuffer) {
-		this.ringBuffer = ringBuffer;
-	}
-*/
 }
