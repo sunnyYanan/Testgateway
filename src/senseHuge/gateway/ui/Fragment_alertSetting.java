@@ -31,7 +31,7 @@ public class Fragment_alertSetting extends Fragment {
 	public static String alertMusicPath;//‘§æØ“Ù¿÷…Ë÷√
 	public static final String EXTRA_FILE_CHOOSER = "file_chooser";
 
-	@Override
+/*	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
@@ -73,7 +73,7 @@ public class Fragment_alertSetting extends Fragment {
 			}
 		});
 		return v;
-	}
+	}*/
 
 	/**
 	 * @param arg2

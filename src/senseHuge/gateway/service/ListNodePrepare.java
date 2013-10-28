@@ -47,6 +47,7 @@ public class ListNodePrepare {
 				e.printStackTrace();
 			}
 		}
+		cursor.close();
 	}
 
 	// 在解析后的数据中提取出节点编号，若无重复就存入要显示的节点列表中
@@ -109,6 +110,7 @@ public class ListNodePrepare {
 			i--;
 		}
 		item.put("节点电压", getTheAverage(powers) + "v");
+		cursor.close();
 	}
 
 	// 计算电压平均值
