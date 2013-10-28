@@ -1,8 +1,7 @@
 package senseHuge.gateway.ui;
 
-import com.example.testgateway.R;
-
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
@@ -12,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.testgateway.R;
+
 public class Fragment_dataCenter extends ListFragment {
 	ListView list;
+	SQLiteDatabase db;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +36,9 @@ public class Fragment_dataCenter extends ListFragment {
 //		Cursor cursor = MainActivity.mDb.query("Telosb", new String[] {
 //				"message", "Ctype", "NodeID", "status", "receivetime" }, null,
 //				null, null, null, "receivetime DESC");
-		Cursor cursor = MainActivity.mDb.rawQuery("select * from Telosb", null);
+		db = MainActivity.mDbhelper.getReadableDatabase();
+
+		Cursor cursor = db.rawQuery("select * from Telosb", null);
 		/*
 		 * while (cursor.moveToNext()) {
 		 * 
@@ -51,6 +55,7 @@ public class Fragment_dataCenter extends ListFragment {
 						R.id.DBreceivetimeShow },
 				CursorAdapter.FLAG_AUTO_REQUERY);
 		list.setAdapter(adapter);
+		db.close();
 
 	}
 }

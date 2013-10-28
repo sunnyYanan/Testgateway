@@ -121,11 +121,11 @@ public class Fragment_nodeSetting extends Fragment {
 		values.put("path", alertMusicPath);
 		
 		if(checkIfHas()){
-			System.out.println("已有");
 			db.update("AlertSetting", values, "type=?", new String[]{"预警电量"});
 		}else {
 			db.insert("AlertSetting", null, values);
 		}
+		db.close();
 	}
 	//检查数据库中是否已经有该类型
 	private boolean checkIfHas() {
@@ -135,9 +135,12 @@ public class Fragment_nodeSetting extends Fragment {
 				null, null, null, null);
 		while(cursor.moveToNext()) {
 			String type = (cursor.getString(cursor.getColumnIndex("type")));
-			if(type.equalsIgnoreCase("预警电量"))
+			if(type.equalsIgnoreCase("预警电量")) {
+				cursor.close();
 				return true;
+			}
 		}
+		cursor.close();
 		return false;
 	}
 

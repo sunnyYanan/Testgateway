@@ -6,15 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.example.testgateway.R;
-
 import senseHuge.gateway.model.PackagePattern;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +22,8 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.example.testgateway.R;
 
 public class Fragment_listNode extends Fragment {
 	// 界面显示的节点数据
@@ -36,6 +36,7 @@ public class Fragment_listNode extends Fragment {
 	// dialog显示出来的当前节点的所有包的内容
 	List<Map<String, String>> content;
 	GridView gridview;
+	SQLiteDatabase db;
 
 	// 右侧包内容显示
 	/*
@@ -108,7 +109,8 @@ public class Fragment_listNode extends Fragment {
 		// 得到相应节点的全部包，参数为节点ID
 		private void getThePackage(String string) {
 			// TODO Auto-generated method stub
-			Cursor cursor = MainActivity.mDb.query("Telosb", new String[] {
+			db= MainActivity.mDbhelper.getReadableDatabase();
+			Cursor cursor = db.query("Telosb", new String[] {
 					"Ctype", "status", "message" }, "NodeID=?",
 					new String[] { string }, null, null, "receivetime DESC");
 			content = new ArrayList<Map<String, String>>();
@@ -127,6 +129,7 @@ public class Fragment_listNode extends Fragment {
 				content.add(data);
 			}
 			putDataIntoPackage(content);
+			db.close();
 		}
 
 		private void putDataIntoPackage(List<Map<String, String>> content) {

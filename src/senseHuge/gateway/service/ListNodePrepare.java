@@ -8,11 +8,12 @@ import senseHuge.gateway.model.PackagePattern;
 import senseHuge.gateway.ui.Fragment_listNode;
 import senseHuge.gateway.ui.MainActivity;
 import android.database.Cursor;
-import android.util.Log;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.testgateway.R;
 
 public class ListNodePrepare {
+	SQLiteDatabase db;
 	public void prepare() {
 		Thread listNodeThread = new Thread(new MyThread());
 		listNodeThread.start();
@@ -22,11 +23,11 @@ public class ListNodePrepare {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			prepareData();
+			getTheNodeInfo();
 		}
 	}
 
-	private void prepareData() {
+/*	private void prepareData() {
 
 		// TODO Auto-generated method stub
 		// 得到数据并解析
@@ -48,22 +49,24 @@ public class ListNodePrepare {
 			}
 		}
 		cursor.close();
-	}
+	}*/
 
 	// 在解析后的数据中提取出节点编号，若无重复就存入要显示的节点列表中
-	private void getTheNodeInfo(PackagePattern mpp) {
+	private void getTheNodeInfo() {
 		// TODO Auto-generated method stub
-		Iterator<?> it = mpp.DataField.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry pairs = (Map.Entry) it.next();
-			if (pairs.getKey().equals("源节点编号")) {
-				String id = pairs.getValue().toString();
+		db = MainActivity.mDbhelper.getReadableDatabase();
+		Cursor cursor = db.query("Telosb",
+				new String[] { "NodeID" }, null, null,
+				null, null, "receivetime DESC");
+		while (cursor.moveToNext()) {
+			String id = cursor.getString(cursor.getColumnIndex("NodeID"));
+			System.out.println("id:"+id);
 				if (!Fragment_listNode.nodeId.contains(id)) {
 					Fragment_listNode.nodeId.add(id);
 					addNodeIntoList();
 				}
-			}
 		}
+		db.close();
 	}
 
 	// 将节点加入到显示列表中
@@ -88,7 +91,7 @@ public class ListNodePrepare {
 	private void computeTheNodePower(String string, Map<String, Object> item) {
 		// TODO Auto-generated method stub
 		// 得到该节点的最近4条记录,并计算其电量平均值
-		Cursor cursor = MainActivity.mDb.query("Telosb",
+		Cursor cursor = db.query("Telosb",
 				new String[] { "message" }, "NodeID=? AND CType=?",
 				new String[] { string, "C1" }, null, null, "receivetime DESC");
 		int i = 4;
@@ -102,6 +105,7 @@ public class ListNodePrepare {
 				PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil
 						.parseTelosbPackage(message);
 				float power = getTheNodePower(mpp);
+				System.out.println("power after "+cur+":"+power);
 				powers[cur++] = power;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -134,6 +138,7 @@ public class ListNodePrepare {
 			Map.Entry pairs = (Map.Entry) it.next();
 			if (pairs.getKey().equals("节点电压")) {
 				power = pairs.getValue().toString();
+				System.out.println("power before:"+power);
 			}
 		}
 		int powerDeci = 0;

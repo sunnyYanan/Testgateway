@@ -70,13 +70,10 @@ public class PackagePatternService {
 						case XmlPullParser.START_TAG:
 							// packagePattern.DataField.put(xmlPullParser.getName(),
 							// (String) xmlPullParser.nextText());
-							System.out.println("metest"
-									+ xmlPullParser.getName()+ xmlPullParser.getText());
 							DataField.put(xmlPullParser.getName(),
 									(String) xmlPullParser.nextText());
 							break;
 						case XmlPullParser.END_TAG:
-							System.out.println(";;" + xmlPullParser.getName());
 							if ("DataField".equals(xmlPullParser.getName())) {
 								i = 1;
 								System.out.println("parse end !!");
