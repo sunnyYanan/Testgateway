@@ -31,22 +31,6 @@ public class ListNodePrepare {
 		}
 	}
 
-	/*
-	 * private void prepareData() {
-	 * 
-	 * // TODO Auto-generated method stub // 得到数据并解析 //
-	 * 按接受时间的降序排列,只查找C1包，因为只有C1包有电压信息 Cursor cursor =
-	 * MainActivity.mDb.query("Telosb", new String[] { "message" }, "CType=?",
-	 * new String[] { "C1" }, null, null, "receivetime DESC"); while
-	 * (cursor.moveToNext()) { String message =
-	 * cursor.getString(cursor.getColumnIndex("message")); //
-	 * System.out.println("query--->" + message); try { // 解析后的数据 PackagePattern
-	 * mpp = MainActivity.xmlTelosbPackagePatternUtil
-	 * .parseTelosbPackage(message); getTheNodeInfo(mpp); } catch (Exception e)
-	 * { // TODO Auto-generated catch block e.printStackTrace(); } }
-	 * cursor.close(); }
-	 */
-
 	// 在解析后的数据中提取出节点编号，若无重复就存入要显示的节点列表中
 	private void getTheNodeInfo() {
 		// TODO Auto-generated method stub
