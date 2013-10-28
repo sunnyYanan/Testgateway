@@ -1,5 +1,6 @@
 package senseHuge.gateway.service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,11 +10,14 @@ import senseHuge.gateway.ui.Fragment_listNode;
 import senseHuge.gateway.ui.MainActivity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 
 import com.example.testgateway.R;
 
 public class ListNodePrepare {
 	SQLiteDatabase db;
+
 	public void prepare() {
 		Thread listNodeThread = new Thread(new MyThread());
 		listNodeThread.start();
@@ -27,44 +31,34 @@ public class ListNodePrepare {
 		}
 	}
 
-/*	private void prepareData() {
-
-		// TODO Auto-generated method stub
-		// 得到数据并解析
-		// 按接受时间的降序排列,只查找C1包，因为只有C1包有电压信息
-		Cursor cursor = MainActivity.mDb.query("Telosb",
-				new String[] { "message" }, "CType=?", new String[] { "C1" },
-				null, null, "receivetime DESC");
-		while (cursor.moveToNext()) {
-			String message = cursor.getString(cursor.getColumnIndex("message"));
-			// System.out.println("query--->" + message);
-			try {
-				// 解析后的数据
-				PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil
-						.parseTelosbPackage(message);
-				getTheNodeInfo(mpp);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		cursor.close();
-	}*/
+	/*
+	 * private void prepareData() {
+	 * 
+	 * // TODO Auto-generated method stub // 得到数据并解析 //
+	 * 按接受时间的降序排列,只查找C1包，因为只有C1包有电压信息 Cursor cursor =
+	 * MainActivity.mDb.query("Telosb", new String[] { "message" }, "CType=?",
+	 * new String[] { "C1" }, null, null, "receivetime DESC"); while
+	 * (cursor.moveToNext()) { String message =
+	 * cursor.getString(cursor.getColumnIndex("message")); //
+	 * System.out.println("query--->" + message); try { // 解析后的数据 PackagePattern
+	 * mpp = MainActivity.xmlTelosbPackagePatternUtil
+	 * .parseTelosbPackage(message); getTheNodeInfo(mpp); } catch (Exception e)
+	 * { // TODO Auto-generated catch block e.printStackTrace(); } }
+	 * cursor.close(); }
+	 */
 
 	// 在解析后的数据中提取出节点编号，若无重复就存入要显示的节点列表中
 	private void getTheNodeInfo() {
 		// TODO Auto-generated method stub
 		db = MainActivity.mDbhelper.getReadableDatabase();
-		Cursor cursor = db.query("Telosb",
-				new String[] { "NodeID" }, null, null,
-				null, null, "receivetime DESC");
+		Cursor cursor = db.query("Telosb", new String[] { "NodeID" }, null,
+				null, null, null, "receivetime DESC");
 		while (cursor.moveToNext()) {
 			String id = cursor.getString(cursor.getColumnIndex("NodeID"));
-			System.out.println("id:"+id);
-				if (!Fragment_listNode.nodeId.contains(id)) {
-					Fragment_listNode.nodeId.add(id);
-					addNodeIntoList();
-				}
+			if (!Fragment_listNode.nodeId.contains(id)) {
+				Fragment_listNode.nodeId.add(id);
+				addNodeIntoList();
+			}
 		}
 		db.close();
 	}
@@ -91,9 +85,9 @@ public class ListNodePrepare {
 	private void computeTheNodePower(String string, Map<String, Object> item) {
 		// TODO Auto-generated method stub
 		// 得到该节点的最近4条记录,并计算其电量平均值
-		Cursor cursor = db.query("Telosb",
-				new String[] { "message" }, "NodeID=? AND CType=?",
-				new String[] { string, "C1" }, null, null, "receivetime DESC");
+		Cursor cursor = db.query("Telosb", new String[] { "message" },
+				"NodeID=? AND CType=?", new String[] { string, "C1" }, null,
+				null, "receivetime DESC");
 		int i = 4;
 		int cur = 0;
 		float[] powers = new float[i];
@@ -105,7 +99,13 @@ public class ListNodePrepare {
 				PackagePattern mpp = MainActivity.xmlTelosbPackagePatternUtil
 						.parseTelosbPackage(message);
 				float power = getTheNodePower(mpp);
-				System.out.println("power after "+cur+":"+power);
+				System.out.println("power after " + cur + ":" + power);
+				// 舍弃不正确的数据，大于最大值4096
+				if (power > 4096) {
+					System.out
+							.println("a bad data that has power bigger then Max happens");
+					continue;
+				}
 				powers[cur++] = power;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -127,7 +127,76 @@ public class ListNodePrepare {
 		float power = (float) (powerSum / powers.length / 4096 * 2.5);
 		float b = (float) (Math.round(power * 1000)) / 1000;
 		// (这里的100就是2位小数点,如果要其它位,如4位,这里两个100改成10000)
+		System.out.println("average power：" + b);
+		TrigerTheAlert(b);
 		return b;
+	}
+
+	private void TrigerTheAlert(float b) {
+		// TODO Auto-generated method stub
+		String alert = findTheAlertValueSetting();
+		MediaPlayer mp = new MediaPlayer();
+		// 处理数据
+		if (alert != null) {
+			// 预警阈值
+			int pos = alert.indexOf("%");
+			String valueStr = alert.substring(0, pos);
+			float value = Float.parseFloat(valueStr);
+			System.out.println(b/2.5);
+			if (b / 2.5 <= (value / 100)) {
+				// 播放音乐
+				String musicPath = findTheAlertMusicPath();
+				System.out.println(musicPath);
+				try {
+					mp.setDataSource(musicPath);
+					mp.prepareAsync();
+					mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+						@Override
+						public void onPrepared(MediaPlayer mp) {
+							// TODO Auto-generated method stub
+							mp.start();// 异步准备数据的方法，service是可以在用户与其他应用交互时仍运行，此时需要wake
+						}
+					});
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+
+	private String findTheAlertMusicPath() {
+		// TODO Auto-generated method stub
+		String path = null;
+		Cursor cursor = db.query("AlertSetting", new String[] { "path" },
+				"type=?", new String[] { "预警电量" }, null, null, null);
+		while (cursor.moveToNext())
+			path = cursor.getString(cursor.getColumnIndex("path"));
+		cursor.close();
+		return path;
+	}
+
+	private String findTheAlertValueSetting() {
+		// TODO Auto-generated method stub
+		String alertSetting = null;
+		Cursor cursor = db.query("AlertSetting", new String[] { "value" },
+				"type=?", new String[] { "预警电量" }, null, null, null);
+		while (cursor.moveToNext()) {
+			// 由于写入的规则设定，此时其实只有1条数据
+			alertSetting = cursor.getString(cursor.getColumnIndex("value"));
+		}
+		cursor.close();
+		return alertSetting;
 	}
 
 	private float getTheNodePower(PackagePattern mpp) {
@@ -138,7 +207,7 @@ public class ListNodePrepare {
 			Map.Entry pairs = (Map.Entry) it.next();
 			if (pairs.getKey().equals("节点电压")) {
 				power = pairs.getValue().toString();
-				System.out.println("power before:"+power);
+				System.out.println("power before:" + power);
 			}
 		}
 		int powerDeci = 0;
