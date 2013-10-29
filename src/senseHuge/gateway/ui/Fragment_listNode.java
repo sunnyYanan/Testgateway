@@ -111,7 +111,7 @@ public class Fragment_listNode extends Fragment {
 			// TODO Auto-generated method stub
 			db= MainActivity.mDbhelper.getReadableDatabase();
 			Cursor cursor = db.query("Telosb", new String[] {
-					"Ctype", "status", "message" }, "NodeID=?",
+					"Ctype", "status", "message" ,"receivetime"}, "NodeID=?",
 					new String[] { string }, null, null, "receivetime DESC");
 			content = new ArrayList<Map<String, String>>();
 			Map<String, String> data;
@@ -122,10 +122,12 @@ public class Fragment_listNode extends Fragment {
 				String status = cursor.getString(cursor
 						.getColumnIndex("status"));
 				String type = cursor.getString(cursor.getColumnIndex("Ctype"));
+				String receicvetime = cursor.getString(cursor.getColumnIndex("receivetime"));
 
 				data.put("type", type);
 				data.put("status", status);
 				data.put("message", message);
+				data.put("receivetime", receicvetime);
 				content.add(data);
 			}
 			putDataIntoPackage(content);
@@ -137,9 +139,9 @@ public class Fragment_listNode extends Fragment {
 			packageList = (ListView) dialog.findViewById(android.R.id.list);
 			SimpleAdapter adapter = new SimpleAdapter(dialog.getContext(),
 					content, R.layout.list_node_package, new String[] { "type",
-							"status", "message" }, new int[] {
+							"status", "message" ,"receivetime"}, new int[] {
 							R.id.packageType, R.id.packageStatus,
-							R.id.packageMessage });
+							R.id.packageMessage,R.id.packageReceivetime });
 			packageList.setAdapter(adapter);
 
 			// 设置列表点击事件

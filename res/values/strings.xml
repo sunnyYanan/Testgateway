@@ -21,6 +21,7 @@
     <string name="packageType">包类型</string>
     <string name="packageStatus">包状态</string>
     <string name="packageMessage">包内容</string>
+    <string name="packageReceivetime">接收时间</string>
     <string name="internetSetting">以太网设置</string>
     <string name="wifiSetting">wifi设置</string>
     <string name="dataCenter">数据中心</string>
