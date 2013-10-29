@@ -85,9 +85,9 @@ public class ListNodePrepare {
 				float power = getTheNodePower(mpp);
 				System.out.println("power after " + cur + ":" + power);
 				// 舍弃不正确的数据，大于最大值4096
-				if (power > 4096) {
+				if (power > 4096||power <= 0) {
 					System.out
-							.println("a bad data that has power bigger then Max happens");
+							.println("a bad data that has power bigger than Max or smaller than 0 happens");
 					continue;
 				}
 				powers[cur++] = power;
@@ -97,6 +97,9 @@ public class ListNodePrepare {
 			}
 			i--;
 		}
+		for(int j=0; j<powers.length; j++) {
+			System.out.println("powers"+j+":"+powers[j]);
+		}
 		item.put("节点电压", getTheAverage(powers) + "v");
 		cursor.close();
 	}
@@ -105,14 +108,21 @@ public class ListNodePrepare {
 	private float getTheAverage(float[] powers) {
 		// TODO Auto-generated method stub
 		float powerSum = 0;
+		int num = powers.length;
 		for (int i = 0; i < powers.length; i++) {
-			powerSum += powers[i];
+			if(powers[i]!=0)
+				powerSum += powers[i];
+			else
+				num = num - 1;
+				
 		}
-		float power = (float) (powerSum / powers.length / 4096 * 2.5);
+		float power = (float) (powerSum / num / 4096 * 2.5);
 		float b = (float) (Math.round(power * 1000)) / 1000;
 		// (这里的100就是2位小数点,如果要其它位,如4位,这里两个100改成10000)
 		System.out.println("average power：" + b);
+		
 		TrigerTheAlert(b);
+		
 		return b;
 	}
 
@@ -126,7 +136,6 @@ public class ListNodePrepare {
 			int pos = alert.indexOf("%");
 			String valueStr = alert.substring(0, pos);
 			float value = Float.parseFloat(valueStr);
-			System.out.println(b/2.5);
 			if (b / 2.5 <= (value / 100)) {
 				// 播放音乐
 				String musicPath = findTheAlertMusicPath();
