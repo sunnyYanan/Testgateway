@@ -9,6 +9,7 @@ import java.util.Map;
 import com.example.testgateway.R;
 
 import senseHuge.gateway.model.PackagePattern;
+import senseHuge.gateway.util.DataSwitchUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.database.Cursor;
@@ -172,7 +173,22 @@ public class Fragment_listNode extends Fragment {
 
 			private void showTheParsedPackage(PackagePattern pp) {
 				// TODO Auto-generated method stub
-				Iterator<?> it = pp.DataField.entrySet().iterator();
+				
+				DataSwitchUtil dataSwitchUtil= new DataSwitchUtil();
+				pp.ctype = "C1";
+				Iterator<?> it = null;
+				if (pp.ctype == "C1") {
+					 it = dataSwitchUtil.excute_C1(pp.DataField).entrySet().iterator();
+				}else if (pp.ctype == "C2") {
+					 it = dataSwitchUtil.excute_C2(pp.DataField).entrySet().iterator();
+				}else if (pp.ctype == "C3") {
+					 it = dataSwitchUtil.excute_C3(pp.DataField).entrySet().iterator();
+				}else if (pp.ctype == "C4") {
+					 it = dataSwitchUtil.excute_C4(pp.DataField).entrySet().iterator();
+				}
+				
+				
+//				Iterator<?> it = pp.DataField.entrySet().iterator();
 				StringBuffer sb = new StringBuffer();
 				while (it.hasNext()) {
 					Map.Entry pairs = (Map.Entry) it.next();
