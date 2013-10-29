@@ -175,15 +175,18 @@ public class Fragment_listNode extends Fragment {
 				// TODO Auto-generated method stub
 				
 				DataSwitchUtil dataSwitchUtil= new DataSwitchUtil();
-				pp.ctype = "C1";
+				System.out.println(pp.ctype+"^^^^^^^^^^^^^^^^^^^^^");
+				//pp.ctype = "C1";
 				Iterator<?> it = null;
-				if (pp.ctype == "C1") {
+				
+				if (pp.ctype.equals("C1")) {
+					
 					 it = dataSwitchUtil.excute_C1(pp.DataField).entrySet().iterator();
-				}else if (pp.ctype == "C2") {
+				}else if (pp.ctype.equals("C2")) {
 					 it = dataSwitchUtil.excute_C2(pp.DataField).entrySet().iterator();
-				}else if (pp.ctype == "C3") {
+				}else if (pp.ctype.equals("C3")) {
 					 it = dataSwitchUtil.excute_C3(pp.DataField).entrySet().iterator();
-				}else if (pp.ctype == "C4") {
+				}else if (pp.ctype.equals("C4")) {
 					 it = dataSwitchUtil.excute_C4(pp.DataField).entrySet().iterator();
 				}
 				
