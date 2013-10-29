@@ -44,6 +44,7 @@ public class ListNodePrepare {
 				addNodeIntoList();
 			}
 		}
+		cursor.close();
 		db.close();
 	}
 
