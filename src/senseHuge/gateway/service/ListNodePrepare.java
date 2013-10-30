@@ -149,6 +149,13 @@ public class ListNodePrepare {
 						public void onPrepared(MediaPlayer mp) {
 							// TODO Auto-generated method stub
 							mp.start();// 异步准备数据的方法，service是可以在用户与其他应用交互时仍运行，此时需要wake
+							mp.setOnCompletionListener(new OnCompletionListener() {
+								@Override
+								public void onCompletion(MediaPlayer arg0) {
+									// TODO Auto-generated method stub
+									arg0.release();
+								}
+							});
 						}
 					});
 				} catch (IllegalArgumentException e) {
