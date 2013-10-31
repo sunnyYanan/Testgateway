@@ -12,7 +12,7 @@ import android.net.Uri;
 public class DataProvider extends ContentProvider {
 	MySQLiteDbHelper dbHelper;
 	SQLiteDatabase db;
-	public static final String AUTHORITY = "senseHuge.gateway.service.1";
+	public static final String AUTHORITY = "senseHuge.gateway.service";
 
 	/**
 	 * A uri to do operations on cust_master table. A content provider is

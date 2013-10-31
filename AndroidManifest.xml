@@ -30,7 +30,7 @@
         </activity>
         <provider
             android:name="senseHuge.gateway.service.DataProvider"
-            android:authorities="senseHuge.gateway.service.1"
+            android:authorities="senseHuge.gateway.service"
             android:exported="false" />
     </application>
 

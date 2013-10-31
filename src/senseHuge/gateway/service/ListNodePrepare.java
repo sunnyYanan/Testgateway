@@ -41,22 +41,23 @@ public class ListNodePrepare {
 			String id = cursor.getString(cursor.getColumnIndex("NodeID"));
 			if (!Fragment_listNode.nodeId.contains(id)) {
 				Fragment_listNode.nodeId.add(id);
-				addNodeIntoList();
 			}
+		}
+		for (int i = 0; i < Fragment_listNode.nodeId.size(); i++) {
+			System.out.println("节点：" + Fragment_listNode.nodeId.get(i));
+			addNodeIntoList(Fragment_listNode.nodeId.get(i));
 		}
 		cursor.close();
 		db.close();
 	}
 
 	// 将节点加入到显示列表中
-	private void addNodeIntoList() {
+	private void addNodeIntoList(String nodeId) {
 		// TODO Auto-generated method stub
 		Map<String, Object> item = new HashMap<String, Object>();
 		item.put("图片", R.drawable.ic_launcher);
-		for (int i = 0; i < Fragment_listNode.nodeId.size(); i++) {
-			item.put("源节点编号", Fragment_listNode.nodeId.get(i));
-			computeTheNodePower(Fragment_listNode.nodeId.get(i), item);
-		}
+		item.put("源节点编号", nodeId);
+		computeTheNodePower(nodeId, item);
 		// item.put("节点电压", "11");
 		Fragment_listNode.nodeList.add(item);
 	}
@@ -76,6 +77,9 @@ public class ListNodePrepare {
 		int i = 4;
 		int cur = 0;
 		float[] powers = new float[i];
+		/*
+		 * if(cursor.equals(null)) { System.out.println("未查找到该节点的c1包"); }
+		 */
 
 		while (cursor.moveToNext() && i > 0) {
 			String message = cursor.getString(cursor.getColumnIndex("message"));
@@ -86,7 +90,7 @@ public class ListNodePrepare {
 				float power = getTheNodePower(mpp);
 				System.out.println("power after " + cur + ":" + power);
 				// 舍弃不正确的数据，大于最大值4096
-				if (power > 4096||power <= 0) {
+				if (power > 4096 || power <= 0) {
 					System.out
 							.println("a bad data that has power bigger than Max or smaller than 0 happens");
 					continue;
@@ -98,10 +102,14 @@ public class ListNodePrepare {
 			}
 			i--;
 		}
-		for(int j=0; j<powers.length; j++) {
-			System.out.println("powers"+j+":"+powers[j]);
+		for (int j = 0; j < powers.length; j++) {
+			System.out.println(string + " powers" + j + ":" + powers[j]);
 		}
-		item.put("节点电压", getTheAverage(powers) + "v");
+		float resultPower = getTheAverage(powers);
+		if(resultPower==0.0f)
+			item.put("节点电压", "unknown");
+		else
+			item.put("节点电压", resultPower + "v");
 		cursor.close();
 	}
 
@@ -111,19 +119,21 @@ public class ListNodePrepare {
 		float powerSum = 0;
 		int num = powers.length;
 		for (int i = 0; i < powers.length; i++) {
-			if(powers[i]!=0)
+			if (powers[i] != 0)
 				powerSum += powers[i];
 			else
 				num = num - 1;
-				
+
 		}
 		float power = (float) (powerSum / num / 4096 * 2.5);
 		float b = (float) (Math.round(power * 1000)) / 1000;
 		// (这里的100就是2位小数点,如果要其它位,如4位,这里两个100改成10000)
 		System.out.println("average power：" + b);
-		
-		TrigerTheAlert(b);
-		
+
+		//还应有用户设置的控制
+		if (b != 0) {
+			TrigerTheAlert(b);
+		}
 		return b;
 	}
 
