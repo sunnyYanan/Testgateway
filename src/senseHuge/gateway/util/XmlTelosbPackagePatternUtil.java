@@ -306,13 +306,11 @@ public class XmlTelosbPackagePatternUtil {
 
 			System.out.println("packagePattern == null");
 		}
-		System.out.println(packagePattern.getTelosbDataField().size()
-				+ "==packagePattern.getTelosbDataField().size()");
 		String type = "C1C2C3C4";
 		String ctype = packageParserService
 				.parseDatafield(telsobData, "019019");
 		if (!type.contains(ctype)) {
-			System.out.println(telsobData + "^^^^^^^^^^^^^^^^^^^error:");
+			System.out.println("∞¸¿‡–Õ^^^^^^^^^^^^^^^^^^^error:");
 			throw new RuntimeException("demo");
 
 		}

@@ -11,6 +11,7 @@ import senseHuge.gateway.model.Serial;
 import senseHuge.gateway.service.SerialportDataProcess;
 import senseHuge.gateway.util.SerialUtil;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -49,6 +50,7 @@ public class Fragment_serialconfig extends Fragment {
 	ReadThread readThread = null;
 	MainActivity ma;
 	View view1;
+	private ContentResolver contentResolver;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +63,7 @@ public class Fragment_serialconfig extends Fragment {
 
 		connectButton = (Button) view1.findViewById(R.id.connect);
 		closeButton = (Button) view1.findViewById(R.id.close);
+		contentResolver = this.getActivity().getContentResolver();
 
 		changeButtonStatus();
 
@@ -178,7 +181,7 @@ public class Fragment_serialconfig extends Fragment {
 					readThread.start();
 					
 					//数据处理
-					dataProcess = new SerialportDataProcess();
+					dataProcess = new SerialportDataProcess(contentResolver);
 					dataProcess.start();
 					
 					ma.serialState.setValue(true);//应该改进为用这个！！

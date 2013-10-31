@@ -7,12 +7,22 @@ import senseHuge.gateway.model.PackagePattern;
 import senseHuge.gateway.model.TelosbPackage;
 import senseHuge.gateway.ui.Fragment_serialconfig;
 import senseHuge.gateway.ui.MainActivity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 public class SerialportDataProcess extends Thread {
-//	List<String> list = new ArrayList<String>();//全部包
-	SQLiteDatabase db;
+	// List<String> list = new ArrayList<String>();//全部包
+	private ContentResolver contentResolver;
+
+	public SerialportDataProcess() {
+
+	}
+
+	public SerialportDataProcess(ContentResolver resolver) {
+		this.contentResolver = resolver;
+	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -23,41 +33,33 @@ public class SerialportDataProcess extends Thread {
 		int i;
 		while (MainActivity.serialPortConnect) {
 			i = Fragment_serialconfig.serialUtil.findhead(headTest);
-//			System.out.println("包头位置："+i);
-//			System.out.println("未处理前："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
-			if (i < 0 && Fragment_serialconfig.serialUtil.stringBuffer.length() > 6) {
-				Fragment_serialconfig.serialUtil.delete(Fragment_serialconfig.serialUtil.stringBuffer.length() - 6);
+			// System.out.println("包头位置："+i);
+			// System.out.println("未处理前："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
+			if (i < 0
+					&& Fragment_serialconfig.serialUtil.stringBuffer.length() > 6) {
+				Fragment_serialconfig.serialUtil
+						.delete(Fragment_serialconfig.serialUtil.stringBuffer
+								.length() - 6);
 			} else if (i > 0) {
 				Fragment_serialconfig.serialUtil.delete(i);
 			}
-//			System.out.println("处理后："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
+			// System.out.println("处理后："+Fragment_serialconfig.serialUtil.stringBuffer.toString());
 			if (Fragment_serialconfig.serialUtil.stringBuffer.length() > 300) {
+				System.out.println("读入的数据+++++++++++++++++++++++++++++++++++");
 				System.out
-						.println("读入的数据+++++++++++++++++++++++++++++++++++");
-				System.out.println(Fragment_serialconfig.serialUtil.stringBuffer.toString());
+						.println(Fragment_serialconfig.serialUtil.stringBuffer
+								.toString());
 				System.out
 						.println("+++++++++++++++++++++++++++++++++++++++++++++");
-				String telosbData = Fragment_serialconfig.serialUtil.getFirstData();
+				String telosbData = Fragment_serialconfig.serialUtil
+						.getFirstData();
 				System.out.println("receive package:" + telosbData);
 
-				if (telosbData == "") {
+				if (telosbData == null) {
 					System.out.println("包为empty");
 
 				} else {
-					/*System.out
-							.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-					try {
-						// 数据解析
-						System.out.println(xmlTelosbPackagePatternUtil
-								.parseTelosbPackage(telosbData).getCtype()
-								+ ":%%%%%%%%%%%%%%");
-					} catch (Exception e) {
-						System.out.println("异常");
-						e.printStackTrace();
-						continue;
-					}
-					// ;
-*/					PackagePattern telosbPackagePattern = null;
+					PackagePattern telosbPackagePattern = null;
 					try {
 						// 数据解析
 						telosbPackagePattern = MainActivity.xmlTelosbPackagePatternUtil
@@ -68,7 +70,8 @@ public class SerialportDataProcess extends Thread {
 						continue;
 
 					}
-					if (MainActivity.httpClientUtil.PostTelosbData("", telosbData)) {
+					if (MainActivity.httpClientUtil.PostTelosbData("",
+							telosbData)) {
 						telosbPackage.setStatus("已上传");
 					} else {
 						telosbPackage.setStatus("未上传");
@@ -77,7 +80,7 @@ public class SerialportDataProcess extends Thread {
 					telosbPackage.setCtype(telosbPackagePattern.ctype);
 					telosbPackage.setMessage(telosbData);
 					telosbPackage.setNodeID(telosbPackagePattern.nodeID);
-					
+
 					ContentValues values = new ContentValues(); // 相当于map
 					values.put("message", telosbPackage.getMessage());
 					values.put("Ctype", telosbPackage.getCtype());
@@ -87,17 +90,21 @@ public class SerialportDataProcess extends Thread {
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 							"yyyy-MM-dd hh:mm:ss");
 					values.put("receivetime", simpleDateFormat.format(date));
-					
-					db = MainActivity.mDbhelper.getWritableDatabase();
-					db.insert("Telosb", null, values);
-					db.close();
-					
-					/*if (telosbData != null) {
-						list.add(telosbData);
-//						Packagesingnal();
-					}*/
-//					System.out.println(list.size() + "_____________");
-					System.gc();//垃圾回收
+
+					/*
+					 * db = MainActivity.mDbhelper.getWritableDatabase();
+					 * db.insert("Telosb", null, values); db.close();
+					 */
+					this.contentResolver.insert(DataProvider.CONTENT_URI,
+							values);
+					System.out.println("time:" + values.get("receivetime"));
+
+					/*
+					 * if (telosbData != null) { list.add(telosbData); //
+					 * Packagesingnal(); }
+					 */
+					// System.out.println(list.size() + "_____________");
+					System.gc();// 垃圾回收
 				}
 			}
 		}

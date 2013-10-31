@@ -50,8 +50,10 @@ public class DataProvider extends ContentProvider {
 		if (uriMatcher.match(arg0) != MESSAGE) {
 			throw new IllegalArgumentException("Unknown URI" + arg0);
 		}
+		System.out.println("insert");
 		rowId = db.insert(MySQLiteDbHelper.TABLEMESSAGE, null, arg1);
 		if (rowId > 0) {
+			System.out.println("insert su");
 			Uri noteUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
 			getContext().getContentResolver().notifyChange(noteUri, null);
 			return noteUri;

@@ -50,7 +50,7 @@ public class Fragment_dataCenter extends ListFragment {
 						R.id.DBreceivetimeShow },
 				CursorAdapter.FLAG_AUTO_REQUERY);
 		list.setAdapter(adapter);
-		this.getActivity().startManagingCursor(cursor);  //查找后关闭游标
+//		this.getActivity().startManagingCursor(cursor);  //查找后关闭游标
 
 	}
 }
