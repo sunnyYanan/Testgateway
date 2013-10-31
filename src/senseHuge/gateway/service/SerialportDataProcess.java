@@ -97,8 +97,6 @@ public class SerialportDataProcess extends Thread {
 					 */
 					this.contentResolver.insert(DataProvider.CONTENT_URI,
 							values);
-					System.out.println("time:" + values.get("receivetime"));
-
 					/*
 					 * if (telosbData != null) { list.add(telosbData); //
 					 * Packagesingnal(); }

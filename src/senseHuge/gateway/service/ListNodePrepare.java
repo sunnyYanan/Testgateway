@@ -43,6 +43,7 @@ public class ListNodePrepare {
 				Fragment_listNode.nodeId.add(id);
 			}
 		}
+		Fragment_listNode.nodeList.clear();
 		for (int i = 0; i < Fragment_listNode.nodeId.size(); i++) {
 			System.out.println("节点：" + Fragment_listNode.nodeId.get(i));
 			addNodeIntoList(Fragment_listNode.nodeId.get(i));
@@ -106,7 +107,7 @@ public class ListNodePrepare {
 			System.out.println(string + " powers" + j + ":" + powers[j]);
 		}
 		float resultPower = getTheAverage(powers);
-		if(resultPower==0.0f)
+		if (resultPower == 0.0f)
 			item.put("节点电压", "unknown");
 		else
 			item.put("节点电压", resultPower + "v");
@@ -130,7 +131,7 @@ public class ListNodePrepare {
 		// (这里的100就是2位小数点,如果要其它位,如4位,这里两个100改成10000)
 		System.out.println("average power：" + b);
 
-		//还应有用户设置的控制
+		// 还应有用户设置的控制
 		if (b != 0) {
 			TrigerTheAlert(b);
 		}

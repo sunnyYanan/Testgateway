@@ -1,6 +1,7 @@
 package senseHuge.gateway.service;
 
 import senseHuge.gateway.Dao.MySQLiteDbHelper;
+import senseHuge.gateway.ui.MainActivity;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -12,6 +13,7 @@ import android.net.Uri;
 public class DataProvider extends ContentProvider {
 	MySQLiteDbHelper dbHelper;
 	SQLiteDatabase db;
+	ListNodePrepare nodePrepare;
 	public static final String AUTHORITY = "senseHuge.gateway.service";
 
 	/**
@@ -56,6 +58,7 @@ public class DataProvider extends ContentProvider {
 			System.out.println("insert su");
 			Uri noteUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
 			getContext().getContentResolver().notifyChange(noteUri, null);
+			nodePrepare.prepare();
 			return noteUri;
 		}
 		return null;
@@ -65,7 +68,9 @@ public class DataProvider extends ContentProvider {
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
 		dbHelper = new MySQLiteDbHelper(this.getContext());
+		nodePrepare = new ListNodePrepare();
 		return true;
+		
 	}
 
 	@Override
