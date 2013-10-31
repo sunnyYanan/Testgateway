@@ -6,18 +6,26 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MySQLiteDbHelper extends SQLiteOpenHelper {
+	public static String DBNAME ="MyData.db";
+	public static int VERSION = 1;
+	public static String TABLEMESSAGE = "Telosb";
+	public static String TABLESERVER = "Server";
+	public static String TABLEALERTSETTING = "AlertSetting";
 	public MySQLiteDbHelper(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
 		// TODO Auto-generated constructor stub
 	}
+	public MySQLiteDbHelper(Context context) {
+		super(context, DBNAME, null,VERSION );
+	}
 
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
 		// TODO Auto-generated method stub
-		String sql = "create table Telosb(_id integer primary key AutoIncrement,message varchar(300),Ctype varchar(10),NodeID varchar(10),status varchar(20),receivetime varchar(30))";
-		String sqlServer = "create table Server(_id integer primary key AutoIncrement,address varchar(50))";
-		String alertSetting = "create table AlertSetting(_id integer primary key AutoIncrement,type varchar(10),value varchar(5),path varchar(200))";
+		String sql = "create table "+TABLEMESSAGE+"(_id integer primary key AutoIncrement,message varchar(300),Ctype varchar(10),NodeID varchar(10),status varchar(20),receivetime varchar(30))";
+		String sqlServer = "create table "+TABLESERVER+"(_id integer primary key AutoIncrement,address varchar(50))";
+		String alertSetting = "create table "+TABLEALERTSETTING+"(_id integer primary key AutoIncrement,type varchar(10),value varchar(5),path varchar(200))";
 		arg0.execSQL(sql);
 		arg0.execSQL(sqlServer);
 		arg0.execSQL(alertSetting);

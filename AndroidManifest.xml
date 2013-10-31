@@ -28,6 +28,10 @@
             android:name="senseHuge.gateway.service.FileChooserActivity"
             android:label="@string/title_activity_file_chooser" >
         </activity>
+        <provider
+            android:name="senseHuge.gateway.service.DataProvider"
+            android:authorities="senseHuge.gateway.service.1"
+            android:exported="false" />
     </application>
 
 </manifest>
