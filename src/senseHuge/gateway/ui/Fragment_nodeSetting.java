@@ -29,7 +29,7 @@ import com.example.testgateway.R;
 
 public class Fragment_nodeSetting extends Fragment {
 	// 节点设置
-//	public MainActivity ma;
+	// public MainActivity ma;
 	private boolean isAvalable;// 标识串口是否已连接
 	private int cycle;// 标识设置的周期时间
 	Spinner sendCycleSpinner;
@@ -40,7 +40,7 @@ public class Fragment_nodeSetting extends Fragment {
 	RadioButton radioYesButton;
 	RadioButton radioNoButton;
 	int alertPower = 15;// 预警值的设置
-	String alertMusicPath= "\\mnt\\1.mp3";// 预警音乐设置
+	String alertMusicPath = "\\mnt\\1.mp3";// 预警音乐设置
 	MySQLiteDbHelper mdbHelper;
 	SQLiteDatabase db;
 	View v;
@@ -48,13 +48,13 @@ public class Fragment_nodeSetting extends Fragment {
 	private static final int REQUEST_CODE = 1; // 请求码
 	public static final String EXTRA_FILE_CHOOSER = "file_chooser";
 	private boolean isMusicAlert = true;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		v = inflater.inflate(R.layout.fragment_node_setting, container,
-				false);
-		
+		v = inflater.inflate(R.layout.fragment_node_setting, container, false);
+
 		mdbHelper = new MySQLiteDbHelper(v.getContext(), "MyData.db", null, 1);
 		// 默认发包周期是5秒
 		cycle = 5;
@@ -96,20 +96,22 @@ public class Fragment_nodeSetting extends Fragment {
 		rg.setOnCheckedChangeListener(new MyOnCheckedChangeListener());
 		return v;
 	}
+
 	public class MyOnCheckedChangeListener implements OnCheckedChangeListener {
 
 		@Override
 		public void onCheckedChanged(RadioGroup arg0, int arg1) {
 			// TODO Auto-generated method stub
-			if(arg1==radioYesButton.getId()) {
+			if (arg1 == radioYesButton.getId()) {
 				isMusicAlert = true;
 			}
-			if(arg1==radioNoButton.getId()) {
+			if (arg1 == radioNoButton.getId()) {
 				isMusicAlert = false;
 			}
 		}
-		
+
 	}
+
 	public class MyButtonListener implements OnClickListener {
 		@Override
 		public void onClick(View arg0) {
@@ -123,7 +125,8 @@ public class Fragment_nodeSetting extends Fragment {
 			case R.id.settingOKButton:
 				writeIntoNode();
 				saveIntoDB();
-				Toast.makeText(v.getContext(), "设置成功", Toast.LENGTH_SHORT).show();
+				Toast.makeText(v.getContext(), "设置成功", Toast.LENGTH_SHORT)
+						.show();
 				break;
 			}
 		}
@@ -133,30 +136,30 @@ public class Fragment_nodeSetting extends Fragment {
 	// 将预警设置写入数据库
 	private void saveIntoDB() {
 		// TODO Auto-generated method stub
-		db=mdbHelper.getWritableDatabase();
-		
+		db = mdbHelper.getWritableDatabase();
+
 		ContentValues values = new ContentValues();
 		values.put("type", "预警电量");
-		values.put("value", alertPower+"%");
+		values.put("value", alertPower + "%");
 		values.put("path", alertMusicPath);
 		values.put("alert", isMusicAlert);
-		
-		if(checkIfHas()){
-			db.update("AlertSetting", values, "type=?", new String[]{"预警电量"});
-		}else {
+
+		if (checkIfHas()) {
+			db.update("AlertSetting", values, "type=?", new String[] { "预警电量" });
+		} else {
 			db.insert("AlertSetting", null, values);
 		}
 		db.close();
 	}
-	//检查数据库中是否已经有该类型
+
+	// 检查数据库中是否已经有该类型
 	private boolean checkIfHas() {
 		// TODO Auto-generated method stub
-		Cursor cursor = db.query("AlertSetting",
-				new String[] { "type" },null,
+		Cursor cursor = db.query("AlertSetting", new String[] { "type" }, null,
 				null, null, null, null);
-		while(cursor.moveToNext()) {
+		while (cursor.moveToNext()) {
 			String type = (cursor.getString(cursor.getColumnIndex("type")));
-			if(type.equalsIgnoreCase("预警电量")) {
+			if (type.equalsIgnoreCase("预警电量")) {
 				cursor.close();
 				return true;
 			}
@@ -182,7 +185,6 @@ public class Fragment_nodeSetting extends Fragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
 		/*
 		 * Log.v(TAG, "onActivityResult#requestCode:" + requestCode +
 		 * "#resultCode:" + resultCode); this.getActivity();

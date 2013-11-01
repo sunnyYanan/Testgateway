@@ -83,7 +83,8 @@ public class DataProvider extends ContentProvider {
 		case MESSAGE:
 			/*c = db.query(MySQLiteDbHelper.TABLEMESSAGE, arg1, arg2, arg3, null,
 					null, null);*/
-			c = db.rawQuery("select * from "+MySQLiteDbHelper.TABLEMESSAGE,null);
+			//c = db.rawQuery("select * from "+MySQLiteDbHelper.TABLEMESSAGE,null);
+			 c = db.query(MySQLiteDbHelper.TABLEMESSAGE, arg1, arg2, arg3, null, null, arg4);
 			break;
 		default:
 			throw new IllegalArgumentException("Unknown URI" + arg0);

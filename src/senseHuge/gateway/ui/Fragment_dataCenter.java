@@ -27,19 +27,19 @@ public class Fragment_dataCenter extends ListFragment {
 		list = (ListView) view.findViewById(android.R.id.list);
 		contentResolver = this.getActivity().getContentResolver();
 
-		showData();
+		showAllData();
 
 		return view;
 	}
 
-	private void showData() {
+	private void showAllData() {
 		// TODO Auto-generated method stub
 
 		// Cursor cursor = MainActivity.mDb.query("Telosb", new String[] {
 		// "message", "Ctype", "NodeID", "status", "receivetime" }, null,
 		// null, null, null, "receivetime DESC");
 		Cursor cursor = contentResolver.query(DataProvider.CONTENT_URI,
-				new String[] { "message", "Ctype", "NodeID", "status",
+				new String[] { "_id", "message", "Ctype", "NodeID", "status",
 						"receivetime" }, null, null, "receivetime DESC");
 
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
@@ -51,6 +51,5 @@ public class Fragment_dataCenter extends ListFragment {
 				CursorAdapter.FLAG_AUTO_REQUERY);
 		list.setAdapter(adapter);
 		this.getActivity().startManagingCursor(cursor);  //查找后关闭游标
-
 	}
 }
