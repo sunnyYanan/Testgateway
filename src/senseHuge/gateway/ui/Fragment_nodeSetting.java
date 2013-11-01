@@ -19,6 +19,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -33,23 +36,26 @@ public class Fragment_nodeSetting extends Fragment {
 	Spinner powerSettingSpinner;
 	Button musicChooseButton;
 	Button settingOkButton;
+	RadioGroup rg;
+	RadioButton radioYesButton;
+	RadioButton radioNoButton;
 	int alertPower = 15;// 预警值的设置
 	String alertMusicPath= "\\mnt\\1.mp3";// 预警音乐设置
 	MySQLiteDbHelper mdbHelper;
 	SQLiteDatabase db;
+	View v;
 
-	private static String TAG = "MainActivity";
 	private static final int REQUEST_CODE = 1; // 请求码
 	public static final String EXTRA_FILE_CHOOSER = "file_chooser";
-
+	private boolean isMusicAlert = true;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View v = inflater.inflate(R.layout.fragment_node_setting, container,
+		v = inflater.inflate(R.layout.fragment_node_setting, container,
 				false);
 		
-		mdbHelper =  new MySQLiteDbHelper(v.getContext(), "MyData.db", null, 1);
+		mdbHelper = new MySQLiteDbHelper(v.getContext(), "MyData.db", null, 1);
 		// 默认发包周期是5秒
 		cycle = 5;
 		if (Fragment_serialconfig.mSerialPort == null) {
@@ -57,12 +63,14 @@ public class Fragment_nodeSetting extends Fragment {
 		} else {
 			isAvalable = true;
 		}
-
+		rg = (RadioGroup) v.findViewById(R.id.radioGroup);
+		radioYesButton = (RadioButton) v.findViewById(R.id.yes);
+		radioNoButton = (RadioButton) v.findViewById(R.id.no);
 		sendCycleSpinner = (Spinner) v.findViewById(R.id.sendCycleSelect);
 		powerSettingSpinner = (Spinner) v
 				.findViewById(R.id.powerSettingSpinner);
-//		musicChooseButton = (Button) v.findViewById(R.id.musicSelect);
-//		settingOkButton = (Button) v.findViewById(R.id.settingOKButton);
+		musicChooseButton = (Button) v.findViewById(R.id.musicSelect);
+		settingOkButton = (Button) v.findViewById(R.id.settingOKButton);
 
 		ArrayAdapter<CharSequence> sendCycleAdapter = ArrayAdapter
 				.createFromResource(getActivity(), R.array.nodeSettingCycle,
@@ -83,28 +91,41 @@ public class Fragment_nodeSetting extends Fragment {
 				.setOnItemSelectedListener(new SendCycleSelectedListener());
 		powerSettingSpinner
 				.setOnItemSelectedListener(new PowerSettingListener());
-//		musicChooseButton.setOnClickListener(new MyButtonListener());
-//		settingOkButton.setOnClickListener(new MyButtonListener());
+		musicChooseButton.setOnClickListener(new MyButtonListener());
+		settingOkButton.setOnClickListener(new MyButtonListener());
+		rg.setOnCheckedChangeListener(new MyOnCheckedChangeListener());
 		return v;
 	}
+	public class MyOnCheckedChangeListener implements OnCheckedChangeListener {
 
+		@Override
+		public void onCheckedChanged(RadioGroup arg0, int arg1) {
+			// TODO Auto-generated method stub
+			if(arg1==radioYesButton.getId()) {
+				isMusicAlert = true;
+			}
+			if(arg1==radioNoButton.getId()) {
+				isMusicAlert = false;
+			}
+		}
+		
+	}
 	public class MyButtonListener implements OnClickListener {
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-		/*	switch (arg0.getId()) {
+			switch (arg0.getId()) {
 			case R.id.musicSelect:
 				Intent fileChooserIntent = new Intent(arg0.getContext(),
 						FileChooserActivity.class);
 				startActivityForResult(fileChooserIntent, REQUEST_CODE);
 				break;
 			case R.id.settingOKButton:
-				System.out.println("settingOk");
 				writeIntoNode();
 				saveIntoDB();
+				Toast.makeText(v.getContext(), "设置成功", Toast.LENGTH_SHORT).show();
 				break;
 			}
-*/
 		}
 
 	}
@@ -118,6 +139,7 @@ public class Fragment_nodeSetting extends Fragment {
 		values.put("type", "预警电量");
 		values.put("value", alertPower+"%");
 		values.put("path", alertMusicPath);
+		values.put("alert", isMusicAlert);
 		
 		if(checkIfHas()){
 			db.update("AlertSetting", values, "type=?", new String[]{"预警电量"});

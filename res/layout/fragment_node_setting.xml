@@ -45,13 +45,15 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/sendCycleItem" />
 
-       <!--  <Button
+        <!--
+             <Button
             android:id="@+id/sendCycleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/sendCycleSelect"
             android:layout_toRightOf="@id/sendCycleSelect"
-            android:text="@string/settingOK" /> -->
+            android:text="@string/settingOK" />
+        -->
     </RelativeLayout>
 
     <RelativeLayout
@@ -113,16 +115,20 @@
                 android:textSize="20sp" />
 
             <RadioGroup
+                android:id="@+id/radioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checkedButton="@+id/yes"
                 android:orientation="vertical" >
 
                 <RadioButton
+                    android:id="@+id/yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/yes" />
 
                 <RadioButton
+                    android:id="@+id/no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no" />
@@ -173,7 +179,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/musicSelect" />
-    </LinearLayout>-->
+    </LinearLayout>
+    -->
 
     <Button
         android:id="@+id/settingOKButton"
@@ -183,6 +190,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="200dp"
         android:text="@string/settingOK" >
-    </Button> 
+    </Button>
 
 </RelativeLayout>

@@ -252,7 +252,7 @@ public class MainActivity extends FragmentActivity {
 		// havePackage.setValue(false);
 
 		// 创建数据库表
-		mDbhelper = new MySQLiteDbHelper(MainActivity.this, "MyData.db", null, 1);
+		mDbhelper = new MySQLiteDbHelper(MainActivity.this);
 
 		/*
 		 * httpserverState.setValue(true); serialState.setValue(true);

@@ -132,10 +132,26 @@ public class ListNodePrepare {
 		System.out.println("average power：" + b);
 
 		// 还应有用户设置的控制
-		if (b != 0) {
+		String trige = findIftriger();
+		System.out.println("chufa:"+trige);
+		System.out.println(trige.equals("1"));
+		if (b != 0&&trige.equals("1")) {
 			TrigerTheAlert(b);
 		}
 		return b;
+	}
+
+	private String findIftriger() {
+		// TODO Auto-generated method stub
+		String alert = null;
+		Cursor cursor = db.query("AlertSetting", new String[] { "alert" },
+				"type=?", new String[] { "预警电量" }, null, null, null);
+		while (cursor.moveToNext()) {
+			// 由于写入的规则设定，此时其实只有1条数据
+			alert = cursor.getString(cursor.getColumnIndex("alert"));
+		}
+		cursor.close();
+		return alert;
 	}
 
 	private void TrigerTheAlert(float b) {
@@ -151,7 +167,7 @@ public class ListNodePrepare {
 			if (b / 2.5 <= (value / 100)) {
 				// 播放音乐
 				String musicPath = findTheAlertMusicPath();
-				System.out.println(musicPath);
+				System.out.println("musicPath "+musicPath);
 				try {
 					mp.setDataSource(musicPath);
 					mp.prepareAsync();
@@ -160,13 +176,13 @@ public class ListNodePrepare {
 						public void onPrepared(MediaPlayer mp) {
 							// TODO Auto-generated method stub
 							mp.start();// 异步准备数据的方法，service是可以在用户与其他应用交互时仍运行，此时需要wake
-							mp.setOnCompletionListener(new OnCompletionListener() {
-								@Override
-								public void onCompletion(MediaPlayer arg0) {
-									// TODO Auto-generated method stub
-									arg0.release();
-								}
-							});
+						}
+					});
+					mp.setOnCompletionListener(new OnCompletionListener() {
+						@Override
+						public void onCompletion(MediaPlayer arg0) {
+							// TODO Auto-generated method stub
+							arg0.release();
 						}
 					});
 				} catch (IllegalArgumentException e) {
