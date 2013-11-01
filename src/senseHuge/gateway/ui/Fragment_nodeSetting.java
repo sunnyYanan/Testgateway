@@ -26,7 +26,7 @@ import com.example.testgateway.R;
 
 public class Fragment_nodeSetting extends Fragment {
 	// 节点设置
-	public MainActivity ma;
+//	public MainActivity ma;
 	private boolean isAvalable;// 标识串口是否已连接
 	private int cycle;// 标识设置的周期时间
 	Spinner sendCycleSpinner;
@@ -49,7 +49,6 @@ public class Fragment_nodeSetting extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_node_setting, container,
 				false);
 		
-		ma = (MainActivity) getActivity();
 		mdbHelper =  new MySQLiteDbHelper(v.getContext(), "MyData.db", null, 1);
 		// 默认发包周期是5秒
 		cycle = 5;
@@ -62,8 +61,8 @@ public class Fragment_nodeSetting extends Fragment {
 		sendCycleSpinner = (Spinner) v.findViewById(R.id.sendCycleSelect);
 		powerSettingSpinner = (Spinner) v
 				.findViewById(R.id.powerSettingSpinner);
-		musicChooseButton = (Button) v.findViewById(R.id.musicSelect);
-		settingOkButton = (Button) v.findViewById(R.id.settingOKButton);
+//		musicChooseButton = (Button) v.findViewById(R.id.musicSelect);
+//		settingOkButton = (Button) v.findViewById(R.id.settingOKButton);
 
 		ArrayAdapter<CharSequence> sendCycleAdapter = ArrayAdapter
 				.createFromResource(getActivity(), R.array.nodeSettingCycle,
@@ -84,8 +83,8 @@ public class Fragment_nodeSetting extends Fragment {
 				.setOnItemSelectedListener(new SendCycleSelectedListener());
 		powerSettingSpinner
 				.setOnItemSelectedListener(new PowerSettingListener());
-		musicChooseButton.setOnClickListener(new MyButtonListener());
-		settingOkButton.setOnClickListener(new MyButtonListener());
+//		musicChooseButton.setOnClickListener(new MyButtonListener());
+//		settingOkButton.setOnClickListener(new MyButtonListener());
 		return v;
 	}
 
@@ -93,7 +92,7 @@ public class Fragment_nodeSetting extends Fragment {
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-			switch (arg0.getId()) {
+		/*	switch (arg0.getId()) {
 			case R.id.musicSelect:
 				Intent fileChooserIntent = new Intent(arg0.getContext(),
 						FileChooserActivity.class);
@@ -105,7 +104,7 @@ public class Fragment_nodeSetting extends Fragment {
 				saveIntoDB();
 				break;
 			}
-
+*/
 		}
 
 	}

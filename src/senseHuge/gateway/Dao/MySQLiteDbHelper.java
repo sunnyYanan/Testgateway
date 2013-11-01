@@ -23,9 +23,9 @@ public class MySQLiteDbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
 		// TODO Auto-generated method stub
-		String sql = "create table "+TABLEMESSAGE+"(_id integer primary key AutoIncrement,message varchar(300),Ctype varchar(10),NodeID varchar(10),status varchar(20),receivetime varchar(30))";
-		String sqlServer = "create table "+TABLESERVER+"(_id integer primary key AutoIncrement,address varchar(50))";
-		String alertSetting = "create table "+TABLEALERTSETTING+"(_id integer primary key AutoIncrement,type varchar(10),value varchar(5),path varchar(200))";
+		String sql = "create table if not exists "+TABLEMESSAGE+"(_id integer primary key AutoIncrement,message varchar(300),Ctype varchar(10),NodeID varchar(10),status varchar(20),receivetime varchar(30))";
+		String sqlServer = "create table if not exists "+TABLESERVER+"(_id integer primary key AutoIncrement,address varchar(50))";
+		String alertSetting = "create table if not exists "+TABLEALERTSETTING+"(_id integer primary key AutoIncrement,type varchar(10),value varchar(5),path varchar(200))";
 		arg0.execSQL(sql);
 		arg0.execSQL(sqlServer);
 		arg0.execSQL(alertSetting);
