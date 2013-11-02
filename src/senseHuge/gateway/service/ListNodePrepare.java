@@ -8,6 +8,9 @@ import java.util.Map;
 import senseHuge.gateway.model.PackagePattern;
 import senseHuge.gateway.ui.Fragment_listNode;
 import senseHuge.gateway.ui.MainActivity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
@@ -17,6 +20,7 @@ import com.example.testgateway.R;
 
 public class ListNodePrepare {
 	SQLiteDatabase db;
+	String currentId = null;
 
 	public void prepare() {
 		Thread listNodeThread = new Thread(new MyThread());
@@ -72,6 +76,7 @@ public class ListNodePrepare {
 	private void computeTheNodePower(String string, Map<String, Object> item) {
 		// TODO Auto-generated method stub
 		// 得到该节点的最近4条记录,并计算其电量平均值
+		currentId = string;
 		Cursor cursor = db.query("Telosb", new String[] { "message" },
 				"NodeID=? AND CType=?", new String[] { string, "C1" }, null,
 				null, "receivetime DESC");
@@ -133,9 +138,7 @@ public class ListNodePrepare {
 
 		// 还应有用户设置的控制
 		String trige = findIftriger();
-		System.out.println("chufa:"+trige);
-		System.out.println(trige.equals("1"));
-		if (b != 0&&trige.equals("1")) {
+		if (b != 0 && trige.equals("1")) {
 			TrigerTheAlert(b);
 		}
 		return b;
@@ -157,7 +160,6 @@ public class ListNodePrepare {
 	private void TrigerTheAlert(float b) {
 		// TODO Auto-generated method stub
 		String alert = findTheAlertValueSetting();
-		MediaPlayer mp = new MediaPlayer();
 		// 处理数据
 		if (alert != null) {
 			// 预警阈值
@@ -167,24 +169,27 @@ public class ListNodePrepare {
 			if (b / 2.5 <= (value / 100)) {
 				// 播放音乐
 				String musicPath = findTheAlertMusicPath();
-				System.out.println("musicPath "+musicPath);
+				System.out.println("musicPath " + musicPath);
 				try {
-					mp.setDataSource(musicPath);
-					mp.prepareAsync();
-					mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-						@Override
-						public void onPrepared(MediaPlayer mp) {
-							// TODO Auto-generated method stub
-							mp.start();// 异步准备数据的方法，service是可以在用户与其他应用交互时仍运行，此时需要wake
-						}
-					});
-					mp.setOnCompletionListener(new OnCompletionListener() {
-						@Override
-						public void onCompletion(MediaPlayer arg0) {
-							// TODO Auto-generated method stub
-							arg0.release();
-						}
-					});
+					MainActivity.mp.setDataSource(musicPath);
+					MainActivity.mp.prepareAsync();
+					MainActivity.mp
+							.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+								@Override
+								public void onPrepared(MediaPlayer mp) {
+									// TODO Auto-generated method stub
+									mp.start();// 异步准备数据的方法，service是可以在用户与其他应用交互时仍运行，此时需要wake
+								}
+
+							});
+					MainActivity.mp
+							.setOnCompletionListener(new OnCompletionListener() {
+								@Override
+								public void onCompletion(MediaPlayer arg0) {
+									// TODO Auto-generated method stub
+									arg0.release();
+								}
+							});
 				} catch (IllegalArgumentException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

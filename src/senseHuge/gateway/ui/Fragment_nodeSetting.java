@@ -8,6 +8,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -40,7 +42,7 @@ public class Fragment_nodeSetting extends Fragment {
 	RadioButton radioYesButton;
 	RadioButton radioNoButton;
 	int alertPower = 15;// ‘§æØ÷µµƒ…Ë÷√
-	String alertMusicPath = "\\mnt\\1.mp3";// ‘§æØ“Ù¿÷…Ë÷√
+	String alertMusicPath = "/mnt/1.mp3";// ‘§æØ“Ù¿÷…Ë÷√
 	MySQLiteDbHelper mdbHelper;
 	SQLiteDatabase db;
 	View v;
@@ -127,6 +129,7 @@ public class Fragment_nodeSetting extends Fragment {
 				saveIntoDB();
 				Toast.makeText(v.getContext(), "…Ë÷√≥…π¶", Toast.LENGTH_SHORT)
 						.show();
+
 				break;
 			}
 		}
@@ -251,7 +254,7 @@ public class Fragment_nodeSetting extends Fragment {
 			alertPower = 30;
 		} else if (arg2 == 6) {
 			alertPower = 35;
-		} else if (arg2 == 76) {
+		} else if (arg2 == 7) {
 			alertPower = 40;
 		}
 	}

@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.example.testgateway.R;
-
 import senseHuge.gateway.Dao.MySQLiteDbHelper;
 import senseHuge.gateway.listener.Listenable;
 import senseHuge.gateway.listener.MyEvent;
 import senseHuge.gateway.listener.MySource;
 import senseHuge.gateway.model.PackagePattern;
-//import senseHuge.gateway.model.RingBuffer;
 import senseHuge.gateway.model.TelosbPackage;
 import senseHuge.gateway.service.ListNodePrepare;
 import senseHuge.gateway.service.LocalConfigService;
@@ -19,9 +16,11 @@ import senseHuge.gateway.util.HttpClientUtil;
 import senseHuge.gateway.util.OfflineBackupUtil;
 import senseHuge.gateway.util.XmlTelosbPackagePatternUtil;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -35,14 +34,19 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.testgateway.R;
+
+//import senseHuge.gateway.model.RingBuffer;
+
 public class MainActivity extends FragmentActivity {
 
 	private static final int capibity = 50;
 	private static final String tag = "sensehuge:";
 	protected static final String tags = "sensehuge:";
-	
+	public static MediaPlayer mp;
+
 	public static MySQLiteDbHelper mDbhelper;
-//	SerialUtil serialUtil = new SerialUtil();
+	// SerialUtil serialUtil = new SerialUtil();
 	public static HttpClientUtil httpClientUtil;
 	PackagePattern packagePattern = null;
 	public static XmlTelosbPackagePatternUtil xmlTelosbPackagePatternUtil;
@@ -51,18 +55,18 @@ public class MainActivity extends FragmentActivity {
 	public static boolean serverConnect = false;// 服务器是否连接
 	public static boolean serialPortConnect = false;// 串口是否连接
 
-//	public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
+	// public RingBuffer<String> ringBuffer = new RingBuffer<String>(capibity);
 
 	// 调用以下资源的getvalue方法也可以判断当前的连接状态，当监听多个时方便使用的，目前没用
-//	MySource ms;// 这个变量应该是多余的，待删除
+	// MySource ms;// 这个变量应该是多余的，待删除
 	MySource httpserverState;
 	MySource serialState;
-//	MySource havePackage;
+	// MySource havePackage;
 
 	FragmentManager manager;
 	LinearLayout layout;
-	Fragment f_serialPort, f_server, f_listnode, f_nodeSetting,
-			f_dataCenter, f_aboutUs;
+	Fragment f_serialPort, f_server, f_listnode, f_nodeSetting, f_dataCenter,
+			f_aboutUs;
 	Button serialPortSetting;
 	Button serverSetting;
 	Button sinkSetting;
@@ -77,7 +81,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-//		fListNode = new Fragment_listNode();
+		// fListNode = new Fragment_listNode();
 
 		// 串口，服务器，节点监听事务
 		manager = getSupportFragmentManager();
@@ -226,7 +230,7 @@ public class MainActivity extends FragmentActivity {
 	 * mainactivity 初始化
 	 */
 	public void init() {
-	
+
 		LocalConfigService localConfigService = new LocalConfigService(
 				getBaseContext());
 		localConfigService.setConfig("webserver", "192.168.10.145");
@@ -239,15 +243,15 @@ public class MainActivity extends FragmentActivity {
 		httpClientUtil = new HttpClientUtil(getBaseContext());
 		httpserverState = new MySource();
 		serialState = new MySource();
-//		ms = new MySource();
-//		havePackage = new MySource();
+		// ms = new MySource();
+		// havePackage = new MySource();
 
 		HttpserverState hl = new HttpserverState();
 		SerialListener ml = new SerialListener();
-//		PackageListener pl = new PackageListener();
+		// PackageListener pl = new PackageListener();
 		httpserverState.addListener(hl);
 		serialState.addListener(ml);
-//		havePackage.addListener(pl);
+		// havePackage.addListener(pl);
 
 		// havePackage.setValue(false);
 
@@ -258,19 +262,45 @@ public class MainActivity extends FragmentActivity {
 		 * httpserverState.setValue(true); serialState.setValue(true);
 		 * httpserverState.setValue(false);
 		 */
-		//准备节点信息
+		mp = new MediaPlayer();
+		// 准备节点信息
 		listNodePrepare.prepare();
-		//testBackup();
+		// 监听预警音乐是否播放
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				// 要做的事情
+				if(mp.isPlaying()) {
+					alertNoticeDialog();
+				}
+			}
+		};
+		handler.postDelayed(runnable, 4000);
+		// testBackup();
 	}
-	
-	
-	public void testBackup(){
+	Handler handler = new Handler();
+	private void alertNoticeDialog() {
+		// TODO Auto-generated method stub
+		new AlertDialog.Builder(this).setTitle("预警")
+				.setMessage("是否关闭预警")
+				.setPositiveButton("是", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mp.stop();
+						mp.release();
+					}
+				})
+				.setNegativeButton("否", null).show();
+	}
+
+	public void testBackup() {
 		List<TelosbPackage> list = new ArrayList<TelosbPackage>();
 		for (int i = 0; i < 10; i++) {
 			TelosbPackage telosbPackage = new TelosbPackage();
 			telosbPackage.setCtype("C1");
 			telosbPackage.setId(i);
-			telosbPackage.setMessage("XXXXXXXXXXXXXXXX"+i);
+			telosbPackage.setMessage("XXXXXXXXXXXXXXXX" + i);
 			telosbPackage.setReceivetime(new Date());
 			telosbPackage.setNodeID("1");
 			list.add(telosbPackage);
@@ -291,21 +321,15 @@ public class MainActivity extends FragmentActivity {
 			}
 		}
 	}
-/*
-	public class PackageListener implements Listenable {
 
-		@Override
-		public void eventChanged(MyEvent e) {
-			// TODO Auto-generated method stub
-			System.out.println("包's e:" + e.getValue());
-			if (ms.value) {
-				System.out.println("接收到数据，数据正在出处理。。。。");
-				//ProcessData();
-			} else {
-				System.out.println("数据接收完毕，等待中。。。。");
-			}
-		}
-	}*/
+	/*
+	 * public class PackageListener implements Listenable {
+	 * 
+	 * @Override public void eventChanged(MyEvent e) { // TODO Auto-generated
+	 * method stub System.out.println("包's e:" + e.getValue()); if (ms.value) {
+	 * System.out.println("接收到数据，数据正在出处理。。。。"); //ProcessData(); } else {
+	 * System.out.println("数据接收完毕，等待中。。。。"); } } }
+	 */
 
 	public class HttpserverState implements Listenable {
 		@Override
