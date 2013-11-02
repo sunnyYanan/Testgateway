@@ -40,15 +40,15 @@ public final class R {
         public static final int mp3=0x7f020009;
     }
     public static final class id {
-        public static final int DBCtype=0x7f09001c;
+        public static final int DBCtype=0x7f09001d;
         public static final int DBCtypeShow=0x7f09000c;
-        public static final int DBNodeID=0x7f09001d;
+        public static final int DBNodeID=0x7f09001e;
         public static final int DBNodeIDShow=0x7f09000d;
-        public static final int DBmessage=0x7f09001b;
+        public static final int DBmessage=0x7f09001c;
         public static final int DBmessageShow=0x7f09000b;
-        public static final int DBreceivetime=0x7f09001f;
+        public static final int DBreceivetime=0x7f090020;
         public static final int DBreceivetimeShow=0x7f09000f;
-        public static final int DBstatus=0x7f09001e;
+        public static final int DBstatus=0x7f09001f;
         public static final int DBstatusShow=0x7f09000e;
         public static final int aboutUs=0x7f090008;
         public static final int action_settings=0x7f090044;
@@ -60,11 +60,11 @@ public final class R {
         public static final int config=0x7f090043;
         public static final int connect=0x7f090040;
         public static final int dataCenter=0x7f090007;
-        public static final int dataCenterShow=0x7f09001a;
+        public static final int dataCenterShow=0x7f09001b;
         public static final int dataCenterShowSetting=0x7f090017;
         public static final int fragment_container=0x7f09000a;
         public static final int functionView=0x7f090000;
-        public static final int gridview=0x7f090020;
+        public static final int gridview=0x7f090021;
         public static final int gvFileChooser=0x7f090015;
         public static final int imgBackFolder=0x7f090012;
         public static final int imgFileIcon=0x7f090010;
@@ -87,7 +87,8 @@ public final class R {
         public static final int powerSettingSpinner=0x7f09002b;
         public static final int quit=0x7f090009;
         public static final int radioGroup=0x7f09002d;
-        public static final int refresh=0x7f090021;
+        public static final int searchRecentNum=0x7f09001a;
+        public static final int searchTitle=0x7f090019;
         public static final int sendCycleItem=0x7f090025;
         public static final int sendCycleSelect=0x7f090026;
         public static final int sendCycleTitle=0x7f090024;
@@ -98,7 +99,6 @@ public final class R {
         public static final int server_check=0x7f090046;
         public static final int settingOKButton=0x7f090032;
         public static final int showAll=0x7f090018;
-        public static final int showAsTime=0x7f090019;
         public static final int sinkCheck=0x7f090004;
         public static final int sinkCycleSetting=0x7f090023;
         public static final int sinkSetting=0x7f090003;
@@ -133,9 +133,9 @@ public final class R {
         public static final int main=0x7f080002;
     }
     public static final class string {
-        public static final int Ctype=0x7f060021;
-        public static final int NodeID=0x7f060022;
-        public static final int aboutUs=0x7f060025;
+        public static final int Ctype=0x7f060024;
+        public static final int NodeID=0x7f060025;
+        public static final int aboutUs=0x7f060028;
         public static final int action_settings=0x7f060001;
         public static final int alertSettingItemTitle1=0x7f06000a;
         public static final int alertSettingTitle=0x7f060009;
@@ -145,7 +145,7 @@ public final class R {
         public static final int internetSetting=0x7f06001c;
         public static final int isAlertMusic=0x7f06000e;
         public static final int listNodeImage=0x7f060014;
-        public static final int message=0x7f060020;
+        public static final int message=0x7f060023;
         public static final int music=0x7f06000c;
         public static final int musicSelect=0x7f06000d;
         public static final int musicSetting=0x7f06000b;
@@ -158,11 +158,14 @@ public final class R {
         public static final int packageStatus=0x7f060019;
         public static final int packageType=0x7f060018;
         public static final int powerSetting=0x7f060008;
-        public static final int quit=0x7f060026;
-        public static final int receivetime=0x7f060024;
+        public static final int quit=0x7f060029;
+        public static final int receivetime=0x7f060027;
         public static final int refresh=0x7f060011;
-        public static final int sendCycleItem=0x7f060028;
-        public static final int sendCycleTitle=0x7f060027;
+        public static final int searchRecent=0x7f060021;
+        public static final int searchRecentUnit=0x7f060022;
+        public static final int searchTitle=0x7f060020;
+        public static final int sendCycleItem=0x7f06002b;
+        public static final int sendCycleTitle=0x7f06002a;
         public static final int serialPortSetting=0x7f060005;
         public static final int serialPort_check=0x7f060002;
         public static final int serverSetting=0x7f060006;
@@ -171,9 +174,9 @@ public final class R {
         public static final int showAll=0x7f06001f;
         public static final int sinkCheck=0x7f060013;
         public static final int sinkSetting=0x7f060007;
-        public static final int status=0x7f060023;
-        public static final int title_activity_file_chooser=0x7f06002a;
-        public static final int title_activity_fragment_node_setting=0x7f060029;
+        public static final int status=0x7f060026;
+        public static final int title_activity_file_chooser=0x7f06002d;
+        public static final int title_activity_fragment_node_setting=0x7f06002c;
         public static final int wifiSetting=0x7f06001d;
         public static final int yes=0x7f06000f;
     }

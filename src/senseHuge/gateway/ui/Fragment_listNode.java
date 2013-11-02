@@ -12,6 +12,8 @@ import android.app.AlertDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +39,7 @@ public class Fragment_listNode extends Fragment {
 	ListView packageList;
 	View dialog;
 	TextView packageAfterParse;
-	Button refreshButton;
+//	Button refreshButton;
 	// dialog显示出来的当前节点的所有包的内容
 	List<Map<String, String>> content;
 	GridView gridview;
@@ -68,7 +70,7 @@ public class Fragment_listNode extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
 		gridview = (GridView) view.findViewById(R.id.gridview);
-		refreshButton = (Button) view.findViewById(R.id.refresh);
+	/*	refreshButton = (Button) view.findViewById(R.id.refresh);
 		refreshButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -76,10 +78,43 @@ public class Fragment_listNode extends Fragment {
 				// TODO Auto-generated method stub
 				adapter.notifyDataSetChanged();
 			}
-			
-		});
+
+		});*/
 		show();
+		//实时刷新
+		if (MainActivity.serialPortConnect)
+			new Thread(new MyThread()).start();
 		return view;
+	}
+
+	Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			// 要做的事情
+			super.handleMessage(msg);
+			switch (msg.arg1) {
+			case 1:
+				adapter.notifyDataSetChanged();
+			}
+
+		}
+	};
+
+	public class MyThread implements Runnable {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while (true) {
+				try {
+					Thread.sleep(2000);// 线程暂停2秒，单位毫秒
+					Message message = new Message();
+					message.arg1 = 1;
+					handler.sendMessage(message);// 发送消息
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void show() {

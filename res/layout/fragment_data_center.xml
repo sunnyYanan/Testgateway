@@ -18,12 +18,34 @@
             android:id="@+id/showAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/showAll"/>
-         <Button
-            android:id="@+id/showAsTime"
+            android:text="@string/showAll" />
+
+        <Button
+            android:id="@+id/searchTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="最近2条"/>
+            android:layout_marginLeft="20dp"
+            android:text="@string/searchTitle"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/searchRecent"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/searchRecentNum"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/searchRecentUnit"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -44,28 +66,24 @@
             android:id="@+id/DBCtype"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/DBmessage"
             android:text="@string/Ctype" />
 
         <TextView
             android:id="@+id/DBNodeID"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/DBCtype"
             android:text="@string/NodeID" />
 
         <TextView
             android:id="@+id/DBstatus"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/DBNodeID"
             android:text="@string/status" />
 
         <TextView
             android:id="@+id/DBreceivetime"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/DBstatus"
             android:text="@string/receivetime" />
     </LinearLayout>
 

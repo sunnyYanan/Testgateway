@@ -33,6 +33,9 @@
     <string name="wifiSetting">wifi设置</string>
     <string name="dataCenter">数据中心</string>
     <string name="showAll">显示全部</string>
+    <string name="searchTitle">搜索</string>
+    <string name="searchRecent">搜索最近</string>
+    <string name="searchRecentUnit">条</string>
     <string name="message">message</string>
     <string name="Ctype">Ctype</string>
     <string name="NodeID">NodeID</string>
