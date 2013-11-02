@@ -1,7 +1,7 @@
 package senseHuge.gateway.service;
 
 import senseHuge.gateway.Dao.MySQLiteDbHelper;
-import senseHuge.gateway.ui.MainActivity;
+import senseHuge.gateway.ui.Fragment_listNode;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -25,11 +25,13 @@ public class DataProvider extends ContentProvider {
 
 	/** Constants to identify the requested operation */
 	private static final int MESSAGE = 1;
+	//private static final int RECENTTIME = 2;
 
 	private static final UriMatcher uriMatcher;
 	static {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(AUTHORITY, MySQLiteDbHelper.TABLEMESSAGE, MESSAGE);
+	//	uriMatcher.addURI(AUTHORITY, MySQLiteDbHelper.TABLEMESSAGE+"/time", RECENTTIME);
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class DataProvider extends ContentProvider {
 			System.out.println("insert su");
 			Uri noteUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
 			getContext().getContentResolver().notifyChange(noteUri, null);
+			//Ë¢ÐÂlistnodeÒ³Ãæ
 			nodePrepare.prepare();
 			return noteUri;
 		}
@@ -86,6 +89,9 @@ public class DataProvider extends ContentProvider {
 			//c = db.rawQuery("select * from "+MySQLiteDbHelper.TABLEMESSAGE,null);
 			 c = db.query(MySQLiteDbHelper.TABLEMESSAGE, arg1, arg2, arg3, null, null, arg4);
 			break;
+		/*case RECENTTIME:
+			c = db.query(MySQLiteDbHelper.TABLEMESSAGE, arg1, arg2, arg3, null, null, arg4);
+			break;*/
 		default:
 			throw new IllegalArgumentException("Unknown URI" + arg0);
 		}

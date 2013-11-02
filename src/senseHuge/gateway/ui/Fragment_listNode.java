@@ -30,6 +30,8 @@ public class Fragment_listNode extends Fragment {
 	public static List<Map<String, Object>> nodeList = new ArrayList<Map<String, Object>>();
 	// 查找出来的显示的不重复的节点id
 	public static List<String> nodeId = new ArrayList<String>();
+	SimpleAdapter adapter;
+	// public static boolean isChange = false;
 	ListView packageList;
 	View dialog;
 	TextView packageAfterParse;
@@ -48,7 +50,7 @@ public class Fragment_listNode extends Fragment {
 	@Override
 	public void onAttach(Activity a) {
 		super.onAttach(a);
-//		init();
+		// init();
 	}
 
 	@Override
@@ -66,10 +68,11 @@ public class Fragment_listNode extends Fragment {
 		show();
 		return view;
 	}
+
 	private void show() {
 		// TODO Auto-generated method stub
 		// 实例化一个适配器
-		SimpleAdapter adapter = new SimpleAdapter(this.getActivity(), nodeList,
+		adapter = new SimpleAdapter(this.getActivity(), nodeList,
 				R.layout.list_node_page_style, new String[] { "图片", "源节点编号",
 						"节点电压" }, new int[] { R.id.listNodeImage,
 						R.id.listNodeId, R.id.listNodePower });
@@ -109,9 +112,9 @@ public class Fragment_listNode extends Fragment {
 		// 得到相应节点的全部包，参数为节点ID
 		private void getThePackage(String string) {
 			// TODO Auto-generated method stub
-			db= MainActivity.mDbhelper.getReadableDatabase();
-			Cursor cursor = db.query("Telosb", new String[] {
-					"Ctype", "status", "message" ,"receivetime"}, "NodeID=?",
+			db = MainActivity.mDbhelper.getReadableDatabase();
+			Cursor cursor = db.query("Telosb", new String[] { "Ctype",
+					"status", "message", "receivetime" }, "NodeID=?",
 					new String[] { string }, null, null, "receivetime DESC");
 			content = new ArrayList<Map<String, String>>();
 			Map<String, String> data;
@@ -122,7 +125,8 @@ public class Fragment_listNode extends Fragment {
 				String status = cursor.getString(cursor
 						.getColumnIndex("status"));
 				String type = cursor.getString(cursor.getColumnIndex("Ctype"));
-				String receicvetime = cursor.getString(cursor.getColumnIndex("receivetime"));
+				String receicvetime = cursor.getString(cursor
+						.getColumnIndex("receivetime"));
 
 				data.put("type", type);
 				data.put("status", status);
@@ -139,9 +143,9 @@ public class Fragment_listNode extends Fragment {
 			packageList = (ListView) dialog.findViewById(android.R.id.list);
 			SimpleAdapter adapter = new SimpleAdapter(dialog.getContext(),
 					content, R.layout.list_node_package, new String[] { "type",
-							"status", "message" ,"receivetime"}, new int[] {
+							"status", "message", "receivetime" }, new int[] {
 							R.id.packageType, R.id.packageStatus,
-							R.id.packageMessage,R.id.packageReceivetime });
+							R.id.packageMessage, R.id.packageReceivetime });
 			packageList.setAdapter(adapter);
 
 			// 设置列表点击事件
@@ -190,5 +194,5 @@ public class Fragment_listNode extends Fragment {
 		}
 
 	}
-	
+
 }

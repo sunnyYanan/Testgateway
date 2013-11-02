@@ -158,9 +158,9 @@ public class Fragment_serialconfig extends Fragment {
 					} catch (SecurityException e1) {
 						// TODO Auto-generated catch block
 						Log.i(tag, "打开串口失败：");
-						
+
 						linkStatus("打开串口失败");
-						
+
 						e1.printStackTrace();
 						break;
 					} catch (IOException e1) {
@@ -172,27 +172,30 @@ public class Fragment_serialconfig extends Fragment {
 					}
 					Log.i(tag, "打开串口sucess：");
 					linkStatus("打开串口成功");
-					
+
 					MainActivity.serialPortConnect = true;
 					serial.setState(true);
-					
+
 					// 串口读取数据
 					readThread = new ReadThread();
 					readThread.start();
-					
-					//数据处理
+
+					// 数据处理
 					dataProcess = new SerialportDataProcess(contentResolver);
 					dataProcess.start();
-					
-					ma.serialState.setValue(true);//应该改进为用这个！！
-					
+
+					ma.serialState.setValue(true);// 应该改进为用这个！！
+
 					changeButtonStatus();
 				}
 
 				break;
 			}
 			case R.id.close: {
-				if (mSerialPort != null && serial.getState()) {
+				System.out.println((mSerialPort != null) + "   "
+						+ serial.getState());
+				// if (mSerialPort != null && serial.getState()) {
+				if (mSerialPort != null) {
 					try {
 						mSerialPort.close();
 						mOutputStream.close();
@@ -202,11 +205,11 @@ public class Fragment_serialconfig extends Fragment {
 
 						serial.setState(false);
 
-//						Log.i(tag, ma.havadata.getState().toString());
+						// Log.i(tag, ma.havadata.getState().toString());
 						MainActivity.serialPortConnect = false;
-						
+
 						dataProcess.interrupt();
-						ma.serialState.setValue(false);//应该改进为用这个！！
+						ma.serialState.setValue(false);// 应该改进为用这个！！
 
 						if (dataProcess.isInterrupted()) {
 							Log.i(tag, "被中断：");
@@ -215,7 +218,7 @@ public class Fragment_serialconfig extends Fragment {
 						changeButtonStatus();
 						// readThread.stop();
 						linkStatus("关闭串口成功");
-						
+
 					} catch (SecurityException e1) {
 						// TODO Auto-generated catch block
 						linkStatus("关闭串口失败");
@@ -237,13 +240,14 @@ public class Fragment_serialconfig extends Fragment {
 
 		private void linkStatus(String string) {
 			// TODO Auto-generated method stub
-			AlertDialog.Builder builder = new AlertDialog.Builder(view1.getContext());
-			// 2. Chain together various setter methods to set the dialog characteristics
-			builder.setMessage(string)
-			       .setTitle("串口消息");
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					view1.getContext());
+			// 2. Chain together various setter methods to set the dialog
+			// characteristics
+			builder.setMessage(string).setTitle("串口消息");
 			// 3. Get the AlertDialog from create()
 			builder.show();
-			
+
 		}
 	}
 
@@ -284,6 +288,7 @@ public class Fragment_serialconfig extends Fragment {
 				}
 			}
 		}
+
 		private String byteToHex(byte byteData) {
 			// TODO Auto-generated method stub
 			String hex = "";
