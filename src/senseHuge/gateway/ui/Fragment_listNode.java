@@ -15,9 +15,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -35,6 +37,7 @@ public class Fragment_listNode extends Fragment {
 	ListView packageList;
 	View dialog;
 	TextView packageAfterParse;
+	Button refreshButton;
 	// dialog显示出来的当前节点的所有包的内容
 	List<Map<String, String>> content;
 	GridView gridview;
@@ -65,6 +68,16 @@ public class Fragment_listNode extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_list_node, container,
 				false);
 		gridview = (GridView) view.findViewById(R.id.gridview);
+		refreshButton = (Button) view.findViewById(R.id.refresh);
+		refreshButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				adapter.notifyDataSetChanged();
+			}
+			
+		});
 		show();
 		return view;
 	}
