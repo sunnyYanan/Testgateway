@@ -8,9 +8,6 @@ import java.util.Map;
 import senseHuge.gateway.model.PackagePattern;
 import senseHuge.gateway.ui.Fragment_listNode;
 import senseHuge.gateway.ui.MainActivity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
@@ -20,7 +17,7 @@ import com.example.testgateway.R;
 
 public class ListNodePrepare {
 	SQLiteDatabase db;
-	String currentId = null;
+	public static String currentId = null;
 
 	public void prepare() {
 		Thread listNodeThread = new Thread(new MyThread());
@@ -167,6 +164,7 @@ public class ListNodePrepare {
 			String valueStr = alert.substring(0, pos);
 			float value = Float.parseFloat(valueStr);
 			if (b / 2.5 <= (value / 100)) {
+				System.out.println("±ÈÖµ:"+b/2.5);
 				// ²¥·ÅÒôÀÖ
 				String musicPath = findTheAlertMusicPath();
 				System.out.println("musicPath " + musicPath);

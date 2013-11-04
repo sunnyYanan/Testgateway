@@ -282,7 +282,7 @@ public class MainActivity extends FragmentActivity {
 	Handler handler = new Handler();
 	private void alertNoticeDialog() {
 		// TODO Auto-generated method stub
-		new AlertDialog.Builder(this).setTitle("预警")
+		new AlertDialog.Builder(this).setTitle("预警:"+ListNodePrepare.currentId+"节点电量低于阈值")
 				.setMessage("是否关闭预警")
 				.setPositiveButton("是", new DialogInterface.OnClickListener() {
 					@Override
